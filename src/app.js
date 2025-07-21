@@ -13,4 +13,15 @@ app.use(express.urlencoded({extended: true, limit: '2mb'})); // Limit URL-encode
 app.use(express.static('public')); // Serve static files from the 'public' directory
 app.use(cookieParser())
 
+app.get('/',(req, res)=> {
+   res.send('Hello, World!')
+})
+
+
+// Import routes
+import userRouter from './routes/userr.router.js';
+// routes declaration
+app.use('/api/v1/users', userRouter)
+
+
 export {app}
