@@ -4,6 +4,10 @@ import { loginUser } from "../controllers/user.controller.js";
 import { logOutUser } from "../controllers/user.controller.js";
 import { refreshAccessToken } from "../controllers/user.controller.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
+import { changeCurrentPassword } from "../controllers/user.controller.js";
+import { updateAccountDetails } from "../controllers/user.controller.js";
+import { updateAvatarProfile } from "../controllers/user.controller.js";
+import { updateCoverImage } from "../controllers/user.controller.js";
 import { Router } from "express";
 
 const router = Router();
@@ -21,4 +25,16 @@ router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJwt, logOutUser);
 
 router.route("/refresh-token").post(refreshAccessToken);
+
+router.route("/change-password").post(verifyJwt, changeCurrentPassword);
+
+router.route("/update-account").post(verifyJwt, updateAccountDetails);
+
+router
+  .route("/update-avatar")
+  .patch(verifyJwt, upload.single("avatar"), updateAvatarProfile);
+
+router
+  .route("/update-coverImage")
+  .patch(verifyJwt, upload.single("coverImage"), updateCoverImage);
 export default router;
