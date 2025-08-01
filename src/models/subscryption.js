@@ -16,4 +16,4 @@ const subscriberSchema = new Schema(
   }
 );
 
-const Subscriber = mongoose.model("Subscriber", subscriberSchema);
+const Subscription = mongoose.model("Subscription", subscriberSchema);

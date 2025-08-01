@@ -1,13 +1,17 @@
-import { upload } from "../middlewares/multer.middlewares.js";
-import { registerUser } from "../controllers/user.controller.js";
-import { loginUser } from "../controllers/user.controller.js";
-import { logOutUser } from "../controllers/user.controller.js";
-import { refreshAccessToken } from "../controllers/user.controller.js";
-import { verifyJwt } from "../middlewares/auth.middleware.js";
-import { changeCurrentPassword } from "../controllers/user.controller.js";
-import { updateAccountDetails } from "../controllers/user.controller.js";
-import { updateAvatarProfile } from "../controllers/user.controller.js";
-import { updateCoverImage } from "../controllers/user.controller.js";
+import {
+  upload,
+  registerUser,
+  loginUser,
+  logOutUser,
+  refreshAccessToken,
+  verifyJwt,
+  changeCurrentPassword,
+  updateAccountDetails,
+  updateAvatarProfile,
+  updateCoverImage,
+  getUserChannelProfile,
+  getUserWatchHistory,
+} from "../middlewares/multer.middlewares.js";
 import { Router } from "express";
 
 const router = Router();
@@ -37,4 +41,8 @@ router
 router
   .route("/update-coverImage")
   .patch(verifyJwt, upload.single("coverImage"), updateCoverImage);
+
+router.route("/C/:username").get(verifyJwt, getUserChannelProfile);
+
+router.route("/watch-history").get(verifyJwt, getUserWatchHistory);
 export default router;
