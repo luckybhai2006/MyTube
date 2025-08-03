@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/apierror.js";
 import { User } from "../models/user.model.js";
 export const verifyJwt = asyncHandler(async (req, res, next) => {
+  console.log("VERIFY JWT MIDDLEWARE CALLED");
   try {
     const token =
       req.cookies?.accessToken ||
