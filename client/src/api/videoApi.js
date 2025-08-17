@@ -31,3 +31,7 @@ export const updateVideo = (videoId, formData) =>
 // Toggle publish status
 export const togglePublishStatus = (videoId) =>
   axiosInstance.patch(`/videos/toggle/publish/${videoId}`);
+
+// New API to increment views
+export const addVideoView = (videoId) =>
+  axiosInstance.post(`/videos/views/${videoId}`);

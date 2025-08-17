@@ -7,14 +7,53 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import YouTubeIcon from '@mui/icons-material/YouTube';
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 import { SiYoutubeshorts } from "react-icons/si";
-import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined';
-
+import SmartDisplayOutlinedIcon from "@mui/icons-material/SmartDisplayOutlined";
 import "../styles/app.css";
 import "../styles/leftDashboard.css";
+
+const styles = {
+  nav: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "5px 12px",
+    backgroundColor: "#121212",
+    color: "#fff",
+    // borderRadius: "10px",
+    alignItems: "center",
+  },
+  menu: { display: "flex", gap: "10px", alignItems: "center" },
+  button: {
+    padding: "6px 12px",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    backgroundColor: "#ff4500",
+    color: "#fff",
+  },
+  createButton: {
+    padding: "6px 16px",
+    border: "none",
+    borderRadius: "50px",
+    cursor: "pointer",
+    backgroundColor: "#ff0000",
+    color: "#fff",
+    // fontWeight: "bold",
+    fontSize: "1rem",
+    height: "35px",
+    transition: "background-color 0.2s ease",
+  },
+  avatar: {
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    marginRight: "15px",
+  },
+};
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -55,7 +94,7 @@ export default function Navbar() {
   }, [user]);
 
   return (
-    <nav className="nav">
+    <nav style={styles.nav}>
       <div style={{ display: "flex", alignItems: "center" }}>
         <button className="hamburger" onClick={toggleSidebar}>
           <MenuIcon style={{ fontSize: "32px" }} />
@@ -84,16 +123,17 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="menu">
+      <div style={styles.menu}>
         {user && (
           <div ref={createRef}>
             <button
               style={{
+                ...styles.createButton,
                 backgroundColor: hoverCreate
                   ? "rgba(255, 255, 255, 0.22)"
                   : "rgba(0, 0, 0, 0)",
               }}
-              className="create-btn createButton"
+              className="create-btn"
               onMouseEnter={() => setHoverCreate(true)}
               onMouseLeave={() => setHoverCreate(false)}
               onClick={() => setCreateMenuOpen(!createMenuOpen)}
@@ -143,7 +183,7 @@ export default function Navbar() {
             <img
               src={user.avatar}
               alt="avatar"
-              className="avatar"
+              style={styles.avatar}
               onClick={() => setMenuOpen(!menuOpen)}
             />
             {menuOpen && (
@@ -205,10 +245,10 @@ export default function Navbar() {
         ) : (
           <>
             <Link to="/login">
-              <button className="button">Login</button>
+              <button style={styles.button}>Login</button>
             </Link>
             <Link to="/register">
-              <button className="button">Register</button>
+              <button style={styles.button}>Register</button>
             </Link>
           </>
         )}
@@ -221,8 +261,7 @@ export default function Navbar() {
               <YouTubeIcon style={{ fontSize: "32px" }} />
             </button>
 
-            <Link
-              to="/"
+            <p
               style={{
                 color: "#fff",
                 textDecoration: "none",
@@ -232,20 +271,33 @@ export default function Navbar() {
               }}
             >
               MyTube
-            </Link>
+            </p>
           </div>
         </nav>
         <ul className="hover">
-          <li >
+          <li>
             <HomeIcon />
-            <Link to="/" className="home">Home</Link>
+            <Link to="/" className="home">
+              Home
+            </Link>
           </li>
-          <li><SmartDisplayOutlinedIcon/>
-            <Link to="/dashboard"> Your videos</Link>
+          <li>
+            <SmartDisplayOutlinedIcon />
+            <a href="/dashboard"> Your videos</a>
           </li>
-          <li><SiYoutubeshorts /> Shorts</li>
-          <li> <SubscriptionsIcon/>Subscriptions</li>
-          <li> <LibraryAddIcon/>Library</li>
+          <li>
+            <SiYoutubeshorts /> Shorts
+          </li>
+          <li>
+            {" "}
+            <SubscriptionsIcon />
+            Subscriptions
+          </li>
+          <li>
+            {" "}
+            <LibraryAddIcon />
+            Library
+          </li>
         </ul>
       </div>
 

@@ -99,6 +99,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
 
 const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
+  // console.log("Fetching video with ID:", videoId);
 
   if (!isValidObjectId(videoId)) {
     throw new ApiError(400, "Invalid video ID.");
@@ -108,6 +109,8 @@ const getVideoById = asyncHandler(async (req, res) => {
     "owner",
     "username avatar"
   );
+
+  // console.log("Video found:", video);
 
   if (!video) {
     throw new ApiError(404, "Video not found.");
@@ -194,10 +197,25 @@ const getVideosByUser = async (req, res) => {
 
     res.status(200).json(videos);
   } catch (error) {
-    console.error("Error fetching videos by user:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+const addVideoView = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+
+  const video = await Video.findById(videoId);
+  if (!video) {
+    throw new ApiError(404, "Video not found");
+  }
+
+  video.views = (video.views || 0) + 1;
+  await video.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, video, "View count updated"));
+});
 
 export {
   getAllVideos,
@@ -206,5 +224,6 @@ export {
   updateVideo,
   deleteVideo,
   togglePublishStatus,
+  addVideoView,
   getVideosByUser,
 };

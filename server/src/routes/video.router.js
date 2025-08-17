@@ -7,6 +7,7 @@ import {
   publishAVideo,
   togglePublishStatus,
   updateVideo,
+  addVideoView,
 } from "../controllers/video.controller.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middlewares.js";
@@ -40,5 +41,7 @@ router
 router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
 
 router.route("/user/:userId").get(getVideosByUser);
+
+router.post("/views/:videoId", addVideoView);
 
 export default router;
