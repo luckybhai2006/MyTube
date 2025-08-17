@@ -145,6 +145,18 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
+const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select(
+    "_id username avatar coverImage email fullname"
+  );
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  res.status(200).json(user);
+});
+
 const logOutUser = asyncHandler(async (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
@@ -468,6 +480,7 @@ const getUserWatchHistory = asyncHandler(async (req, res) => {
 export {
   registerUser,
   loginUser,
+  getCurrentUser,
   logOutUser,
   refreshAccessToken,
   changeCurrentPassword,

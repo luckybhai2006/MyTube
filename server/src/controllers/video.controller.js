@@ -7,6 +7,7 @@ import { asyncHandler } from "../utils/asynchandeler.js";
 import { uploadOnCloudinary } from "../utils/cloudnary.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
+  // Extract query parameters with defaults
   const {
     page = 1,
     limit = 10,
@@ -16,26 +17,33 @@ const getAllVideos = asyncHandler(async (req, res) => {
     userId,
   } = req.query;
 
+  // Build filter object
   const filter = {};
-  if (query) {
-    filter.title = { $regex: query, $options: "i" }; // case-insensitive search
+
+  if (query.trim()) {
+    filter.title = { $regex: query.trim(), $options: "i" }; // case-insensitive
   }
 
   if (userId && isValidObjectId(userId)) {
     filter.owner = userId;
   }
 
-  const sortOptions = {};
-  sortOptions[sortBy] = sortType === "asc" ? 1 : -1;
+  // Build sort options
+  const sortOptions = {
+    [sortBy]: sortType === "asc" ? 1 : -1,
+  };
 
+  // Query videos
   const videos = await Video.find(filter)
     .sort(sortOptions)
-    .skip((page - 1) * limit)
+    .skip((Number(page) - 1) * Number(limit))
     .limit(Number(limit))
     .populate("owner", "username avatar");
 
+  // Count total documents for pagination
   const total = await Video.countDocuments(filter);
 
+  // Send response
   return res.status(200).json(
     new ApiResponse(
       200,
@@ -171,6 +179,26 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, video, "Video publish status toggled."));
 });
 
+// Get all videos uploaded by a specific user
+const getVideosByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const videos = await Video.find({ owner: userId })
+      .populate("owner", "username avatar") // optional: include owner info
+      .sort({ createdAt: -1 }); // latest first
+
+    if (!videos.length) {
+      return res.status(404).json({ message: "No videos found for this user" });
+    }
+
+    res.status(200).json(videos);
+  } catch (error) {
+    console.error("Error fetching videos by user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export {
   getAllVideos,
   publishAVideo,
@@ -178,4 +206,5 @@ export {
   updateVideo,
   deleteVideo,
   togglePublishStatus,
+  getVideosByUser,
 };

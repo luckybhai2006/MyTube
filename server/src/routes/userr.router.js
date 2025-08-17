@@ -1,6 +1,7 @@
 import { upload } from "../middlewares/multer.middlewares.js";
 import { registerUser } from "../controllers/user.controller.js";
 import { loginUser } from "../controllers/user.controller.js";
+import { getCurrentUser } from "../controllers/user.controller.js";
 import { logOutUser } from "../controllers/user.controller.js";
 import { refreshAccessToken } from "../controllers/user.controller.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
@@ -23,6 +24,8 @@ router.route("/register").post(
 );
 
 router.route("/login").post(loginUser);
+// routes/user.router.js
+router.route("/me").get(verifyJwt, getCurrentUser);
 
 router.route("/logout").post(verifyJwt, logOutUser);
 
