@@ -37,7 +37,6 @@ const styles = {
     cursor: "pointer",
     backgroundColor: "#ff0000",
     color: "#fff",
-    // fontWeight: "bold",
     fontSize: "1rem",
     height: "35px",
     transition: "background-color 0.2s ease",
