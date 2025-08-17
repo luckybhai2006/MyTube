@@ -9,6 +9,8 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import { SiYoutubeshorts } from "react-icons/si";
 import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined';
 
 import "../styles/app.css";
@@ -216,8 +218,9 @@ export default function Navbar() {
         <nav className="nav">
           <div style={{ display: "flex", alignItems: "center" }}>
             <button className="hamburger" onClick={toggleSidebar}>
-              <MenuIcon style={{ fontSize: "32px" }} />
+              <YouTubeIcon style={{ fontSize: "32px" }} />
             </button>
+
             <Link
               to="/"
               style={{
@@ -240,7 +243,7 @@ export default function Navbar() {
           <li><SmartDisplayOutlinedIcon/>
             <Link to="/dashboard"> Your videos</Link>
           </li>
-          <li> Shorts</li>
+          <li><SiYoutubeshorts /> Shorts</li>
           <li> <SubscriptionsIcon/>Subscriptions</li>
           <li> <LibraryAddIcon/>Library</li>
         </ul>
