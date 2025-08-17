@@ -18,7 +18,6 @@ const styles = {
     padding: "5px 12px",
     backgroundColor: "#121212",
     color: "#fff",
-    // borderRadius: "10px",
     alignItems: "center",
   },
   menu: { display: "flex", gap: "10px", alignItems: "center" },
