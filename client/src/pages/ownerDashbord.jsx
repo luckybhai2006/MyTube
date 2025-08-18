@@ -5,11 +5,13 @@ import axiosInstance from "../api/axiosInstance";
 
 const styles = {
   container: {
-    padding: "16px",
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", // responsive columns
+    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
     gap: "4px",
-    // backgroundColor: "#121212",
+    marginLeft: "75px",
+    marginTop: "10px",
+    marginRight: "10px",
+    // Width: "300px",
   },
 };
 
@@ -35,7 +37,7 @@ const Dashboard = () => {
   }, [user]);
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="responsiveContainer">
       {videos.length > 0 ? (
         videos.map((video) => (
           <VideoCard
