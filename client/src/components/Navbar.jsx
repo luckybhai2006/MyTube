@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -12,18 +11,18 @@ import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { SiYoutubeshorts } from "react-icons/si";
 import SmartDisplayOutlinedIcon from "@mui/icons-material/SmartDisplayOutlined";
-import "../styles/app.css";
+import "../styles/navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { user, handleLogout } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [createMenuOpen, setCreateMenuOpen] = useState(false);
-  const [hoverCreate, setHoverCreate] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const menuRef = useRef();
   const createRef = useRef();
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
@@ -42,7 +41,15 @@ export default function Navbar() {
       if (createRef.current && !createRef.current.contains(e.target)) {
         setCreateMenuOpen(false);
       }
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(e.target) &&
+        !e.target.closest(".hamburger")
+      ) {
+        setIsSidebarOpen(false);
+      }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -53,215 +60,174 @@ export default function Navbar() {
   }, [user]);
 
   return (
-    <nav className="nav">
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <button className="hamburger" onClick={toggleSidebar}>
-          <MenuIcon style={{ fontSize: "32px" }} />
-        </button>
-        <YouTubeIcon style={{ fontSize: "40px", color: "red" }} />
-        <Link
-          to="/"
-          style={{
-            color: "#fff",
-            textDecoration: "none",
-            marginLeft: "0px",
-            marginTop: "-4px",
-            fontSize: "30px",
-          }}
-        >
-          MyTube
-        </Link>
-      </div>
+    <>
+      {/* Sticky Top Navbar */}
+      <nav className="sticky-navbar">
+        <div className="nav-left">
+          <button className="hamburger" onClick={toggleSidebar}>
+            <MenuIcon />
+          </button>
+          <Link to="/" className="logo-container">
+            <YouTubeIcon className="youtube-icon" />
+            <span className="logo-text">MyTube</span>
+          </Link>
+        </div>
 
-      {/* Middle Section - Search bar */}
-      <div className="navbar-center">
-        <div className="search-bar">
+        <div className="search-container">
           <input type="text" placeholder="Search" className="search-input" />
           <button className="search-button">
             <SearchIcon />
           </button>
         </div>
+
+        <div className="nav-right">
+          {user && (
+            <div className="create-container" ref={createRef}>
+              <button
+                className="create-button"
+                onClick={() => setCreateMenuOpen(!createMenuOpen)}
+              >
+                <AddOutlinedIcon />
+              </button>
+              {createMenuOpen && (
+                <div className="dropdown-menu">
+                  <div
+                    className="dropdown-item"
+                    onClick={() => {
+                      setCreateMenuOpen(false);
+                      navigate("/upload");
+                    }}
+                  >
+                    Upload Video
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <NotificationsNoneIcon className="notification-icon" />
+
+          {user ? (
+            <div className="profile-container" ref={menuRef}>
+              <img
+                src={user.avatar}
+                alt="avatar"
+                className="avatar"
+                onClick={() => setMenuOpen(!menuOpen)}
+              />
+              {menuOpen && (
+                <div className="dropdown-menu profile-menu">
+                  <div
+                    className="dropdown-item"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/profile");
+                    }}
+                  >
+                    Profile
+                  </div>
+                  <div
+                    className="dropdown-item"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/settings");
+                    }}
+                  >
+                    Settings
+                  </div>
+                  <div className="dropdown-item logout" onClick={onLogout}>
+                    Logout
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="auth-buttons">
+              <Link to="/login">
+                <button className="auth-button">Login</button>
+              </Link>
+              <Link to="/register">
+                <button className="auth-button">Register</button>
+              </Link>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Vertical Sticky Sidebar (always visible) */}
+      <div className="vertical-sticky-sidebar">
+        <Link to="/" className="sidebar-icon-item">
+          <HomeIcon />
+          {/* <span>Home</span> */}
+        </Link>
+        <Link to="/dashboard" className="sidebar-icon-item">
+          <SmartDisplayOutlinedIcon />
+          {/* <span>Videos</span> */}
+        </Link>
+        <Link to="/shorts" className="sidebar-icon-item">
+          <SiYoutubeshorts />
+          {/* <span>Shorts</span> */}
+        </Link>
+        <Link to="/subscriptions" className="sidebar-icon-item">
+          <SubscriptionsIcon />
+          {/* <span>Subs</span> */}
+        </Link>
+        <Link to="/library" className="sidebar-icon-item">
+          <LibraryAddIcon />
+          {/* <span>Library</span> */}
+        </Link>
       </div>
 
-      <div className="menu">
-        {user && (
-          <div ref={createRef}>
-            <button
-              style={{
-                backgroundColor: hoverCreate
-                  ? "rgba(255, 255, 255, 0.22)"
-                  : "rgba(0, 0, 0, 0)",
-              }}
-              className="create-btn createButton"
-              onMouseEnter={() => setHoverCreate(true)}
-              onMouseLeave={() => setHoverCreate(false)}
-              onClick={() => setCreateMenuOpen(!createMenuOpen)}
-            >
-              <AddOutlinedIcon style={{ fontSize: "36px", color: "white" }} />
-              <span>Create</span>
-            </button>
-
-            {createMenuOpen && (
-              <ul
-                style={{
-                  position: "absolute",
-                  top: "40px",
-                  right: 0,
-                  background: "#555",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-                  borderRadius: "6px",
-                  zIndex: 10,
-                  listStyle: "none",
-                  padding: "5px 0",
-                  margin: 0,
-                  minWidth: "150px",
-                }}
-              >
-                <li
-                  style={{
-                    padding: "8px 12px",
-                    margin:"12px",
-                    cursor: "pointer",
-                    fontSize: "0.95rem",
-                  }}
-                  onClick={() => {
-                    setCreateMenuOpen(false);
-                    navigate("/upload");
-                  }}
-                >
-                  Upload Video
-                </li>
-              </ul>
-            )}
-          </div>
-        )}
-
-        <NotificationsNoneIcon className="bell-icon" />
-
-        {user ? (
-          <div style={{ position: "relative" }} ref={menuRef}>
-            <img
-              src={user.avatar}
-              alt="avatar"
-              className="avatar"
-              onClick={() => setMenuOpen(!menuOpen)}
-            />
-            {menuOpen && (
-              <ul
-                style={{
-                  position: "absolute",
-                  top: "40px",
-                  right: 0,
-                  background: "#555",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-                  borderRadius: "6px",
-                  zIndex: 10,
-                  listStyle: "none",
-                  padding: "5px 0",
-                  margin: 0,
-                  minWidth: "150px",
-                }}
-              >
-                <li
-                  style={{
-                    padding: "8px 12px",
-                    cursor: "pointer",
-                    fontSize: "0.95rem",
-                  }}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    navigate("/profile");
-                  }}
-                >
-                  Profile
-                </li>
-                <li
-                  style={{
-                    padding: "8px 12px",
-                    cursor: "pointer",
-                    fontSize: "0.95rem",
-                  }}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    navigate("/settings");
-                  }}
-                >
-                  Settings
-                </li>
-                <li
-                  style={{
-                    padding: "8px 12px",
-                    cursor: "pointer",
-                    fontSize: "0.95rem",
-                    borderTop: "1px solid #eee",
-                  }}
-                  onClick={onLogout}
-                >
-                  Logout
-                </li>
-              </ul>
-            )}
-          </div>
-        ) : (
-          <>
-            <Link to="/login">
-              <button className="button">Login</button>
-            </Link>
-            <Link to="/register">
-              <button className="button">Register</button>
-            </Link>
-          </>
-        )}
-      </div>
-      {/* Sidebar */}
-      <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
-        <nav className="nav">
-          <div style={{ display: "flex", alignItems: "center" }}>
+      {/* Expandable Sidebar (opens on hamburger click) */}
+      <div
+        className={`expandable-sidebar ${isSidebarOpen ? "open" : ""}`}
+        ref={sidebarRef}
+      >
+        <div className="sidebar-content">
+          <div className="sidebar-header">
             <button className="hamburger" onClick={toggleSidebar}>
-              <YouTubeIcon style={{ fontSize: "33px", marginTop: "-1.8rem" }} />
+              <MenuIcon />
             </button>
-
-            <p
-              style={{
-                color: "#fff",
-                textDecoration: "none",
-                marginLeft: "0px",
-                marginTop: "-1px",
-                backgroundColor: "",
-                fontSize: "30px",
-              }}
-            >
-              MyTube
-            </p>
+            <Link to="/" className="logo-container">
+              <YouTubeIcon className="youtube-icon" />
+              <span className="logo-text">MyTube</span>
+            </Link>
           </div>
-        </nav>
-        <ul className="hover">
-          <li>
-            <HomeIcon />
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <SmartDisplayOutlinedIcon />
-            <a href="/dashboard"> Your videos</a>
-          </li>
-          <li>
-            <SiYoutubeshorts /> Shorts
-          </li>
-          <li>
-            {" "}
-            <SubscriptionsIcon />
-            Subscriptions
-          </li>
-          <li>
-            {" "}
-            <LibraryAddIcon />
-            Library
-          </li>
-        </ul>
+
+          <div className="sidebar-section">
+            <h3 className="sidebar-title">Main</h3>
+            <Link to="/" className="sidebar-item">
+              <HomeIcon className="sidebar-icon" />
+              <span>Home</span>
+            </Link>
+            <Link to="/dashboard" className="sidebar-item">
+              <SmartDisplayOutlinedIcon className="sidebar-icon" />
+              <span>Your Videos</span>
+            </Link>
+            <Link to="/shorts" className="sidebar-item">
+              <SiYoutubeshorts className="sidebar-icon" />
+              <span>Shorts</span>
+            </Link>
+          </div>
+
+          <div className="sidebar-section">
+            <h3 className="sidebar-title">Subscriptions</h3>
+            <Link to="/subscriptions" className="sidebar-item">
+              <SubscriptionsIcon className="sidebar-icon" />
+              <span>Subscriptions</span>
+            </Link>
+            <Link to="/library" className="sidebar-item">
+              <LibraryAddIcon className="sidebar-icon" />
+              <span>Library</span>
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {/* Overlay */}
-      {isSidebarOpen && <div className="overlay" onClick={toggleSidebar}></div>}
-    </nav>
+      {/* Overlay when sidebar is open */}
+      {isSidebarOpen && (
+        <div className="sidebar-overlay" onClick={toggleSidebar} />
+      )}
+    </>
   );
 }
