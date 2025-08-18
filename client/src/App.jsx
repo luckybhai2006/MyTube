@@ -5,7 +5,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/ownerDashbord";
 import Home from "./pages/Home";
+import UpdateVideo from "./pages/UploadVideo";
+import VideoPage from "./pages/VideoPage";
 import ProtectedRoute from "./components/protectedRout";
+
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +17,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/upload" element={<UpdateVideo />} />
+        <Route path="/video/:videoId" element={<VideoPage />} />
         <Route
           path="/dashboard"
           element={

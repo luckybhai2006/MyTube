@@ -1,16 +1,26 @@
 import React, { useState } from "react";
 import { updateVideo, deleteVideo } from "../api/videoApi";
-
+import { useNavigate } from "react-router-dom";
 const styles = {
   card: {
-    width: "290px",
     borderRadius: "10px",
+    width: "300px",
     overflow: "hidden",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+    background: "#fff",
     cursor: "pointer",
     position: "relative",
-    marginTop: "13px",
   },
+  owner: {
+    fontSize: "0.88rem",
+    fontWeight: "500",
+    color: "#0f0f0f", // dark like YouTube
+    margin: "0 0 4px 0",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+
   thumbnailWrapper: { position: "relative" },
   thumbnail: {
     width: "100%",
@@ -20,37 +30,63 @@ const styles = {
   },
   durationBadge: {
     position: "absolute",
-    bottom: "10px",
-    right: "7px",
-    backgroundColor: "rgba(0,0,0,0.7)",
+    bottom: "8px",
+    right: "8px",
+    background: "rgba(0,0,0,0.7)",
     color: "#fff",
-    fontSize: "0.85rem",
-    fontWeight: "500",
+    fontSize: "12px",
     padding: "2px 6px",
     borderRadius: "4px",
   },
-  content: { padding: "4px" },
+  content: { padding: "10px" },
+
+  // Layout
+  row: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "8px",
+  },
+  avatar: {
+    width: "36px",
+    height: "36px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    flexShrink: 0,
+  },
+  rightColumn: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+  },
+
+  // Title row
   titleRow: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: "-10px",
+    marginBottom: "4px",
   },
-  title: { fontSize: "1rem", fontWeight: "bold", margin: 0 },
+  title: {
+    flex: 1,
+    fontSize: "1.05rem",
+    fontWeight: "bold",
+    margin: 0,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
   menuButton: {
-    height: "30px",
-    width: "30px",
     background: "transparent",
     border: "none",
-    fontSize: "1.2rem",
-    color: "#555",
+    fontSize: "1.3rem",
+    color: "#666",
     cursor: "pointer",
-    padding: "5px",
-    borderRadius: "100%",
-    transition: "background-color 0.2s ease", // hover transition
+    padding: "2px 6px",
+    borderRadius: "50%",
+    transition: "background 0.2s",
   },
   menuButtonHover: {
-    backgroundColor: "rgba(0,0,0,0.3)", // hover effect
+    background: "rgba(0,0,0,0.1)",
   },
   menuPopup: {
     position: "absolute",
@@ -59,7 +95,7 @@ const styles = {
     background: "#fff",
     boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
     borderRadius: "6px",
-    zIndex: 10,
+    zIndex: 20,
   },
   popupItem: {
     padding: "8px 12px",
@@ -67,45 +103,43 @@ const styles = {
     fontSize: "0.9rem",
     borderBottom: "1px solid #eee",
   },
-  description: { fontSize: "0.875rem", color: "#aaa", marginBottom: "8px" },
-  owner: { fontSize: "0.9rem", color: "#121212" },
-  avatar: {
-    width: "30px",
-    height: "30px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    marginRight: "3px",
-    verticalAlign: "middle",
+
+  description: {
+    fontSize: "0.9rem",
+    color: "#444",
+    margin: "0 0 6px 0",
   },
+  meta: {
+    fontSize: "0.9rem",
+    color: "#777",
+  },
+
+  // Modal
   modalBackdrop: {
     position: "fixed",
     top: 0,
     left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    right: 0,
+    bottom: 0,
+    background: "rgba(0,0,0,0.4)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
   },
   modal: {
-    background: "#1e1e1e",
+    background: "#fff",
     padding: "20px",
-    borderRadius: "10px",
+    borderRadius: "8px",
     width: "300px",
     display: "flex",
     flexDirection: "column",
     gap: "10px",
-    color: "#fff",
   },
   input: {
     padding: "8px",
-    fontSize: "0.9rem",
     borderRadius: "5px",
-    border: "1px solid #555",
-    backgroundColor: "#121212",
-    color: "#fff",
+    border: "1px solid #ccc",
   },
   buttonRow: { display: "flex", justifyContent: "flex-end", gap: "10px" },
   button: {
@@ -113,13 +147,36 @@ const styles = {
     cursor: "pointer",
     borderRadius: "5px",
     border: "none",
+    background: "#1976d2",
+    color: "#fff",
+  },
+  cancelBtn: {
+    background: "#aaa",
   },
 };
 
-function formatDuration(seconds) {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
+function timeAgo(dateString) {
+  const now = new Date();
+  const created = new Date(dateString);
+  const seconds = Math.floor((now - created) / 1000);
+
+  const intervals = [
+    { label: "year", seconds: 31536000 },
+    { label: "month", seconds: 2592000 },
+    { label: "week", seconds: 604800 },
+    { label: "day", seconds: 86400 },
+    { label: "hour", seconds: 3600 },
+    { label: "min", seconds: 60 },
+    { label: "second", seconds: 1 },
+  ];
+
+  for (const interval of intervals) {
+    const count = Math.floor(seconds / interval.seconds);
+    if (count >= 1) {
+      return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
+    }
+  }
+  return "just now";
 }
 
 function VideoCard({
@@ -134,11 +191,12 @@ function VideoCard({
   createdAt,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [menuHover, setMenuHover] = useState(false); // hover state
+  const [menuHover, setMenuHover] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const [newDescription, setNewDescription] = useState(description);
   const [newThumbnail, setNewThumbnail] = useState(null);
+  const navigate = useNavigate();
 
   const handleUpdateSubmit = async () => {
     try {
@@ -167,80 +225,77 @@ function VideoCard({
     }
   };
 
-  function timeAgo(dateString) {
-    const now = new Date();
-    const created = new Date(dateString);
-    const seconds = Math.floor((now - created) / 1000);
-
-    const intervals = [
-      { label: "year", seconds: 31536000 },
-      { label: "month", seconds: 2592000 },
-      { label: "week", seconds: 604800 },
-      { label: "day", seconds: 86400 },
-      { label: "hour", seconds: 3600 },
-      { label: "minute", seconds: 60 },
-      { label: "second", seconds: 1 },
-    ];
-
-    for (const interval of intervals) {
-      const count = Math.floor(seconds / interval.seconds);
-      if (count >= 1) {
-        return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
-      }
-    }
-    return "just now";
-  }
-
   return (
-    <div style={styles.card}>
-      {/* Thumbnail with duration */}
+    <div
+      style={styles.card}
+      onClick={() => navigate(`/video/${_id}`)} // ✅ open VideoPage
+    >
+      {/* Thumbnail */}
       <div style={styles.thumbnailWrapper}>
-        <img src={thumbnail} alt={title} style={styles.thumbnail} />
-        <span style={styles.durationBadge}>
-          {duration ? formatDuration(duration) : "0:00"}
-        </span>
+        <img src={thumbnail} alt="thumbnail" style={styles.thumbnail} />
+        <span style={styles.durationBadge}>{duration}</span>
       </div>
 
-      {/* Title and menu */}
+      {/* Avatar + Right Column */}
       <div style={styles.content}>
-        <div style={styles.titleRow}>
-          <h3 style={styles.title}>{title}</h3>
-          <button
-            onMouseEnter={() => setMenuHover(true)}
-            onMouseLeave={() => setMenuHover(false)}
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              ...styles.menuButton,
-              ...(menuHover ? styles.menuButtonHover : {}),
-            }}
-          >
-            ⋮
-          </button>
-          {menuOpen && (
-            <div style={styles.menuPopup}>
-              <div
-                style={styles.popupItem}
-                onClick={() => {
-                  setShowUpdateModal(true);
-                  setMenuOpen(false);
+        <div style={styles.row}>
+          <img src={avatar} alt="avatar" style={styles.avatar} />
+
+          <div style={styles.rightColumn}>
+            {/* Title + Menu */}
+            <div style={styles.titleRow}>
+              <h3 style={styles.title}>{title}</h3>
+              <button
+                style={{
+                  ...styles.menuButton,
+                  ...(menuHover ? styles.menuButtonHover : {}),
+                }}
+                onMouseEnter={(e) => {
+                  e.stopPropagation(); // ✅ prevent triggering navigate
+                  setMenuHover(true);
+                }}
+                onMouseLeave={() => setMenuHover(false)}
+                onClick={(e) => {
+                  e.stopPropagation(); // ✅ prevent triggering navigate
+                  setMenuOpen(!menuOpen);
                 }}
               >
-                Update
-              </div>
-              <div style={styles.popupItem} onClick={handleDelete}>
-                Delete
-              </div>
+                ⋮
+              </button>
+              {menuOpen && (
+                <div
+                  style={styles.menuPopup}
+                  onClick={(e) => e.stopPropagation()} // ✅ prevent nav
+                >
+                  <div
+                    style={styles.popupItem}
+                    onClick={() => {
+                      setShowUpdateModal(true);
+                      setMenuOpen(false);
+                    }}
+                  >
+                    Update
+                  </div>
+                  <div style={styles.popupItem} onClick={handleDelete}>
+                    Delete
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <p style={styles.description}>{description}</p>
-        <span style={styles.owner}>
-          <img src={avatar} alt="avatar" style={styles.avatar} /> {owner}{" "}
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{" "}
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          {views ? `${views} views` : "0 views"} • {timeAgo(createdAt)}
-        </span>
+            {/* Description */}
+            <p style={styles.description}>
+              {description.length > 60
+                ? description.substring(0, 60) + "..."
+                : description}
+            </p>
+            <p style={styles.owner}>{owner}</p>
+            {/* Views + Time */}
+            <div style={styles.meta}>
+              {views ? `${views} views` : "0 views"} • {timeAgo(createdAt)}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Update Modal */}
@@ -271,7 +326,7 @@ function VideoCard({
             />
             <div style={styles.buttonRow}>
               <button
-                style={styles.button}
+                style={{ ...styles.button, ...styles.cancelBtn }}
                 onClick={() => setShowUpdateModal(false)}
               >
                 Cancel
