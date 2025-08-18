@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { publishVideo } from "../api/videoApi"; // <-- your API function
 import { useNavigate } from "react-router-dom";
+import "../styles/leftDashboard.css";
 
 export default function UploadVideo() {
   const [videoFile, setVideoFile] = useState(null);
@@ -55,7 +56,7 @@ export default function UploadVideo() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="upload-container">
       <h2>Upload Video</h2>
       <form onSubmit={handleSubmit}>
         <div>
