@@ -1,4 +1,9 @@
-
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* prevent extra scrolling */
+}
 
 /* Shared container styles */
 .login-container,
@@ -12,7 +17,7 @@
   margin: 0 auto;
   text-align: center;
   position: absolute;
-  top: 50%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -259,4 +264,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
