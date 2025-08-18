@@ -1,132 +1,36 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #1f1c2c, #928dab);
-  justify-content: center;
-  align-items: center;
-}
-
-.login-container {
-  background: rgba(0, 0, 0, 0.85);
-  padding: 40px 35px;
-  border-radius: 10px;
-  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
-  width: 350px;
-  height: 40vh;
-  max-width: 500px;
-  text-align: center;
-  animation: fadeIn 0.8s ease-in-out;
-  position: relative;
-  left: 500px;
-  top: 2rem;
-}
-
-.login-container h2 {
-  font-size: 30px;
-  color: #fff;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-top: -5px;   
-  margin-bottom: 40px;
-}
-
-.login-container input {
-  display: block;       
-  width: 100%;
-  max-width: 300px;          
-  padding: 12px 15px;
-  margin: 20px auto;   
-  border: none;
-  outline: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-size: 15px;
-  transition: all 0.3s ease; 
-}
-
-.login-container input::placeholder {
-  color: #aaa;
-}
-
-.login-container input:focus {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.02);
-}
-
-.login-container button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  border: none;
-  outline: none;
-  border-radius: 8px;
-  background: #ff3b3b;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.login-container button:hover {
-  background: #e63232;
-  transform: translateY(-2px);
-}
-
-.login-container button:active {
-  transform: scale(0.98);
-}
-
-.login-container p {
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 
-/* Register Page Styling */
+/* Shared container styles */
+.login-container,
 .register-container {
-   background: rgba(0, 0, 0, 0.85);
-  padding: 40px 35px;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 30px 25px;
   border-radius: 10px;
   box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
-  width: 100%;
-  max-width: 450px;
+  width: 90%;
+  max-width: 400px;
   text-align: center;
-  animation: fadeIn 0.8s ease-in-out;
-  position: relative;
-  left: 500px;
-  top: 1.2rem ;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
+.login-container h2,
 .register-container h2 {
-  font-size: 28px;
+  font-size: 26px;
   color: #fff;
   text-transform: uppercase;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   letter-spacing: 1px;
-    margin-top: -5px;   
-  margin-bottom: 40px;
 }
 
+.login-container input,
 .register-container input {
-  display: block;       
+  display: block;
   width: 100%;
-  max-width: 400px;          
   padding: 12px 15px;
-  margin: 20px auto;   
+  margin: 15px 0;
   border: none;
   outline: none;
   border-radius: 8px;
@@ -134,17 +38,24 @@ body {
   color: #fff;
   font-size: 15px;
   transition: all 0.3s ease;
+  display: block;
+  width: 90%;       /* keep same width for all */
+  margin: 15px auto; /* centers them inside */
+  text-align: left
 }
 
+.login-container input::placeholder,
 .register-container input::placeholder {
   color: #aaa;
 }
 
+.login-container input:focus,
 .register-container input:focus {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(1.02);
 }
 
+/* File input styling for register */
 .register-container input[type="file"] {
   background: transparent;
   color: #ddd;
@@ -152,12 +63,13 @@ body {
   cursor: pointer;
   padding: 10px;
 }
-
 .register-container input[type="file"]:hover {
   border-color: #ff3b3b;
   color: #ff3b3b;
 }
 
+/* Buttons */
+.login-container button,
 .register-container button {
   width: 100%;
   padding: 12px;
@@ -171,21 +83,25 @@ body {
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
 }
-
+.login-container button:hover,
 .register-container button:hover {
   background: #e63232;
   transform: translateY(-2px);
 }
-
+.login-container button:active,
 .register-container button:active {
   transform: scale(0.98);
 }
 
+/* Paragraphs */
+.login-container p,
 .register-container p {
   margin: 10px 0;
   font-size: 14px;
+  color: #fff;
 }
 
+/* Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -194,5 +110,31 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .login-container,
+  .register-container {
+    padding: 25px 20px;
+    max-width: 90%;
+  }
+
+  .login-container h2,
+  .register-container h2 {
+    font-size: 22px;
+  }
+
+  .login-container input,
+  .register-container input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .login-container button,
+  .register-container button {
+    font-size: 15px;
+    padding: 10px;
   }
 }
