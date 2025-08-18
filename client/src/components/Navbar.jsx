@@ -58,7 +58,7 @@ export default function Navbar() {
         <button className="hamburger" onClick={toggleSidebar}>
           <MenuIcon style={{ fontSize: "32px" }} />
         </button>
-        <YouTubeIcon style={{fontSize:"40px" , color:"red"}}/>
+        <YouTubeIcon style={{ fontSize: "40px", color: "red" }} />
         <Link
           to="/"
           style={{
@@ -67,7 +67,8 @@ export default function Navbar() {
             marginLeft: "0px",
             marginTop: "-4px",
             fontSize: "30px",
-          }}>
+          }}
+        >
           MyTube
         </Link>
       </div>
@@ -216,7 +217,7 @@ export default function Navbar() {
         <nav className="nav">
           <div style={{ display: "flex", alignItems: "center" }}>
             <button className="hamburger" onClick={toggleSidebar}>
-              <YouTubeIcon style={{ fontSize: "33px", marginTop:"-1.8rem"}} />
+              <YouTubeIcon style={{ fontSize: "33px", marginTop: "-1.8rem" }} />
             </button>
 
             <p
@@ -225,7 +226,7 @@ export default function Navbar() {
                 textDecoration: "none",
                 marginLeft: "0px",
                 marginTop: "-1px",
-                backgroundColor:"",
+                backgroundColor: "",
                 fontSize: "30px",
               }}
             >
@@ -236,9 +237,7 @@ export default function Navbar() {
         <ul className="hover">
           <li>
             <HomeIcon />
-            <Link to="/" >
-              Home
-            </Link>
+            <Link to="/">Home</Link>
           </li>
           <li>
             <SmartDisplayOutlinedIcon />

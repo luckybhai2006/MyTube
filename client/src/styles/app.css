@@ -181,7 +181,7 @@ ul li {
   cursor: pointer;
   color: #fff; /* default text color */
   transition: background-color 0.2s ease, color 0.2s ease;
-  font-size:20px ;
+  font-size: 20px;
 }
 
 ul li:hover {
@@ -198,4 +198,58 @@ ul li a {
 
 ul li a:hover {
   color: #ff4500; /* keep it visible */
+}
+/* Vertical Stick Sidebar */
+.vertical-bar {
+  position: fixed;
+  top: 60px; /* adjust below navbar */
+  left: 0;
+  width: 60px;
+  height: calc(100vh - 60px);
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  z-index: 1000;
+}
+
+.vertical-bar .icon-link {
+  color: #fff;
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  transition: background 0.2s, color 0.2s;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.vertical-bar .icon-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.vertical-bar-inline {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px; /* small space from hamburger */
+}
+
+.vertical-bar-inline .icon-link {
+  color: #fff;
+  margin: 10px 0;
+  font-size: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.vertical-bar-inline .icon-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
