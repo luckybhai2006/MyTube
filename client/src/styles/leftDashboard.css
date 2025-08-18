@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Poppins", sans-serif;
-  /* background: linear-gradient(135deg, #1f1c2c, #928dab); */
-  justify-content: center;
-  align-items: center;
-}
-=======
->>>>>>> 82be409b1080a23db33c97d7769981ae24e7f283
 
 
 /* Shared container styles */
@@ -18,8 +7,9 @@ body {
   padding: 30px 25px;
   border-radius: 10px;
   box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
-  width: 90%;
-  max-width: 400px;
+  width: 100%;
+  max-width: 400px;   /* 500px for upload */
+  margin: 0 auto;
   text-align: center;
   position: absolute;
   top: 50%;
@@ -32,18 +22,6 @@ body {
   font-size: 26px;
   color: #fff;
   text-transform: uppercase;
-<<<<<<< HEAD
-  margin-top: -5px;
-  margin-bottom: 40px;
-}
-
-.login-container input {
-  display: block;
-  width: 100%;
-  max-width: 300px;
-  padding: 12px 15px;
-  margin: 20px auto;
-=======
   margin-bottom: 25px;
   letter-spacing: 1px;
 }
@@ -54,7 +32,6 @@ body {
   width: 100%;
   padding: 12px 15px;
   margin: 15px 0;
->>>>>>> 82be409b1080a23db33c97d7769981ae24e7f283
   border: none;
   outline: none;
   border-radius: 8px;
@@ -62,13 +39,13 @@ body {
   color: #fff;
   font-size: 15px;
   transition: all 0.3s ease;
-<<<<<<< HEAD
-=======
   display: block;
   width: 90%;       /* keep same width for all */
   margin: 15px auto; /* centers them inside */
-  text-align: left
->>>>>>> 82be409b1080a23db33c97d7769981ae24e7f283
+  text-align: left;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .login-container input::placeholder,
@@ -140,12 +117,6 @@ body {
   }
 }
 
-<<<<<<< HEAD
-/* Register Page Styling */
-.register-container {
-  background: rgba(0, 0, 0, 0.85);
-  padding: 40px 35px;
-=======
 /* Responsive */
 @media (max-width: 600px) {
   .login-container,
@@ -177,20 +148,13 @@ body {
 .upload-container {
   background: rgba(0, 0, 0, 0.85);
   padding: 30px 25px;
->>>>>>> 82be409b1080a23db33c97d7769981ae24e7f283
   border-radius: 10px;
   box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
-  width: 90%;
-  max-width: 500px;
-  margin: 50px auto;
+   width: 100%;
+  max-width: 400px;   
+  margin: 10px auto;
   text-align: center;
   animation: fadeIn 0.8s ease-in-out;
-<<<<<<< HEAD
-  position: relative;
-  left: 500px;
-  top: 1.2rem;
-=======
->>>>>>> 82be409b1080a23db33c97d7769981ae24e7f283
 }
 
 .upload-container h2 {
@@ -199,18 +163,6 @@ body {
   text-transform: uppercase;
   margin-bottom: 25px;
   letter-spacing: 1px;
-<<<<<<< HEAD
-  margin-top: -5px;
-  margin-bottom: 40px;
-}
-
-.register-container input {
-  display: block;
-  width: 100%;
-  max-width: 400px;
-  padding: 12px 15px;
-  margin: 20px auto;
-=======
 }
 
 /* Labels */
@@ -226,7 +178,6 @@ body {
 .upload-container input,
 .upload-container textarea {
   padding: 12px 15px;
->>>>>>> 82be409b1080a23db33c97d7769981ae24e7f283
   border: none;
   outline: none;
   border-radius: 8px;
@@ -237,6 +188,10 @@ body {
   transition: all 0.3s ease;
   width: 90%;       /* keep same width for all */
   margin: 15px auto;
+  text-align: left;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .upload-container input[type="file"] {
@@ -297,4 +252,11 @@ body {
     padding: 25px 20px;
     max-width: 90%;
   }
+}
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

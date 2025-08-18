@@ -64,6 +64,7 @@ const Register = () => {
   };
 
   return (
+    <div className="auth-wrapper">
     <div className="register-container">
       <h2>Register</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -110,6 +111,7 @@ const Register = () => {
         <input type="file" name="coverImage" onChange={handleCoverChange} />
         <button type="submit">Register</button>
       </form>
+    </div>
     </div>
   );
 };

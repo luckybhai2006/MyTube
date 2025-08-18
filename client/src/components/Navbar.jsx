@@ -120,6 +120,7 @@ export default function Navbar() {
                 <li
                   style={{
                     padding: "8px 12px",
+                    margin:"12px",
                     cursor: "pointer",
                     fontSize: "0.95rem",
                   }}

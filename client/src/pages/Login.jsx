@@ -24,6 +24,7 @@ const Login = () => {
   };
 
   return (
+      <div className="auth-wrapper">
     <div className="login-container">
       <h2>Login</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -46,6 +47,7 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+      </div>
     </div>
   );
 };
