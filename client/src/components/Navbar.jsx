@@ -83,7 +83,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div style={styles.menu}>
+      <div className="menu">
         {user && (
           <div ref={createRef}>
             <button
@@ -140,9 +140,9 @@ export default function Navbar() {
         {user ? (
           <div style={{ position: "relative" }} ref={menuRef}>
             <img
-              className="avatar"
+              src={user.avatar}
               alt="avatar"
-              style={styles.avatar}
+              className="avatar"
               onClick={() => setMenuOpen(!menuOpen)}
             />
             {menuOpen && (
