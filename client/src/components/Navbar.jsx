@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link,} from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -12,6 +12,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import { SiYoutubeshorts } from "react-icons/si";
 import SmartDisplayOutlinedIcon from "@mui/icons-material/SmartDisplayOutlined";
 import "../styles/navbar.css";
+import "../styles/nprogress.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [createMenuOpen, setCreateMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const menuRef = useRef();
   const createRef = useRef();
@@ -32,7 +34,35 @@ export default function Navbar() {
     navigate("/login", { replace: true });
   };
 
-  // Close dropdowns when clicking outside
+  //loader for nav
+ useEffect(() => {
+  const handleStart = () => setIsLoading(true);
+  const handleComplete = () => setIsLoading(false);
+
+  // Get the current navigation state
+  const navigation = window.navigator || {
+    addEventListener: () => {},
+    removeEventListener: () => {}
+  };
+
+  // Fallback for browsers without window.navigation
+  const handleNavigation = () => {
+    handleStart();
+    const timer = setTimeout(handleComplete, 1000); // Adjust timeout as needed
+    return () => clearTimeout(timer);
+  };
+
+  // Listen for route changes
+  const unlisten = () => {
+    // In React Router v6, we need a different approach
+    window.addEventListener('popstate', handleNavigation);
+    return () => window.removeEventListener('popstate', handleNavigation);
+  };
+
+  const cleanup = unlisten();
+  return cleanup;
+}, [navigate]);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -61,6 +91,9 @@ export default function Navbar() {
 
   return (
     <>
+     <div className={`loader-container ${isLoading ? 'active' : ''}`}>
+    <div className="loader-progress loader-indeterminate" />
+    </div>
       {/* Sticky Top Navbar */}
       <nav className="sticky-navbar">
         <div className="nav-left">
