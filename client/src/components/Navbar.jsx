@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { useNavigate, Link,} from "react-router-dom";
+import { useNavigate, Link,useLocation} from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -11,16 +11,17 @@ import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { SiYoutubeshorts } from "react-icons/si";
 import SmartDisplayOutlinedIcon from "@mui/icons-material/SmartDisplayOutlined";
+import NProgress from "nprogress";
 import "../styles/navbar.css";
 import "../styles/nprogress.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, handleLogout } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [createMenuOpen, setCreateMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const menuRef = useRef();
   const createRef = useRef();
@@ -35,33 +36,14 @@ export default function Navbar() {
   };
 
   //loader for nav
- useEffect(() => {
-  const handleStart = () => setIsLoading(true);
-  const handleComplete = () => setIsLoading(false);
+useEffect(() => {
+    NProgress.start();
+    const timer = setTimeout(() => {
+      NProgress.done();
+    }, 500); // simulate small delay for smoother effect
 
-  // Get the current navigation state
-  const navigation = window.navigator || {
-    addEventListener: () => {},
-    removeEventListener: () => {}
-  };
-
-  // Fallback for browsers without window.navigation
-  const handleNavigation = () => {
-    handleStart();
-    const timer = setTimeout(handleComplete, 1000); // Adjust timeout as needed
     return () => clearTimeout(timer);
-  };
-
-  // Listen for route changes
-  const unlisten = () => {
-    // In React Router v6, we need a different approach
-    window.addEventListener('popstate', handleNavigation);
-    return () => window.removeEventListener('popstate', handleNavigation);
-  };
-
-  const cleanup = unlisten();
-  return cleanup;
-}, [navigate]);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -91,9 +73,6 @@ export default function Navbar() {
 
   return (
     <>
-     <div className={`loader-container ${isLoading ? 'active' : ''}`}>
-    <div className="loader-progress loader-indeterminate" />
-    </div>
       {/* Sticky Top Navbar */}
       <nav className="sticky-navbar">
         <div className="nav-left">
