@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
+import "../styles/leftDashboard.css";
 
 const Login = () => {
   const { handleLogin } = useContext(UserContext); // use context login
@@ -16,7 +17,7 @@ const Login = () => {
     const success = await handleLogin(formData); // important: update context
     if (success) {
       setError("");
-      navigate("/"); // redirect to home
+      navigate("/");
     } else {
       setError("Invalid credentials");
     }

@@ -13,7 +13,6 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import { SiYoutubeshorts } from "react-icons/si";
 import SmartDisplayOutlinedIcon from "@mui/icons-material/SmartDisplayOutlined";
 import "../styles/app.css";
-import "../styles/leftDashboard.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
