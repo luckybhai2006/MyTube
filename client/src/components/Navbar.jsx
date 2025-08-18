@@ -60,6 +60,7 @@ export default function Navbar() {
         <button className="hamburger" onClick={toggleSidebar}>
           <MenuIcon style={{ fontSize: "32px" }} />
         </button>
+        <YouTubeIcon style={{fontSize:"40px" , color:"red"}}/>
         <Link
           to="/"
           style={{
@@ -68,8 +69,7 @@ export default function Navbar() {
             marginLeft: "0px",
             marginTop: "-4px",
             fontSize: "30px",
-          }}
-        >
+          }}>
           MyTube
         </Link>
       </div>
