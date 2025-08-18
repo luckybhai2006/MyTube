@@ -56,6 +56,7 @@ export default function UploadVideo() {
   };
 
   return (
+    <div className="auth-wrapper">
     <div className="upload-container">
       <h2>Upload Video</h2>
       <form onSubmit={handleSubmit}>
@@ -106,6 +107,7 @@ export default function UploadVideo() {
         </div>
         <button type="submit">Upload</button>
       </form>
+    </div>
     </div>
   );
 }
