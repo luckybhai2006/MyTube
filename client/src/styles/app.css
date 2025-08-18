@@ -181,7 +181,7 @@ ul li {
   cursor: pointer;
   color: #fff; /* default text color */
   transition: background-color 0.2s ease, color 0.2s ease;
-  font-size: 20px;
+  font-size:20px ;
 }
 
 ul li:hover {
@@ -199,4 +199,3 @@ ul li a {
 ul li a:hover {
   color: #ff4500; /* keep it visible */
 }
-/* .................................................*/

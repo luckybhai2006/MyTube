@@ -15,46 +15,6 @@ import SmartDisplayOutlinedIcon from "@mui/icons-material/SmartDisplayOutlined";
 import "../styles/app.css";
 import "../styles/leftDashboard.css";
 
-const styles = {
-  nav: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "5px 12px",
-    backgroundColor: "#121212",
-    color: "#fff",
-    // borderRadius: "10px",
-    alignItems: "center",
-  },
-  menu: { display: "flex", gap: "10px", alignItems: "center" },
-  button: {
-    padding: "6px 12px",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    backgroundColor: "#ff4500",
-    color: "#fff",
-  },
-  createButton: {
-    padding: "6px 16px",
-    border: "none",
-    borderRadius: "50px",
-    cursor: "pointer",
-    backgroundColor: "#ff0000",
-    color: "#fff",
-    // fontWeight: "bold",
-    fontSize: "1rem",
-    height: "35px",
-    transition: "background-color 0.2s ease",
-  },
-  avatar: {
-    width: "40px",
-    height: "40px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    marginRight: "15px",
-  },
-};
-
 export default function Navbar() {
   const navigate = useNavigate();
   const { user, handleLogout } = useContext(UserContext);
@@ -94,7 +54,7 @@ export default function Navbar() {
   }, [user]);
 
   return (
-    <nav style={styles.nav}>
+    <nav className="nav">
       <div style={{ display: "flex", alignItems: "center" }}>
         <button className="hamburger" onClick={toggleSidebar}>
           <MenuIcon style={{ fontSize: "32px" }} />
@@ -128,12 +88,11 @@ export default function Navbar() {
           <div ref={createRef}>
             <button
               style={{
-                ...styles.createButton,
                 backgroundColor: hoverCreate
                   ? "rgba(255, 255, 255, 0.22)"
                   : "rgba(0, 0, 0, 0)",
               }}
-              className="create-btn"
+              className="create-btn createButton"
               onMouseEnter={() => setHoverCreate(true)}
               onMouseLeave={() => setHoverCreate(false)}
               onClick={() => setCreateMenuOpen(!createMenuOpen)}
@@ -181,7 +140,7 @@ export default function Navbar() {
         {user ? (
           <div style={{ position: "relative" }} ref={menuRef}>
             <img
-              src={user.avatar}
+              className="avatar"
               alt="avatar"
               style={styles.avatar}
               onClick={() => setMenuOpen(!menuOpen)}
@@ -245,10 +204,10 @@ export default function Navbar() {
         ) : (
           <>
             <Link to="/login">
-              <button style={styles.button}>Login</button>
+              <button className="button">Login</button>
             </Link>
             <Link to="/register">
-              <button style={styles.button}>Register</button>
+              <button className="button">Register</button>
             </Link>
           </>
         )}
@@ -258,7 +217,7 @@ export default function Navbar() {
         <nav className="nav">
           <div style={{ display: "flex", alignItems: "center" }}>
             <button className="hamburger" onClick={toggleSidebar}>
-              <YouTubeIcon style={{ fontSize: "32px" }} />
+              <YouTubeIcon style={{ fontSize: "33px", marginTop:"-1.8rem"}} />
             </button>
 
             <p
@@ -266,7 +225,8 @@ export default function Navbar() {
                 color: "#fff",
                 textDecoration: "none",
                 marginLeft: "0px",
-                marginTop: "-4px",
+                marginTop: "-1px",
+                backgroundColor:"",
                 fontSize: "30px",
               }}
             >
@@ -277,7 +237,7 @@ export default function Navbar() {
         <ul className="hover">
           <li>
             <HomeIcon />
-            <Link to="/" className="home">
+            <Link to="/" >
               Home
             </Link>
           </li>
