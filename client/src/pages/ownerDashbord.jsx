@@ -3,17 +3,6 @@ import VideoCard from "../components/VideoCard";
 import { UserContext } from "../context/userContext";
 import axiosInstance from "../api/axiosInstance";
 
-// const styles = {
-//   container: {
-//     display: "grid",
-//     gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", // responsive columns
-//     gap: "4px",
-//     marginTop: "10px",
-//     marginLeft: "70px",
-//     marginRight: "10px",
-//   },
-// };
-
 const Dashboard = () => {
   const { user } = useContext(UserContext);
   const [videos, setVideos] = useState([]);

@@ -11,32 +11,58 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   const userId = req.user._id;
 
-  if (!isValidObjectId(videoId)) {
-    throw new ApiError(400, "Invalid video ID");
-  }
+  if (!isValidObjectId(videoId)) throw new ApiError(400, "Invalid video ID");
 
-  // ✅ Check if the video exists
-  const videoExists = await Video.findById(videoId);
-  if (!videoExists) {
-    throw new ApiError(404, "Video not found");
-  }
+  const video = await Video.findById(videoId);
+  if (!video) throw new ApiError(404, "Video not found");
 
+  let liked = false;
   const existingLike = await Like.findOne({ video: videoId, likedBy: userId });
 
   if (existingLike) {
     await existingLike.deleteOne();
-    return res
-      .status(200)
-      .json(
-        new ApiResponse(200, { liked: false }, "Video unliked successfully")
-      );
+    liked = false;
+
+    // Decrement video.likes
+    video.likes = Math.max(0, (video.likes || 0) - 1);
+    await video.save();
+  } else {
+    await Like.create({ video: videoId, likedBy: userId });
+    liked = true;
+
+    // Increment video.likes
+    video.likes = (video.likes || 0) + 1;
+    await video.save();
   }
 
-  const like = await Like.create({ video: videoId, likedBy: userId });
+  return res.status(200).json({
+    data: { liked, likes: video.likes },
+    message: liked ? "Video liked successfully" : "Video unliked successfully",
+  });
+});
+
+// Get all liked videos by user
+const getLikedVideos = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const likedVideos = await Like.find({ likedBy: userId, video: { $ne: null } })
+    .populate({
+      path: "video",
+      populate: { path: "owner", select: "username avatar" },
+    })
+    .select("-comment -tweet");
+
+  const validLikedVideos = likedVideos.filter((like) => like.video !== null);
 
   return res
-    .status(201)
-    .json(new ApiResponse(201, { liked: true }, "Video liked successfully"));
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        validLikedVideos,
+        "Liked videos fetched successfully"
+      )
+    );
 });
 
 // Toggle like for comment
@@ -100,31 +126,6 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
   return res
     .status(201)
     .json(new ApiResponse(201, { liked: true }, "Tweet liked successfully"));
-});
-
-// Get all liked videos by user
-const getLikedVideos = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
-
-  const likedVideos = await Like.find({
-    likedBy: userId,
-    video: { $ne: null },
-  })
-    .populate("video")
-    .select("-comment -tweet");
-
-  // ✅ Filter out deleted videos
-  const validLikedVideos = likedVideos.filter((like) => like.video !== null);
-
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        validLikedVideos,
-        "Liked videos fetched successfully"
-      )
-    );
 });
 
 export { toggleCommentLike, toggleTweetLike, toggleVideoLike, getLikedVideos };

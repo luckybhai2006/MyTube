@@ -1,0 +1,286 @@
+.liked-videos-layoutt {
+  display: flex;
+  align-items: flex-start;
+  /* min-height: 90vh; */
+  width: 94%;
+  margin-left: 5.6%;
+  background: #181818;
+  color: #fff;
+  font-family: "Roboto", Arial, sans-serif;
+  gap: 36px;
+  padding: 38px 32px 0 32px;
+  margin-top: 4%;
+  /* Ensure the full viewport is filled for scrolling to work beautifully */
+  height: 94vh;
+  box-sizing: border-box;
+  overflow: hidden; /* prevent unwanted full-page scrollbars */
+}
+
+.playlist-info-cardd {
+  min-width: 340px;
+  max-width: 400px;
+  background: linear-gradient(120deg, #6b1a00 40%, #ffe1a8 100%);
+  border-radius: 32px;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.14);
+  padding-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  height: fit-content;
+}
+
+.playlist-bannerr {
+  width: 100%;
+  overflow: hidden;
+}
+.banner-imgg {
+  width: 100%;
+  border-radius: 32px 32px 0 0;
+  object-fit: cover;
+  max-height: 175px;
+}
+.playlist-info-contentt {
+  padding: 28px 24px 0 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.playlist-titlee {
+  margin: 0 0 10px;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+.playlist-metaa {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.03rem;
+  gap: 4px;
+  color: #330600;
+}
+.channel-namee {
+  font-weight: 600;
+  font-size: 1rem;
+}
+.video-countt,
+.updated-datee {
+  color: #825d35;
+  font-size: 0.95rem;
+}
+.action-roww {
+  margin-top: 22px;
+  display: flex;
+  gap: 14px;
+}
+.playlist-btnn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1.06em;
+  background: #fff;
+  color: #1e1e1e;
+  border-radius: 28px;
+  border: none;
+  padding: 8px 19px;
+  box-shadow: 0 2px 8px rgba(80, 80, 80, 0.1);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.1s;
+}
+.playlist-btnn:hover {
+  background: #fae1d1;
+  color: #a81d1d;
+}
+
+/* Videos Column and Tabs */
+.videos-columnn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* fill the viewport height */
+  overflow: hidden; /* child is scrollable, column itself is not */
+}
+
+.videos-listt {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  overflow-y: auto;
+  /* Ensures the filter tabs stay on top, and only the video list scrolls */
+  height: 100%;
+  padding-bottom: 32px;
+}
+
+.filter-tabss {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 28px;
+  margin-top: 6px;
+}
+.tabs {
+  padding: 8px 28px;
+  border-radius: 22px;
+  background: #252525;
+  color: #ccc;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.14s;
+}
+.tabs.active {
+  background: #fff;
+  color: #111;
+  font-weight: 700;
+}
+
+/* Videos List */
+.video-itemm {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  border-radius: 18px;
+  padding: 10px 8px;
+  background: #202020;
+  box-shadow: 0 1px 8px #0002;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.video-itemm:hover {
+  background: #333;
+  box-shadow: 0 3px 20px #1001;
+}
+.video-thumbnaill {
+  width: 168px;
+  height: 94px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.video-thumbnaill img {
+  width: 100%;
+  height: 94px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #444;
+}
+.video-durationn {
+  position: absolute;
+  bottom: 6px;
+  right: 9px;
+  background: rgba(20, 20, 30, 0.8);
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 2px 7px;
+}
+
+/* Video details */
+.video-detailss {
+  margin-left: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.video-titlee {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #e9e9e9;
+  margin: 0 0 7px 0;
+}
+
+.video-metaa {
+  display: flex;
+  gap: 11px;
+  color: #adadad;
+  font-size: 0.99em;
+  align-items: center;
+}
+/* Three-dots button */
+.menu-btnn {
+  margin-left: 16px;
+  margin-top: 5px;
+  background: none;
+  border: none;
+  color: #bbb;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 5px;
+  transition: background 0.13s;
+}
+.menu-btnn:hover {
+  background: #252525;
+  color: #fff;
+}
+
+/* Loading, error, and empty state */
+.loading-msg,
+.error-msg {
+  color: #f39200;
+  padding: 44px 0;
+  text-align: center;
+}
+.empty-state {
+  margin: 45px 0;
+  color: #8889;
+  text-align: center;
+}
+.empty-state h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.3rem;
+  color: #ccc;
+}
+/* Responsive adjustments - keep these for mobile! */
+@media (max-width: 900px) {
+  .liked-videos-layoutt {
+    flex-direction: column;
+    padding: 20px 0 0 0;
+    gap: 0;
+    height: auto;
+    margin-left: 0;
+    width: 100%;
+  }
+  .playlist-info-cardd {
+    max-width: 100%;
+    min-width: 0;
+    border-radius: 0 0 32px 32px;
+    box-shadow: none;
+    margin-bottom: 16px;
+    position: static;
+    height: auto;
+  }
+  .videos-columnn {
+    width: 100%;
+    height: auto;
+  }
+  .videos-listt {
+    height: auto;
+    overflow-y: visible;
+  }
+}
+@media (max-width: 600px) {
+  .playlist-info-contentt {
+    padding: 16px 10px 0 10px;
+  }
+  .video-itemm {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 4px;
+  }
+  .video-thumbnaill {
+    width: 100%;
+    height: 200px;
+  }
+  .videos-listt {
+    gap: 12px;
+  }
+  .filter-tabss {
+    gap: 8px;
+    padding: 0 5px;
+    font-size: 0.98em;
+    margin-bottom: 10px;
+  }
+}

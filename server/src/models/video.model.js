@@ -32,6 +32,17 @@ const videoSchema = new mongoose.Schema(
       type: Number,
       default: 0, // Default value for views
     },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    likedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
     isPublished: {
       type: Boolean,
       default: false, // Default value for isPublished
