@@ -1,22 +1,13 @@
+
 import React, { useEffect, useState, useContext } from "react";
 import VideoCard from "../components/VideoCard";
 import { UserContext } from "../context/userContext";
 import axiosInstance from "../api/axiosInstance";
 
-// const styles = {
-//   container: {
-//     display: "grid",
-//     gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", // responsive columns
-//     gap: "4px",
-//     marginTop: "10px",
-//     marginLeft: "70px",
-//     marginRight: "10px",
-//   },
-// };
-
 const Dashboard = () => {
-  const { user } = useContext(UserContext);
+  const { user, activeCategory } = useContext(UserContext);
   const [videos, setVideos] = useState([]);
+  const [filteredVideos, setFilteredVideos] = useState([]);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -25,6 +16,7 @@ const Dashboard = () => {
           withCredentials: true,
         });
         setVideos(res.data);
+        setFilteredVideos(res.data);
       } catch (err) {
         console.error("Failed to fetch videos:", err);
       }
@@ -35,11 +27,23 @@ const Dashboard = () => {
     }
   }, [user]);
 
+  // ✅ Apply global category filter whenever activeCategory changes
+  useEffect(() => {
+    if (activeCategory === "All") {
+      setFilteredVideos(videos);
+    } else {
+      setFilteredVideos(
+        videos.filter((video) => video.category === activeCategory)
+      );
+    }
+  }, [activeCategory, videos]);
+
   return (
     <div className="responsiveContainer">
-      {videos.length > 0 ? (
-        videos.map((video) => (
+      {filteredVideos.length > 0 ? (
+        filteredVideos.map((video) => (
           <VideoCard
+            key={video._id}
             createdAt={video.createdAt}
             _id={video._id}
             thumbnail={video.thumbnail}
@@ -52,7 +56,7 @@ const Dashboard = () => {
           />
         ))
       ) : (
-        <p style={{ color: "#fff" }}>No videos uploaded yet.</p>
+        <p>No videos found in {activeCategory}.</p>
       )}
     </div>
   );

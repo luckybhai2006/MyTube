@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { useLocation } from "react-router-dom";
+import ChannelSuggest from "../pages/ChannleSuggest";
 import {
   Menu as MenuIcon,
   Search as SearchIcon,
@@ -40,6 +41,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showUploadMenu, setShowUploadMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+   const { activeCategory, setActiveCategory } = useContext(UserContext);
 
   const sidebarRef = useRef();
   const searchInputRef = useRef();
@@ -472,6 +474,14 @@ export default function Navbar() {
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={toggleSidebar}></div>
       )}
+     <ChannelSuggest
+        activeCategory={activeCategory}
+        onSelectCategory={setActiveCategory}
+      />
+
+         {/* {!hideSidebar && (
+    <div className="mini-sidebar">...</div>
+  )} */}
     </>
   );
 }
