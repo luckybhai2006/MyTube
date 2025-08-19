@@ -351,6 +351,14 @@ export default function Navbar() {
               <span>Your Videos</span>
             </Link>
             <Link
+              to="/likedvideos"
+              className="sidebar-item"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <VideoCallOutlinedIcon />
+              <span>Liked Videos</span>
+            </Link>
+            <Link
               to="/history"
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}

@@ -4,7 +4,9 @@ import { getVideoById, addVideoView } from "../api/videoApi";
 import VideoCard from "../components/VideoCard";
 import axiosInstance from "../api/axiosInstance";
 import { BiDislike, BiLike } from "react-icons/bi";
+import { toggleVideoLike, getLikedVideos } from "../api/likeApi";
 import "../styles/VideoPage.css";
+
 const VideoPage = () => {
   const { videoId } = useParams();
   const [video, setVideo] = useState(null);
@@ -12,6 +14,7 @@ const VideoPage = () => {
   const [showMore, setShowMore] = useState(false);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
+  const [liked, setLiked] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -20,15 +23,28 @@ const VideoPage = () => {
     const fetchVideo = async () => {
       try {
         await addVideoView(videoId);
+
         const res = await getVideoById(videoId);
-        setVideo(res.data);
+        const videoData = res.data.data || res.data;
+        setVideo(videoData);
 
-        setLikes(res.data.likes || 0);
-        setDislikes(res.data.dislikes || 0);
+        // Initial likes and dislikes
+        setLikes(videoData.likes || 0);
+        setDislikes(videoData.dislikes || 0);
 
-        const allVideos = await axiosInstance.get("/videos");
-        setRecommended(allVideos.data.filter((v) => v._id !== videoId));
+        // Check if user liked this video
+        const likedVideosRes = await getLikedVideos();
+        const likedVideos =
+          likedVideosRes.data.data || likedVideosRes.data || [];
+        const isLiked = likedVideos.some((like) => like.video?._id === videoId);
+        setLiked(isLiked);
 
+        // Recommended videos
+        const allVideosRes = await axiosInstance.get("/videos");
+        const allVideos = allVideosRes.data.data || allVideosRes.data;
+        setRecommended(allVideos.filter((v) => v._id !== videoId));
+
+        // Sample comments
         setComments([
           { id: 1, user: "John Doe", text: "Great video!" },
           { id: 2, user: "Jane Smith", text: "Very helpful, thanks!" },
@@ -41,8 +57,26 @@ const VideoPage = () => {
     if (videoId) fetchVideo();
   }, [videoId]);
 
-  const handleLike = () => setLikes((prev) => (prev === 0 ? 1 : prev));
-  const handleDislike = () => setDislikes((prev) => (prev === 0 ? 1 : prev));
+  // Toggle like
+  const handleLike = async () => {
+    try {
+      const res = await toggleVideoLike(videoId);
+
+      // Backend response may wrap data inside `data` property
+      const data = res.data.data || res.data;
+
+      if (data.likes !== undefined) setLikes(data.likes);
+      setLiked(data.liked);
+    } catch (err) {
+      console.error("Error toggling like:", err);
+    }
+  };
+
+  const handleDislike = () => {
+    // Placeholder for future dislike API
+    setDislikes((prev) => (prev === 0 ? 1 : prev));
+  };
+
   const handleSubscribe = () => setSubscribed(!subscribed);
 
   const handleAddComment = () => {
@@ -66,20 +100,21 @@ const VideoPage = () => {
         flexWrap: "wrap",
         background: "#fff",
         color: "#000",
-        // marginTop: "4%",
       }}
       className="my-container"
     >
       {/* Main Video Section */}
       <div style={{ flex: 2, minWidth: "320px" }}>
         <video
-          src={video.data.videoFile}
+          src={video.videoFile || video.data?.videoFile}
           controls
           autoPlay
           style={{ width: "100%", borderRadius: "10px" }}
         />
 
-        <h2 style={{ margin: "12px 0", color: "#000" }}>{video.data.title}</h2>
+        <h2 style={{ margin: "12px 0", color: "#000" }}>
+          {video.title || video.data?.title}
+        </h2>
 
         <div
           style={{
@@ -89,8 +124,12 @@ const VideoPage = () => {
             color: "#555",
           }}
         >
-          <span>{video.data.views} views</span>
-          <span>{new Date(video.data.createdAt).toLocaleDateString()}</span>
+          <span>{video.views || video.data?.views} views</span>
+          <span>
+            {new Date(
+              video.createdAt || video.data?.createdAt
+            ).toLocaleDateString()}
+          </span>
         </div>
 
         {/* Channel + Subscribe + Actions */}
@@ -104,10 +143,9 @@ const VideoPage = () => {
             gap: "12px",
           }}
         >
-          {/* Avatar + Channel Info + Subscribe */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <img
-              src={video.data.owner.avatar}
+              src={video.owner?.avatar || video.data?.owner?.avatar}
               alt="channel avatar"
               style={{
                 width: "50px",
@@ -118,14 +156,13 @@ const VideoPage = () => {
             />
             <div>
               <h4 style={{ margin: 0, color: "#000" }}>
-                {video.data.owner.username}
+                {video.owner?.username || video.data?.owner?.username}
               </h4>
               <p style={{ margin: 0, fontSize: "13px", color: "#777" }}>
                 1.2K subscribers
               </p>
             </div>
 
-            {/* Subscribe Button beside channel name */}
             <button
               onClick={handleSubscribe}
               style={{
@@ -143,7 +180,7 @@ const VideoPage = () => {
             </button>
           </div>
 
-          {/* Actions Row (like/dislike/share) */}
+          {/* Actions Row */}
           <div
             style={{
               display: "flex",
@@ -156,7 +193,8 @@ const VideoPage = () => {
               onClick={handleLike}
               style={{
                 padding: "6px 12px",
-                background: "#f1f1f1",
+                background: liked ? "#065fd4" : "#f1f1f1",
+                color: liked ? "#fff" : "#000",
                 border: "1px solid #ddd",
                 borderRadius: "8px",
                 cursor: "pointer",
@@ -169,6 +207,7 @@ const VideoPage = () => {
               <BiLike style={{ fontSize: "20px" }} />
               {likes}
             </button>
+
             <button
               onClick={handleDislike}
               style={{
@@ -186,6 +225,7 @@ const VideoPage = () => {
               <BiDislike style={{ fontSize: "20px" }} />
               {dislikes}
             </button>
+
             <button
               style={{
                 padding: "6px 12px",
@@ -196,7 +236,7 @@ const VideoPage = () => {
               }}
               onClick={() =>
                 navigator.share?.({
-                  title: video.data.title,
+                  title: video.title || video.data?.title,
                   url: window.location.href,
                 })
               }
@@ -205,6 +245,7 @@ const VideoPage = () => {
             </button>
           </div>
         </div>
+
         {/* Description */}
         <div
           style={{
@@ -217,9 +258,13 @@ const VideoPage = () => {
           }}
         >
           {showMore
-            ? video.data.description
-            : video.data.description.slice(0, 150) + "..."}
-          {video.data.description.length > 150 && (
+            ? video.description || video.data?.description
+            : (video.description || video.data?.description || "").slice(
+                0,
+                150
+              ) + "..."}
+          {(video.description || video.data?.description || "").length >
+            150 && (
             <button
               onClick={() => setShowMore(!showMore)}
               style={{
@@ -296,8 +341,8 @@ const VideoPage = () => {
               duration={v.duration}
               title={v.title}
               description={v.description}
-              owner={v.owner.username}
-              avatar={v.owner.avatar}
+              owner={v.owner?.username}
+              avatar={v.owner?.avatar}
               views={v.views}
               createdAt={v.createdAt}
             />

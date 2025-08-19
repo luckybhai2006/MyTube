@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/ownerDashbord";
+import LikedVideosPage from "./pages/likedVideo";
 import Home from "./pages/Home";
 import UpdateVideo from "./pages/UploadVideo";
 import VideoPage from "./pages/VideoPage";
@@ -24,6 +25,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/likedvideos"
+          element={
+            <ProtectedRoute>
+              <LikedVideosPage />
             </ProtectedRoute>
           }
         />

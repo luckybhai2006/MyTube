@@ -35,3 +35,15 @@ export const togglePublishStatus = (videoId) =>
 // New API to increment views
 export const addVideoView = (videoId) =>
   axiosInstance.post(`/videos/views/${videoId}`);
+
+// Like a video
+export const likeVideo = (videoId) =>
+  axiosInstance.post(`/videos/like/${videoId}`, null, {
+    withCredentials: true, // send cookies if needed
+  });
+
+// Unlike a video
+export const unlikeVideo = (videoId) =>
+  axiosInstance.post(`/videos/unlike/${videoId}`, null, {
+    withCredentials: true,
+  });
