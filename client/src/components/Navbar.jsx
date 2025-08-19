@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
-
+import { useLocation } from "react-router-dom";
 import {
   Menu as MenuIcon,
   Search as SearchIcon,
@@ -21,7 +21,7 @@ import {
   Help as HelpIcon,
   Feedback as FeedbackIcon,
 } from "@mui/icons-material";
-import { SiYoutubeshorts,SiYoutubegaming } from "react-icons/si";
+import { SiYoutubeshorts, SiYoutubegaming } from "react-icons/si";
 import { MdNewspaper } from "react-icons/md";
 import { GrTrophy } from "react-icons/gr";
 import { IoMusicalNotesOutline } from "react-icons/io5";
@@ -29,6 +29,10 @@ import { PiStudentDuotone } from "react-icons/pi";
 import "../styles/navbar.css";
 
 export default function Navbar() {
+  const location = useLocation();
+
+  // Only hide the mini sidebar on /video/:videoId pages
+  const hideSidebar = location.pathname.startsWith("/video/");
   const navigate = useNavigate();
   const { user, handleLogout } = useContext(UserContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -369,7 +373,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
-            <IoMusicalNotesOutline />
+              <IoMusicalNotesOutline />
               <span>Music</span>
             </Link>
             <Link
@@ -377,7 +381,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
-            <SiYoutubegaming />
+              <SiYoutubegaming />
               <span>Gaming</span>
             </Link>
             <Link
@@ -385,7 +389,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
-            <MdNewspaper/>
+              <MdNewspaper />
               <span>News</span>
             </Link>
             <Link
@@ -393,7 +397,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
-            <GrTrophy/>
+              <GrTrophy />
               <span>Sports</span>
             </Link>
             <Link
@@ -401,7 +405,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
-            <PiStudentDuotone/>
+              <PiStudentDuotone />
               <span>Learning</span>
             </Link>
           </div>
@@ -444,25 +448,26 @@ export default function Navbar() {
       </div>
 
       {/* Mini Sidebar */}
-      <div className="mini-sidebar">
-        <Link to="/" className="mini-sidebar-item">
-          <HomeIcon />
-          <span>Home</span>
-        </Link>
-        <Link to="/shorts" className="mini-sidebar-item">
-          <SiYoutubeshorts />
-          <span>Shorts</span>
-        </Link>
-        <Link to="/subscriptions" className="mini-sidebar-item">
-          <SubscriptionsIcon />
-          <span>Subs</span>
-        </Link>
-        <Link className="mini-sidebar-item">
-          <LibraryIcon />
-          <span>Library</span>
-        </Link>
-      </div>
-
+      {!hideSidebar && (
+        <div className="mini-sidebar">
+          <Link to="/" className="mini-sidebar-item">
+            <HomeIcon />
+            <span>Home</span>
+          </Link>
+          <Link to="/shorts" className="mini-sidebar-item">
+            <SiYoutubeshorts />
+            <span>Shorts</span>
+          </Link>
+          <Link to="/subscriptions" className="mini-sidebar-item">
+            <SubscriptionsIcon />
+            <span>Subs</span>
+          </Link>
+          <Link className="mini-sidebar-item">
+            <LibraryIcon />
+            <span>Library</span>
+          </Link>
+        </div>
+      )}
       {/* Sidebar Overlay */}
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={toggleSidebar}></div>
