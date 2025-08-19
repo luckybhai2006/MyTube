@@ -21,7 +21,11 @@ import {
   Help as HelpIcon,
   Feedback as FeedbackIcon,
 } from "@mui/icons-material";
-import { SiYoutubeshorts } from "react-icons/si";
+import { SiYoutubeshorts,SiYoutubegaming } from "react-icons/si";
+import { MdNewspaper } from "react-icons/md";
+import { GrTrophy } from "react-icons/gr";
+import { IoMusicalNotesOutline } from "react-icons/io5";
+import { PiStudentDuotone } from "react-icons/pi";
 import "../styles/navbar.css";
 
 export default function Navbar() {
@@ -365,6 +369,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
+            <IoMusicalNotesOutline />
               <span>Music</span>
             </Link>
             <Link
@@ -372,6 +377,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
+            <SiYoutubegaming />
               <span>Gaming</span>
             </Link>
             <Link
@@ -379,6 +385,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
+            <MdNewspaper/>
               <span>News</span>
             </Link>
             <Link
@@ -386,6 +393,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
+            <GrTrophy/>
               <span>Sports</span>
             </Link>
             <Link
@@ -393,6 +401,7 @@ export default function Navbar() {
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >
+            <PiStudentDuotone/>
               <span>Learning</span>
             </Link>
           </div>

@@ -1,0 +1,281 @@
+/* Main Layout */
+.video-page {
+  display: flex;
+  gap: 24px;
+  padding: 16px;
+  justify-content: center;
+}
+
+/* Left video section */
+.main-video {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Video player responsive */
+.video-player {
+  width: 100%;
+  max-height: 65vh;
+  border-radius: 8px;
+  background: black;
+  object-fit: cover;
+}
+
+/* Title + Info */
+.video-title {
+  margin-top: 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.video-info {
+  font-size: 14px;
+  color: #606060;
+  display: flex;
+  gap: 16px;
+  margin: 8px 0;
+}
+
+/* Channel Section */
+.channel-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.channel-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.channel-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.channel-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.channel-subs {
+  font-size: 13px;
+  color: #606060;
+  margin: 0;
+}
+
+/* Subscribe Button */
+.subscribe-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.subscribe-btn.subscribed {
+  background: #e0e0e0;
+  color: black;
+}
+
+/* Like/Dislike Buttons */
+.video-actions {
+  margin: 12px 0;
+  display: flex;
+  gap: 12px;
+}
+
+.likes-dislikes button {
+  border: none;
+  background: #f1f1f1;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.likes-dislikes button:hover {
+  background: #ddd;
+}
+
+/* Description */
+.video-description {
+  background: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.show-more-btn {
+  background: none;
+  border: none;
+  color: #065fd4;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* Recommended Section */
+.recommended-videos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recommended-videos h3 {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* 📱 Responsive Styles */
+@media (max-width: 1024px) {
+  .video-page {
+    flex-direction: column;
+  }
+
+  .main-video {
+    width: 100%;
+  }
+
+  .recommended-videos {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .video-title {
+    font-size: 18px;
+  }
+
+  .video-info {
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .channel-name {
+    font-size: 14px;
+  }
+
+  .channel-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .subscribe-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .recommended-videos {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-page {
+    padding: 8px;
+  }
+
+  .video-title {
+    font-size: 16px;
+  }
+
+  .video-info {
+    font-size: 11px;
+  }
+
+  .channel-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .subscribe-btn {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
+  .likes-dislikes button {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+}
+
+.comments-section {
+  margin-top: 20px;
+  color: #fff;
+}
+
+.add-comment {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.add-comment input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+.add-comment button {
+  padding: 6px 14px;
+  border: none;
+  background: #3ea6ff;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.add-comment button:hover {
+  background: #1e90ff;
+}
+
+.comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.comment-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.comment-body {
+  background: #1c1c1c;
+  padding: 8px 12px;
+  border-radius: 10px;
+  flex: 1;
+}
+
+.comment-user {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: #aaa;
+}
