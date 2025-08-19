@@ -9,7 +9,10 @@ const styles = {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", // responsive columns
     gap: "4px",
-    // backgroundColor: "#121212",
+    marginLeft: "75px",
+    marginTop: "10px",
+    marginRight: "10px",
+    // Width: "300px",
   },
 };
 
@@ -35,7 +38,7 @@ const Dashboard = () => {
   }, [user]);
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="responsiveContainer">
       {videos.length > 0 ? (
         videos.map((video) => (
           <VideoCard

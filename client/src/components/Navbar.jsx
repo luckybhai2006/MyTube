@@ -7,7 +7,6 @@ import {
   Menu as MenuIcon,
   Search as SearchIcon,
   Mic as MicIcon,
-  VideoCall as VideoCallIcon,
   Notifications as NotificationsIcon,
   Apps as AppsIcon,
   AccountCircle as AccountCircleIcon,
@@ -18,12 +17,7 @@ import {
   Whatshot as TrendingIcon,
   History as HistoryIcon,
   LibraryMusic as LibraryIcon,
-  // SportsEsports as GamingIcon,
-  // News as NewsIcon,
-  // EmojiEvents as SportsIcon,
-  // Lightbulb as LearningIcon,
   Settings as SettingsIcon,
-  // Flag as ReportIcon,
   Help as HelpIcon,
   Feedback as FeedbackIcon,
 } from "@mui/icons-material";
@@ -33,20 +27,22 @@ import "../styles/navbar.css";
 export default function Navbar() {
   const navigate = useNavigate();
   const { user, handleLogout } = useContext(UserContext);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Changed to true by default
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showUploadMenu, setShowUploadMenu] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
-  const menuRef = useRef();
   const sidebarRef = useRef();
   const searchInputRef = useRef();
+  const uploadMenuRef = useRef();
+  const userMenuRef = useRef();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const onLogout = () => {
     handleLogout();
-    setMenuOpen(false);
+    setShowUserMenu(false);
     navigate("/login", { replace: true });
   };
 
@@ -58,10 +54,22 @@ export default function Navbar() {
     }
   };
 
+  // close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false);
+      if (
+        uploadMenuRef.current &&
+        !uploadMenuRef.current.contains(e.target) &&
+        !e.target.closest(".upload-trigger")
+      ) {
+        setShowUploadMenu(false);
+      }
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target) &&
+        !e.target.closest(".avatar")
+      ) {
+        setShowUserMenu(false);
       }
       if (
         sidebarRef.current &&
@@ -86,7 +94,7 @@ export default function Navbar() {
     <>
       {/* Main Navbar */}
       <nav className={`navbar ${showMobileSearch ? "search-active" : ""}`}>
-        {/* Left Section - Always visible */}
+        {/* Left Section */}
         <div className="navbar-left">
           {!showMobileSearch ? (
             <>
@@ -112,7 +120,6 @@ export default function Navbar() {
         <div className="search-container">
           {!showMobileSearch ? (
             <>
-              {/* Desktop Search */}
               <form onSubmit={handleSearch} className="desktop-search">
                 <div className="search-input-container">
                   <input
@@ -131,7 +138,6 @@ export default function Navbar() {
                 </button>
               </form>
 
-              {/* Mobile Search Button */}
               <button
                 className="mobile-search-button"
                 onClick={() => setShowMobileSearch(true)}
@@ -153,40 +159,124 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Right Section - Hidden when search is active on mobile */}
+        {/* Right Section */}
         <div className={`navbar-right ${showMobileSearch ? "hidden" : ""}`}>
-          <VideoCallIcon className="navbar-icon" />
+          {/* Upload menu */}
+          <div className="upload-trigger" style={{ position: "relative" }}>
+            <VideoCallOutlinedIcon
+              className="navbar-icon"
+              onClick={() => setShowUploadMenu((prev) => !prev)}
+              style={{ cursor: "pointer" }}
+            />
+            {showUploadMenu && (
+              <div
+                ref={uploadMenuRef}
+                className="upload-menu"
+                style={{
+                  position: "absolute",
+                  top: "40px",
+                  right: "0",
+                  background: "#fff",
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                  padding: "10px",
+                  zIndex: 500,
+                }}
+              >
+                <Link
+                  to="/upload"
+                  style={{
+                    display: "block",
+                    // padding: "8px 14px",
+                    borderRadius: "6px",
+                    textDecoration: "none",
+                    color: "#000",
+                  }}
+                  onClick={() => setShowUploadMenu(false)}
+                >
+                  Upload Video
+                </Link>
+              </div>
+            )}
+          </div>
+
           <AppsIcon className="navbar-icon" />
           <NotificationsIcon className="navbar-icon" />
+
+          {/* Avatar with User Menu */}
           {user ? (
-            <div className="profile-container" ref={menuRef}>
+            <div className="user-trigger" style={{ position: "relative" }}>
               <img
                 src={user.avatar}
                 alt="avatar"
                 className="avatar"
-                onClick={() => setMenuOpen(!menuOpen)}
+                style={{ cursor: "pointer", borderRadius: "50%" }}
+                onClick={() => setShowUserMenu((prev) => !prev)}
               />
-              {menuOpen && (
-                <div className="dropdown-menu">
-                  <div className="dropdown-header">
+              {showUserMenu && (
+                <div
+                  ref={userMenuRef}
+                  className="user-menu"
+                  style={{
+                    position: "absolute",
+                    top: "50px",
+                    right: "0",
+                    background: "#fff",
+                    borderRadius: "10px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    padding: "15px",
+                    zIndex: 600,
+                    width: "250px",
+                  }}
+                >
+                  {/* User info section */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "10px",
+                    }}
+                  >
                     <img
                       src={user.avatar}
                       alt="avatar"
-                      className="dropdown-avatar"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                        marginRight: "12px",
+                      }}
                     />
-                    <div className="dropdown-user-info">
-                      <span className="dropdown-username">{user.name}</span>
-                      <span className="dropdown-email">{user.email}</span>
+                    <div>
+                      <div style={{ fontWeight: "bold" }}>{user.username}</div>
+                      <div style={{ fontSize: "14px", color: "#555" }}>
+                        @{user.fullname}
+                      </div>
+                      <div style={{ fontSize: "12px", color: "#777" }}>
+                        {user.email}
+                      </div>
                     </div>
                   </div>
-                  <div className="dropdown-divider"></div>
-                  <div className="dropdown-item">
-                    <AccountCircleIcon />
-                    <span>Your channel</span>
-                  </div>
-                  <div className="dropdown-item" onClick={() => handleLogout()}>
-                    <span>Sign out</span>
-                  </div>
+
+                  <hr style={{ margin: "10px 0", borderColor: "#eee" }} />
+
+                  {/* Logout button */}
+                  <button
+                    onClick={onLogout}
+                    style={{
+                      display: "block",
+                      padding: "8px 14px",
+                      borderRadius: "6px",
+                      border: "none",
+                      width: "100%",
+                      textAlign: "left",
+                      background: "transparent",
+                      cursor: "pointer",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
@@ -198,6 +288,7 @@ export default function Navbar() {
           )}
         </div>
       </nav>
+
       {/* Sidebar */}
       <div
         className={`sidebar ${isSidebarOpen ? "open" : ""}`}
@@ -208,7 +299,7 @@ export default function Navbar() {
             <Link
               to="/"
               className="sidebar-item active"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <HomeIcon />
               <span>Home</span>
@@ -216,7 +307,7 @@ export default function Navbar() {
             <Link
               to="/shorts"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <SiYoutubeshorts />
               <span>Shorts</span>
@@ -224,7 +315,7 @@ export default function Navbar() {
             <Link
               to="/subscriptions"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <SubscriptionsIcon />
               <span>Subscriptions</span>
@@ -236,7 +327,7 @@ export default function Navbar() {
             <Link
               to="/library"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <LibraryIcon />
               <span>Library</span>
@@ -244,7 +335,7 @@ export default function Navbar() {
             <Link
               to="/dashboard"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <VideoCallOutlinedIcon />
               <span>Your Videos</span>
@@ -252,7 +343,7 @@ export default function Navbar() {
             <Link
               to="/history"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <HistoryIcon />
               <span>History</span>
@@ -264,7 +355,7 @@ export default function Navbar() {
             <Link
               to="/trending"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <TrendingIcon />
               <span>Trending</span>
@@ -272,41 +363,36 @@ export default function Navbar() {
             <Link
               to="/music"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
-              {/* <LibraryMusic /> */}
               <span>Music</span>
             </Link>
             <Link
               to="/gaming"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
-              {/* <SportsEsports /> */}
               <span>Gaming</span>
             </Link>
             <Link
               to="/news"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
-              {/* <NewsIcon /> */}
               <span>News</span>
             </Link>
             <Link
               to="/sports"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
-              {/* <EmojiEvents /> */}
               <span>Sports</span>
             </Link>
             <Link
               to="/learning"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
-              {/* <Lightbulb /> */}
               <span>Learning</span>
             </Link>
           </div>
@@ -316,7 +402,7 @@ export default function Navbar() {
             <Link
               to="/settings"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <SettingsIcon />
               <span>Settings</span>
@@ -324,15 +410,14 @@ export default function Navbar() {
             <Link
               to="/report"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
-              {/* <Flag /> */}
               <span>Report</span>
             </Link>
             <Link
               to="/help"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <HelpIcon />
               <span>Help</span>
@@ -340,7 +425,7 @@ export default function Navbar() {
             <Link
               to="/feedback"
               className="sidebar-item"
-              onClick={() => setIsSidebarOpen()}
+              onClick={() => setIsSidebarOpen(false)}
             >
               <FeedbackIcon />
               <span>Send feedback</span>
@@ -349,7 +434,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mini Sidebar (Icons Only) */}
+      {/* Mini Sidebar */}
       <div className="mini-sidebar">
         <Link to="/" className="mini-sidebar-item">
           <HomeIcon />
@@ -369,7 +454,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Overlays */}
+      {/* Sidebar Overlay */}
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={toggleSidebar}></div>
       )}
