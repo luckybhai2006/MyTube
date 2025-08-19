@@ -184,7 +184,7 @@ export default function Navbar() {
                 }}
               >
                 <Link
-                  to="/upload"
+                  to={user ? "/upload" : "/login"}
                   style={{
                     display: "block",
                     // padding: "8px 14px",
