@@ -4,7 +4,7 @@ import { getVideoById, addVideoView } from "../api/videoApi";
 import VideoCard from "../components/VideoCard";
 import axiosInstance from "../api/axiosInstance";
 import { BiDislike, BiLike } from "react-icons/bi";
-
+import "../styles/VideoPage.css";
 const VideoPage = () => {
   const { videoId } = useParams();
   const [video, setVideo] = useState(null);
@@ -66,7 +66,9 @@ const VideoPage = () => {
         flexWrap: "wrap",
         background: "#fff",
         color: "#000",
+        // marginTop: "4%",
       }}
+      className="my-container"
     >
       {/* Main Video Section */}
       <div style={{ flex: 2, minWidth: "320px" }}>
@@ -91,111 +93,118 @@ const VideoPage = () => {
           <span>{new Date(video.data.createdAt).toLocaleDateString()}</span>
         </div>
 
-{/* Channel + Subscribe + Actions */}
-<div
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: "16px",
-    flexWrap: "wrap",
-    gap: "12px",
-  }}
->
-  {/* Avatar + Channel Info + Subscribe */}
-  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-    <img
-      src={video.data.owner.avatar}
-      alt="channel avatar"
-      style={{
-        width: "50px",
-        height: "50px",
-        borderRadius: "50%",
-        objectFit: "cover",
-      }}
-    />
-    <div>
-      <h4 style={{ margin: 0, color: "#000" }}>
-        {video.data.owner.username}
-      </h4>
-      <p style={{ margin: 0, fontSize: "13px", color: "#777" }}>
-        1.2K subscribers
-      </p>
-    </div>
+        {/* Channel + Subscribe + Actions */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "16px",
+            flexWrap: "wrap",
+            gap: "12px",
+          }}
+        >
+          {/* Avatar + Channel Info + Subscribe */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <img
+              src={video.data.owner.avatar}
+              alt="channel avatar"
+              style={{
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+            <div>
+              <h4 style={{ margin: 0, color: "#000" }}>
+                {video.data.owner.username}
+              </h4>
+              <p style={{ margin: 0, fontSize: "13px", color: "#777" }}>
+                1.2K subscribers
+              </p>
+            </div>
 
-    {/* Subscribe Button beside channel name */}
-    <button
-      onClick={handleSubscribe}
-      style={{
-        padding: "10px 16px",
-        background: subscribed ? "#ccc" : "red",
-        border: "none",
-        borderRadius: "20px",
-        color: "#fff",
-        cursor: "pointer",
-        fontWeight: "bold",
-        marginLeft: "12px",
-      }}
-    >
-      {subscribed ? "Subscribed" : "Subscribe"}
-    </button>
-  </div>
+            {/* Subscribe Button beside channel name */}
+            <button
+              onClick={handleSubscribe}
+              style={{
+                padding: "10px 16px",
+                background: subscribed ? "#ccc" : "red",
+                border: "none",
+                borderRadius: "20px",
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: "bold",
+                marginLeft: "12px",
+              }}
+            >
+              {subscribed ? "Subscribed" : "Subscribe"}
+            </button>
+          </div>
 
-  {/* Actions Row (like/dislike/share) */}
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "10px",
-      flexWrap: "wrap",
-    }}
-  >
-    <button
-      onClick={handleLike}
-      style={{
-        padding: "6px 12px",
-        background: "#f1f1f1",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        cursor: "pointer",
-        display: "flex",          
-        alignItems: "center",     
-        gap: "6px",              
-        justifyContent: "center"
-      }}><BiLike style={{fontSize:"20px",}}/>{likes}</button>
-    <button
-      onClick={handleDislike}
-      style={{
-        padding: "6px 12px",
-        background: "#f1f1f1",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        cursor: "pointer",
-        display: "flex",          
-        alignItems: "center",     
-        gap: "6px",              
-        justifyContent: "center"
-      }}><BiDislike style={{fontSize:"20px",}}/>{dislikes}
-    </button>
-    <button
-      style={{
-        padding: "6px 12px",
-        background: "#f1f1f1",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        cursor: "pointer",
-      }}
-      onClick={() =>
-        navigator.share?.({
-          title: video.data.title,
-          url: window.location.href,
-        })
-      }
-    >
-      🔗 Share
-    </button>
-  </div>
-</div>
+          {/* Actions Row (like/dislike/share) */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              onClick={handleLike}
+              style={{
+                padding: "6px 12px",
+                background: "#f1f1f1",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                justifyContent: "center",
+              }}
+            >
+              <BiLike style={{ fontSize: "20px" }} />
+              {likes}
+            </button>
+            <button
+              onClick={handleDislike}
+              style={{
+                padding: "6px 12px",
+                background: "#f1f1f1",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                justifyContent: "center",
+              }}
+            >
+              <BiDislike style={{ fontSize: "20px" }} />
+              {dislikes}
+            </button>
+            <button
+              style={{
+                padding: "6px 12px",
+                background: "#f1f1f1",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                cursor: "pointer",
+              }}
+              onClick={() =>
+                navigator.share?.({
+                  title: video.data.title,
+                  url: window.location.href,
+                })
+              }
+            >
+              🔗 Share
+            </button>
+          </div>
+        </div>
         {/* Description */}
         <div
           style={{
