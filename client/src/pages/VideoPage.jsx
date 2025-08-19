@@ -1,14 +1,12 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getVideoById, addVideoView } from "../api/videoApi";
 import VideoCard from "../components/VideoCard";
 import axiosInstance from "../api/axiosInstance";
-import { UserContext } from "../context/userContext";
+import { BiDislike, BiLike } from "react-icons/bi";
 import "../styles/VideoPage.css";
-
 const VideoPage = () => {
   const { videoId } = useParams();
-  const { user } = useContext(UserContext);
   const [video, setVideo] = useState(null);
   const [recommended, setRecommended] = useState([]);
   const [showMore, setShowMore] = useState(false);
@@ -31,9 +29,10 @@ const VideoPage = () => {
         const allVideos = await axiosInstance.get("/videos");
         setRecommended(allVideos.data.filter((v) => v._id !== videoId));
 
-        // Fetch comments
-        const commentRes = await axiosInstance.get(`/videos/${videoId}/comments`);
-        setComments(commentRes.data);
+        setComments([
+          { id: 1, user: "John Doe", text: "Great video!" },
+          { id: 2, user: "Jane Smith", text: "Very helpful, thanks!" },
+        ]);
       } catch (err) {
         console.error("Error fetching video:", err);
       }
@@ -42,141 +41,252 @@ const VideoPage = () => {
     if (videoId) fetchVideo();
   }, [videoId]);
 
-  const handleLike = () => {
-    setLikes(likes + 1);
-    // TODO: axiosInstance.post(`/videos/${videoId}/like`);
-  };
+  const handleLike = () => setLikes((prev) => (prev === 0 ? 1 : prev));
+  const handleDislike = () => setDislikes((prev) => (prev === 0 ? 1 : prev));
+  const handleSubscribe = () => setSubscribed(!subscribed);
 
-  const handleDislike = () => {
-    setDislikes(dislikes + 1);
-    // TODO: axiosInstance.post(`/videos/${videoId}/dislike`);
-  };
-
-  const handleSubscribe = () => {
-    setSubscribed(!subscribed);
-    // TODO: axiosInstance.post(`/users/${video.data.owner._id}/subscribe`);
-  };
-
-  const handleAddComment = async () => {
-    if (!newComment.trim()) return;
-    try {
-      const res = await axiosInstance.post(`/videos/${videoId}/comments`, {
-        text: newComment,
-        userId: user._id,
-      });
-      setComments([res.data, ...comments]); // prepend new comment
+  const handleAddComment = () => {
+    if (newComment.trim()) {
+      setComments([
+        ...comments,
+        { id: Date.now(), user: "You", text: newComment },
+      ]);
       setNewComment("");
-    } catch (err) {
-      console.error("Error adding comment:", err);
     }
   };
 
   if (!video) return <p>Loading video...</p>;
 
   return (
-    <div className="video-page">
+    <div
+      style={{
+        display: "flex",
+        gap: "24px",
+        padding: "16px",
+        flexWrap: "wrap",
+        background: "#fff",
+        color: "#000",
+        // marginTop: "4%",
+      }}
+      className="my-container"
+    >
       {/* Main Video Section */}
-      <div className="main-video">
+      <div style={{ flex: 2, minWidth: "320px" }}>
         <video
           src={video.data.videoFile}
           controls
           autoPlay
-          className="video-player"
+          style={{ width: "100%", borderRadius: "10px" }}
         />
 
-        <h2 className="video-title">{video.data.title}</h2>
+        <h2 style={{ margin: "12px 0", color: "#000" }}>{video.data.title}</h2>
 
-        <div className="video-info">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: "14px",
+            color: "#555",
+          }}
+        >
           <span>{video.data.views} views</span>
           <span>{new Date(video.data.createdAt).toLocaleDateString()}</span>
         </div>
 
-        <div className="channel-section">
-          <div className="channel-info">
+        {/* Channel + Subscribe + Actions */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "16px",
+            flexWrap: "wrap",
+            gap: "12px",
+          }}
+        >
+          {/* Avatar + Channel Info + Subscribe */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <img
               src={video.data.owner.avatar}
               alt="channel avatar"
-              className="channel-avatar"
+              style={{
+                width: "50px",
+                height: "50px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
             />
             <div>
-              <h4 className="channel-name">{video.data.owner.username}</h4>
-              <p className="channel-subs">1.2K subscribers</p>
+              <h4 style={{ margin: 0, color: "#000" }}>
+                {video.data.owner.username}
+              </h4>
+              <p style={{ margin: 0, fontSize: "13px", color: "#777" }}>
+                1.2K subscribers
+              </p>
             </div>
+
+            {/* Subscribe Button beside channel name */}
+            <button
+              onClick={handleSubscribe}
+              style={{
+                padding: "10px 16px",
+                background: subscribed ? "#ccc" : "red",
+                border: "none",
+                borderRadius: "20px",
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: "bold",
+                marginLeft: "12px",
+              }}
+            >
+              {subscribed ? "Subscribed" : "Subscribe"}
+            </button>
           </div>
-          <button
-            onClick={handleSubscribe}
-            className={`subscribe-btn ${subscribed ? "subscribed" : ""}`}
+
+          {/* Actions Row (like/dislike/share) */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              flexWrap: "wrap",
+            }}
           >
-            {subscribed ? "Subscribed" : "Subscribe"}
-          </button>
-        </div>
-
-        <div className="video-actions">
-          <div className="likes-dislikes">
-            <button onClick={handleLike}>👍 {likes}</button>
-            <button onClick={handleDislike}>👎 {dislikes}</button>
+            <button
+              onClick={handleLike}
+              style={{
+                padding: "6px 12px",
+                background: "#f1f1f1",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                justifyContent: "center",
+              }}
+            >
+              <BiLike style={{ fontSize: "20px" }} />
+              {likes}
+            </button>
+            <button
+              onClick={handleDislike}
+              style={{
+                padding: "6px 12px",
+                background: "#f1f1f1",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                justifyContent: "center",
+              }}
+            >
+              <BiDislike style={{ fontSize: "20px" }} />
+              {dislikes}
+            </button>
+            <button
+              style={{
+                padding: "6px 12px",
+                background: "#f1f1f1",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                cursor: "pointer",
+              }}
+              onClick={() =>
+                navigator.share?.({
+                  title: video.data.title,
+                  url: window.location.href,
+                })
+              }
+            >
+              🔗 Share
+            </button>
           </div>
         </div>
-
-        <div className="video-description">
+        {/* Description */}
+        <div
+          style={{
+            marginTop: "16px",
+            background: "#f9f9f9",
+            padding: "12px",
+            borderRadius: "8px",
+            fontSize: "14px",
+            color: "#333",
+          }}
+        >
           {showMore
             ? video.data.description
             : video.data.description.slice(0, 150) + "..."}
           {video.data.description.length > 150 && (
             <button
               onClick={() => setShowMore(!showMore)}
-              className="show-more-btn"
+              style={{
+                background: "none",
+                border: "none",
+                color: "#065fd4",
+                cursor: "pointer",
+                marginLeft: "8px",
+              }}
             >
               {showMore ? "Show less" : "Show more"}
             </button>
           )}
         </div>
 
-        {/* Comment Section */}
-        <div className="comments-section">
-          <h3>Comments</h3>
-          {user ? (
-            <div className="add-comment">
-              <img src={user.avatar} alt="user avatar" className="comment-avatar" />
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-              />
-              <button onClick={handleAddComment}>Post</button>
-            </div>
-          ) : (
-            <p style={{ color: "#888" }}>Login to add a comment</p>
-          )}
-
-          <div className="comments-list">
-            {comments.length > 0 ? (
-              comments.map((c) => (
-                <div key={c._id} className="comment">
-                  <img
-                    src={c.user.avatar}
-                    alt="comment user"
-                    className="comment-avatar"
-                  />
-                  <div className="comment-body">
-                    <p className="comment-user">{c.user.username}</p>
-                    <p>{c.text}</p>
-                    <span className="comment-date">
-                      {new Date(c.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No comments yet. Be the first to comment!</p>
-            )}
+        {/* Comments */}
+        <div style={{ marginTop: "20px" }}>
+          <h3 style={{ color: "#000" }}>Comments</h3>
+          <div style={{ display: "flex", gap: "10px", marginBottom: "12px" }}>
+            <input
+              type="text"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Add a comment..."
+              style={{
+                flex: 1,
+                padding: "8px",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+                background: "#fff",
+                color: "#000",
+              }}
+            />
+            <button
+              onClick={handleAddComment}
+              style={{
+                padding: "8px 16px",
+                background: "#065fd4",
+                border: "none",
+                borderRadius: "6px",
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Comment
+            </button>
           </div>
+
+          {comments.map((c) => (
+            <div
+              key={c.id}
+              style={{
+                padding: "8px 0",
+                borderBottom: "1px solid #eee",
+              }}
+            >
+              <strong style={{ color: "#000" }}>{c.user}</strong>
+              <p style={{ margin: "4px 0", color: "#333" }}>{c.text}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="recommended-videos">
-        <h3>Recommended</h3>
+      {/* Recommended Videos */}
+      <div style={{ flex: 1, minWidth: "280px" }}>
+        <h3 style={{ color: "#000" }}>Recommended</h3>
         {recommended.length > 0 ? (
           recommended.map((v) => (
             <VideoCard
@@ -193,7 +303,7 @@ const VideoPage = () => {
             />
           ))
         ) : (
-          <p>No recommendations</p>
+          <p style={{ color: "#555" }}>No recommendations</p>
         )}
       </div>
     </div>

@@ -1,7 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 /* Navbar */
 .navbar {
-  position: sticky;
+  position: fixed; /* keep navbar locked at the top */
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%; /* stretch full screen width */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -135,6 +143,7 @@
   display: flex;
   align-items: center;
   min-width: 225px;
+  margin-right: 27px;
   justify-content: flex-end;
 }
 
@@ -309,15 +318,24 @@
   font-size: 1.4rem;
 }
 
+/* Sidebar overlay — light, transparent, clickable */
 .sidebar-overlay {
   position: fixed;
-  top: 56px;
+  top: 56px; /* keep navbar visible; use 0 if you want to cover it */
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  display: none;
+  background: rgba(0, 0, 0, 0.45); /* translucent black (YouTube-like) */
+  z-index: 1000; /* below the sidebar (which should be 1001+) */
+  opacity: 1; /* visible */
+  pointer-events: auto; /* so clicks register to close */
+  transition: opacity 0.2s ease;
+}
+
+/* OPTIONAL: if you ever keep the overlay mounted and toggle a class */
+.sidebar-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Responsive Styles */
@@ -387,9 +405,9 @@
     display: none;
   }
 
-  .sidebar-overlay {
+  /* .sidebar-overlay {
     display: block;
-  }
+  } */
 
   .navbar.search-active .mobile-search-expanded {
     display: flex;
