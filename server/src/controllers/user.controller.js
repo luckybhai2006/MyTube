@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudnary.js";
 import { ApiResponse } from "../utils/apiresponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -422,11 +423,67 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     );
 });
 
+const addToWatchHistory = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { videoId } = req.params;
+
+  if (!videoId) {
+    return res.status(400).json({
+      success: false,
+      message: "Video ID is required",
+    });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // ✅ Do not add to history if paused
+    if (user.watchHistoryPaused) {
+      return res.status(200).json({
+        success: true,
+        message: "Watch history is paused. Video not added.",
+      });
+    }
+
+    // Remove videoId if already present
+    user.watchHistory = user.watchHistory.filter(
+      (id) => id.toString() !== videoId
+    );
+
+    // Add videoId at the start (top)
+    user.watchHistory.unshift(videoId);
+
+    // Optional: limit watch history size (e.g., max 50 videos)
+    if (user.watchHistory.length > 50) {
+      user.watchHistory = user.watchHistory.slice(0, 50);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Video added to watch history",
+      data: user.watchHistory,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+});
+
 const getUserWatchHistory = asyncHandler(async (req, res) => {
   const user = await User.aggregate([
     {
       $match: {
-        // _id: req.user._id    // it cant get req.user._id because in aggregate pipeline, it doesn't have access to req object, so we need to make mongoose objetId.
         _id: new mongoose.Types.ObjectId(req.user._id),
       },
     },
@@ -456,25 +513,123 @@ const getUserWatchHistory = asyncHandler(async (req, res) => {
           },
           {
             $addFields: {
-              owner: {
-                $first: "$owner",
-              },
+              owner: { $first: "$owner" },
+            },
+          },
+          {
+            $project: {
+              title: 1,
+              description: 1,
+              thumbnail: 1,
+              duration: 1,
+              createdAt: 1,
+              views: 1,
+              owner: 1,
             },
           },
         ],
       },
     },
+    {
+      // Add a project stage to return isHistoryPaused
+      $project: {
+        watchHistory: 1,
+        watchHistoryPaused: 1, // include the pause status
+      },
+    },
   ]);
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        user[0].watchHistory,
-        "Watch history fetched successfully"
-      )
+  if (!user.length || !user[0].watchHistory.length) {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, [], "No watch history found", false));
+  }
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      user[0].watchHistory,
+      "Watch history fetched successfully",
+      { paused: user[0].watchHistoryPaused } // ✅ ye hona chahiye
+    )
+  );
+});
+
+const removeFromWatchHistory = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { videoId } = req.params;
+
+    if (!videoId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Video ID required" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Remove videoId from watchHistory array
+    user.watchHistory = user.watchHistory.filter(
+      (id) => id.toString() !== videoId
     );
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Video removed from watch history",
+      data: user.watchHistory,
+    });
+  } catch (error) {
+    console.error("Error removing from watch history:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+const clearWatchHistory = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  user.watchHistory = []; // Clear history
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Watch history cleared",
+  });
+});
+
+// Controller function (e.g., in userController.js)
+const togglePauseWatchHistory = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  user.watchHistoryPaused = !user.watchHistoryPaused;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Watch history ${user.watchHistoryPaused ? "paused" : "resumed"}`,
+    paused: user.watchHistoryPaused,
+  });
 });
 
 export {
@@ -488,5 +643,9 @@ export {
   updateAvatarProfile,
   updateCoverImage,
   getUserChannelProfile,
+  addToWatchHistory,
   getUserWatchHistory,
+  removeFromWatchHistory,
+  clearWatchHistory,
+  togglePauseWatchHistory,
 };

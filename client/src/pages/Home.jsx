@@ -69,7 +69,11 @@ const HomePage = () => {
                   <h3 className="video-title">{video.title}</h3>
                   <button className="menu-button">⋮</button>
                 </div>
-                <p className="video-description">{video.description}</p>
+                {/* <p className="video-description">
+                  {video.description.length > 60
+                    ? `${video.description.substring(0, 60)}...`
+                    : video.description}
+                </p> */}
                 <p className="video-owner">
                   {video.owner?.username || "Unknown"}
                 </p>

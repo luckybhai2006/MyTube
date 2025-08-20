@@ -7,6 +7,7 @@ import Dashboard from "./pages/ownerDashbord";
 import LikedVideosPage from "./pages/likedVideo";
 import Home from "./pages/Home";
 import UpdateVideo from "./pages/UploadVideo";
+import WatchHistory from "./pages/WatchHistory";
 import VideoPage from "./pages/VideoPage";
 import ProtectedRoute from "./components/protectedRout";
 import { VideoProvider } from "./context/videoContext";
@@ -24,6 +25,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/upload" element={<UpdateVideo />} />
           <Route path="/video/:videoId" element={<VideoPage />} />
+          <Route path="/watch-history" element={<WatchHistory />} />
+
           <Route
             path="/dashboard"
             element={

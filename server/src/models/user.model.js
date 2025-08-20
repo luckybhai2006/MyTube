@@ -39,6 +39,10 @@ const userSchema = new Schema(
         ref: "Video", // Reference to the Video model
       },
     ],
+    watchHistoryPaused: {
+      type: Boolean,
+      default: false,
+    },
     password: {
       type: String,
       required: true,

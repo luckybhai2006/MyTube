@@ -9,8 +9,14 @@ import { changeCurrentPassword } from "../controllers/user.controller.js";
 import { updateAccountDetails } from "../controllers/user.controller.js";
 import { updateAvatarProfile } from "../controllers/user.controller.js";
 import { updateCoverImage } from "../controllers/user.controller.js";
-import { getUserChannelProfile } from "../controllers/user.controller.js";
-import { getUserWatchHistory } from "../controllers/user.controller.js";
+import {
+  getUserChannelProfile,
+  addToWatchHistory,
+  getUserWatchHistory,
+  removeFromWatchHistory,
+  clearWatchHistory,
+  togglePauseWatchHistory,
+} from "../controllers/user.controller.js";
 import { Router } from "express";
 
 const router = Router();
@@ -44,6 +50,13 @@ router
   .patch(verifyJwt, upload.single("coverImage"), updateCoverImage);
 
 router.route("/C/:username").get(verifyJwt, getUserChannelProfile);
-
+router.post("/watch-history/add/:videoId", verifyJwt, addToWatchHistory);
 router.route("/watch-history").get(verifyJwt, getUserWatchHistory);
+
+router.delete("/watch-history/:videoId", verifyJwt, removeFromWatchHistory);
+router.delete("/history/clear", verifyJwt, clearWatchHistory);
+// In routes/userRoutes.js
+router.patch("/watch-history/pause", verifyJwt, togglePauseWatchHistory);
+// router.get("/watch-history/status", verifyJwt, togglePauseWatchHistory);
+
 export default router;

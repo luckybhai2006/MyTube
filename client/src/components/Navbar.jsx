@@ -359,7 +359,7 @@ export default function Navbar() {
               <span>Liked Videos</span>
             </Link>
             <Link
-              to="/history"
+              to="/watch-history"
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >

@@ -59,4 +59,23 @@ export const getUserChannelProfile = (username) =>
   axiosInstance.get(`/users/C/${username}`);
 
 // Get watch history
+
+export const addToWatchHistory = (videoId) =>
+  axiosInstance.post(`/users/watch-history/add/${videoId}`);
+
 export const getWatchHistory = () => axiosInstance.get("/users/watch-history");
+
+export const removeFromWatchHistory = (videoId) => {
+  // Assuming DELETE /user/watch-history/:videoId removes the video
+  return axiosInstance.delete(`/users/watch-history/${videoId}`);
+};
+
+export const clearWatchHistory = () =>
+  axiosInstance.delete("/users/history/clear");
+
+export const togglePauseWatchHistory = () =>
+  axiosInstance.patch("/users/watch-history/pause");
+
+export const getWatchHistoryStatus = () => {
+  return axiosInstance.get("/users/watch-history/status");
+};

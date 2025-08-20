@@ -9,6 +9,9 @@ const ChannelSuggest = ({ activeCategory, onSelectCategory }) => {
   if (location.pathname.startsWith("/video")) {
     return null;
   }
+  if (location.pathname.startsWith("/watch-history")) {
+    return null;
+  }
   const categories = [
     "All",
     "Music",

@@ -5,6 +5,8 @@ import VideoCard from "../components/VideoCard";
 import axiosInstance from "../api/axiosInstance";
 import { BiDislike, BiLike } from "react-icons/bi";
 import { toggleVideoLike, getLikedVideos } from "../api/likeApi";
+import { addToWatchHistory } from "../api/userApi";
+
 import "../styles/VideoPage.css";
 
 const VideoPage = () => {
@@ -18,6 +20,7 @@ const VideoPage = () => {
   const [subscribed, setSubscribed] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [addedToHistory, setAddedToHistory] = useState(false); // prevent multiple calls
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -42,7 +45,13 @@ const VideoPage = () => {
         // Recommended videos
         const allVideosRes = await axiosInstance.get("/videos");
         const allVideos = allVideosRes.data.data || allVideosRes.data;
-        setRecommended(allVideos.filter((v) => v._id !== videoId));
+
+        if (Array.isArray(allVideos)) {
+          setRecommended(allVideos.filter((v) => v._id !== videoId));
+        } else {
+          setRecommended([]);
+          console.warn("Expected an array for allVideos but got:", allVideos);
+        }
 
         // Sample comments
         setComments([
@@ -54,15 +63,35 @@ const VideoPage = () => {
       }
     };
 
-    if (videoId) fetchVideo();
+    if (videoId) {
+      setAddedToHistory(false); // reset when video changes
+      fetchVideo();
+    }
   }, [videoId]);
+
+  // Add video to watch history after 5 seconds of playback
+  const handleAddToHistory = async () => {
+    if (!addedToHistory && video) {
+      try {
+        await addToWatchHistory(video._id);
+        setAddedToHistory(true);
+      } catch (err) {
+        console.error("Watch history error:", err);
+      }
+    }
+  };
+
+  const handleTimeUpdate = (e) => {
+    const currentTime = e.target.currentTime;
+    if (currentTime >= 5) {
+      handleAddToHistory();
+    }
+  };
 
   // Toggle like
   const handleLike = async () => {
     try {
       const res = await toggleVideoLike(videoId);
-
-      // Backend response may wrap data inside `data` property
       const data = res.data.data || res.data;
 
       if (data.likes !== undefined) setLikes(data.likes);
@@ -108,6 +137,7 @@ const VideoPage = () => {
         <video
           src={video.videoFile || video.data?.videoFile}
           controls
+          onTimeUpdate={handleTimeUpdate}
           autoPlay
           style={{ width: "100%", borderRadius: "10px" }}
         />
