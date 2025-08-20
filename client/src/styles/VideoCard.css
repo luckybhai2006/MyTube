@@ -171,9 +171,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 10px;
-  margin-top: 40px;
+  margin-top: 120px;
   margin-right: 10px;
-  margin-left: 75px; /* default for large screens */
+  margin-left: 75px;
 }
 
 /* Small screens (below 768px) → remove side margin */
@@ -187,7 +187,38 @@
 /* Medium screens (769px - 1023px) → adjust margin smaller */
 @media (min-width: 769px) and (max-width: 1023px) {
   .responsiveContainer {
-    margin-left: 40px;
+    margin-left: 74px;
     margin-right: 10px;
+  }
+}
+
+.suggestbar {
+  position: fixed;
+  top: 56px; /* adjust so it appears below your navbar */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 10px 0;
+  background: #fff; /* add background so content behind doesn’t show */
+  z-index: 999; /* keep it above content */
+}
+
+@media (max-width: 768px) {
+  .suggestbar {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 769px) and (max-width: 1280px) {
+  .suggestbar {
+    margin-left: 55px;
+    margin-right: 100px;
+    width: 96%;
   }
 }

@@ -41,7 +41,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showUploadMenu, setShowUploadMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-   const { activeCategory, setActiveCategory } = useContext(UserContext);
+  const { activeCategory, setActiveCategory } = useContext(UserContext);
 
   const sidebarRef = useRef();
   const searchInputRef = useRef();
@@ -482,14 +482,12 @@ export default function Navbar() {
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={toggleSidebar}></div>
       )}
-     <ChannelSuggest
+      <ChannelSuggest
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
       />
 
-         {/* {!hideSidebar && (
-    <div className="mini-sidebar">...</div>
-  )} */}
+      {!hideSidebar && <div className="mini-sidebar">...</div>}
     </>
   );
 }

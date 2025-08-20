@@ -14,11 +14,11 @@ import { upload } from "../middlewares/multer.middlewares.js";
 import { Video } from "../models/video.model.js";
 
 const router = Router();
-router.use(verifyJwt); // Apply verifyJWT middleware to all routes in this file
+// router.use(verifyJwt);
 
 router
   .route("/")
-  .get(getAllVideos)
+  .get(verifyJwt, getAllVideos)
   .post(
     upload.fields([
       {
@@ -30,18 +30,19 @@ router
         maxCount: 1,
       },
     ]),
+    verifyJwt,
     publishAVideo
   );
 
 router
   .route("/:videoId")
-  .get(getVideoById)
-  .delete(deleteVideo)
-  .patch(upload.single("thumbnail"), updateVideo);
+  .get(verifyJwt, getVideoById)
+  .delete(verifyJwt, deleteVideo)
+  .patch(verifyJwt, upload.single("thumbnail"), updateVideo);
 
-router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
+router.route("/toggle/publish/:videoId").patch(verifyJwt, togglePublishStatus);
 
-router.route("/user/:userId").get(getVideosByUser);
+router.route("/user/:userId").get(verifyJwt, getVideosByUser);
 
 router.post("/views/:videoId", addVideoView);
 // Like a video
@@ -85,6 +86,16 @@ router.post("/unlike/:videoId", async (req, res) => {
     res.status(200).json({ likes: video.likes });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+// GET /api/videos/random
+router.get("/random", async (req, res) => {
+  try {
+    const videos = await Video.aggregate([{ $sample: { size: 20 } }]);
+    // size: 20 means 20 random videos, change as you like
+    res.json(videos);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching random videos", error });
   }
 });
 

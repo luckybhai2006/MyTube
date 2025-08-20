@@ -1,6 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import "../styles/VideoCard.css";
 
 const ChannelSuggest = ({ activeCategory, onSelectCategory }) => {
+  const location = useLocation();
+
+  // hide if current path starts with /video
+  if (location.pathname.startsWith("/video")) {
+    return null;
+  }
   const categories = [
     "All",
     "Music",
@@ -61,17 +69,7 @@ const ChannelSuggest = ({ activeCategory, onSelectCategory }) => {
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        margin: "10px 0",
-        position: "relative",
-        width: "100%",
-        
-      }}
-    >
+    <div className="suggestbar">
       <div
         style={{
           display: "flex",
@@ -83,24 +81,25 @@ const ChannelSuggest = ({ activeCategory, onSelectCategory }) => {
         }}
       >
         {/* Prev Button */}
-        {showPrev && !isMobile && ( // ✅ Hide arrows on phones (swipe instead)
-          <button
-            onClick={scrollLeft}
-            style={{
-              position: "absolute",
-              left: 0,
-              zIndex: 2,
-              background: "white",
-              border: "none",
-              cursor: "pointer",
-              padding: "6px 10px",
-              boxShadow: "0 0 6px rgba(0,0,0,0.2)",
-              borderRadius: "50%",
-            }}
-          >
-            ◀
-          </button>
-        )}
+        {showPrev &&
+          !isMobile && ( // ✅ Hide arrows on phones (swipe instead)
+            <button
+              onClick={scrollLeft}
+              style={{
+                position: "absolute",
+                left: 0,
+                zIndex: 2,
+                background: "white",
+                border: "none",
+                cursor: "pointer",
+                padding: "6px 10px",
+                boxShadow: "0 0 6px rgba(0,0,0,0.2)",
+                borderRadius: "50%",
+              }}
+            >
+              ◀
+            </button>
+          )}
 
         {/* Scrollable Categories */}
         <div
@@ -138,24 +137,25 @@ const ChannelSuggest = ({ activeCategory, onSelectCategory }) => {
         </div>
 
         {/* Next Button */}
-        {showNext && !isMobile && ( // ✅ Hide arrows on phones
-          <button
-            onClick={scrollRight}
-            style={{
-              position: "absolute",
-              right:0,
-              zIndex: 2,
-              background: "white",
-              border: "none",
-              cursor: "pointer",
-              padding: "6px 10px",
-              boxShadow: "0 0 6px rgba(0,0,0,0.2)",
-              borderRadius: "50%",
-            }}
-          >
-            ▶
-          </button>
-        )}
+        {showNext &&
+          !isMobile && ( // ✅ Hide arrows on phones
+            <button
+              onClick={scrollRight}
+              style={{
+                position: "absolute",
+                right: 0,
+                zIndex: 2,
+                background: "white",
+                border: "none",
+                cursor: "pointer",
+                padding: "6px 10px",
+                boxShadow: "0 0 6px rgba(0,0,0,0.2)",
+                borderRadius: "50%",
+              }}
+            >
+              ▶
+            </button>
+          )}
       </div>
     </div>
   );
