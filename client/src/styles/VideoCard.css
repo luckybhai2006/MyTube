@@ -60,6 +60,7 @@
   justify-content: space-between;
   align-items: flex-start;
   position: relative; /* Add this */
+  text-decoration: none !important;
 }
 
 .video-title {

@@ -1,4 +1,4 @@
-// import { UserProvider } from "./context/userContext";
+// App.jsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
@@ -9,35 +9,41 @@ import Home from "./pages/Home";
 import UpdateVideo from "./pages/UploadVideo";
 import VideoPage from "./pages/VideoPage";
 import ProtectedRoute from "./components/protectedRout";
+import { VideoProvider } from "./context/videoContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar /> {/* Navbar must be inside BrowserRouter */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/upload" element={<UpdateVideo />} />
-        <Route path="/video/:videoId" element={<VideoPage />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/likedvideos"
-          element={
-            <ProtectedRoute>
-              <LikedVideosPage />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      {/* ✅ Provider must wrap Routes */}
+      <VideoProvider>
+        <Navbar />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/upload" element={<UpdateVideo />} />
+          <Route path="/video/:videoId" element={<VideoPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/likedvideos"
+            element={
+              <ProtectedRoute>
+                <LikedVideosPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </VideoProvider>
     </BrowserRouter>
   );
 }
+
 export default App;

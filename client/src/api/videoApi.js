@@ -47,3 +47,8 @@ export const unlikeVideo = (videoId) =>
   axiosInstance.post(`/videos/unlike/${videoId}`, null, {
     withCredentials: true,
   });
+
+export const getRandomVideos = () =>
+  axiosInstance.get("/videos/random", null, {
+    withCredentials: true,
+  });

@@ -34,6 +34,20 @@ router
     publishAVideo
   );
 
+// GET /api/videos/random
+router.get("/random", async (req, res) => {
+  try {
+    const videos = await Video.aggregate([{ $sample: { size: 20 } }]);
+    // size: 20 means 20 random videos, change as you like
+    const populatedVideos = await Video.populate(videos, {
+      path: "owner",
+      select: "username avatar",
+    });
+    res.json(videos);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching random videos", error });
+  }
+});
 router
   .route("/:videoId")
   .get(verifyJwt, getVideoById)
@@ -86,16 +100,6 @@ router.post("/unlike/:videoId", async (req, res) => {
     res.status(200).json({ likes: video.likes });
   } catch (err) {
     res.status(500).json({ message: err.message });
-  }
-});
-// GET /api/videos/random
-router.get("/random", async (req, res) => {
-  try {
-    const videos = await Video.aggregate([{ $sample: { size: 20 } }]);
-    // size: 20 means 20 random videos, change as you like
-    res.json(videos);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching random videos", error });
   }
 });
 
