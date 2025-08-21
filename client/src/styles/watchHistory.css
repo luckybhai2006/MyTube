@@ -1,0 +1,14 @@
+/* Small screens (below 768px) → remove side margin */
+
+@media (max-width: 5120px) {
+  .historyContainer {
+    margin-left: 55px;
+    margin-right: 0;
+  }
+}
+@media (max-width: 768px) {
+  .historyContainer {
+    margin-left: -16px;
+    margin-right: 0;
+  }
+}

@@ -6,6 +6,7 @@ import {
   togglePauseWatchHistory,
 } from "../api/userApi";
 import { Link } from "react-router-dom";
+import "../styles/watchHistory.css";
 
 const WatchHistory = () => {
   const [history, setHistory] = useState([]);
@@ -62,7 +63,7 @@ const WatchHistory = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="historyContainer">
       <div style={styles.mainLayout}>
         <div style={styles.content}>
           <div style={styles.historyHeader}>
@@ -136,8 +137,7 @@ const WatchHistory = () => {
 
 const styles = {
   container: {
-    //  marginLeft: "70px",
-    //  backgroundColor: "#0f0f0f",
+    //  marginLeft: "60px",
     marginTop: "50px",
     minHeight: "100vh",
     color: "#fff",
