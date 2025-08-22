@@ -266,7 +266,7 @@
     padding: 10px;
     border-radius: 12px;
   }
-   .liked-videos-layoutt {
+  .liked-videos-layoutt {
     position: absolute;
     left: -70px;
   }
@@ -283,7 +283,7 @@
     position: absolute;
     right: 0;
   }
-  
+
   .playlist-titlee {
     font-size: 1.4rem;
   }
@@ -309,9 +309,9 @@
     height: 80px;
   }
   .liked-videos-layoutt {
-  position: absolute;
-  right: 0px;
-}
+    position: absolute;
+    right: 0px;
+  }
 
   /* .videos-columnn {
     margin-left: -60px;
