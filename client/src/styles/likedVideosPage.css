@@ -23,12 +23,12 @@
   flex-direction: column;
   align-items: center;
   position: sticky;
-  top: 0;
-  height: fit-content;
+  margin-top: 80px;
 }
 
 .playlist-bannerr {
   width: 100%;
+  /* margin-top: 22%; */
   overflow: hidden;
 }
 
@@ -100,6 +100,7 @@
   min-width: 280px;
   display: flex;
   flex-direction: column;
+  margin-top: 80px;
 }
 
 .filter-tabss {
@@ -233,274 +234,150 @@
 ---------------------- */
 
 /* Large Desktop Screens */
-@media (min-width: 1440px) {
+/* ========== Extra Small Phones (<= 360px) ========== */
+@media (max-width: 360px) {
   .liked-videos-layoutt {
-    max-width: 1600px;
-    margin: 0 auto;
+    padding: 12px 8px;
+    gap: 16px;
   }
-
-  .playlist-info-cardd {
-    flex: 0 0 380px;
-  }
-}
-
-/* Standard Desktop Screens */
-@media (max-width: 1280px) {
-  .liked-videos-layoutt {
-    padding: 24px;
-    gap: 24px;
-  }
-
-  .playlist-info-cardd {
-    flex: 0 0 300px;
-  }
-}
-
-/* Small Desktop / Large Tablets */
-@media (max-width: 1024px) {
-  .liked-videos-layoutt {
-    padding: 20px;
-  }
-
-  .playlist-info-cardd {
-    flex: 0 0 280px;
-  }
-
   .playlist-titlee {
-    font-size: 1.75rem;
+    font-size: 1.2rem;
   }
-}
-
-/* Tablets */
-@media (max-width: 900px) {
-  .liked-videos-layoutt {
-    flex-direction: column;
-    padding: 20px 16px;
-    gap: 24px;
+  .playlist-btnn {
+    font-size: 0.85rem;
+    padding: 5px 10px;
   }
-
-  .playlist-info-cardd {
+  .video-thumbnaill {
     width: 100%;
-    max-width: 100%;
-    flex: none;
-    position: static;
-    margin-bottom: 16px;
-    border-radius: 20px;
+    aspect-ratio: 16/9;
   }
-
-  .playlist-info-contentt {
-    padding: 20px 16px 0 16px;
-  }
-
-  .action-roww {
-    justify-content: center;
+  .playlist-info-cardd {
+    margin: 0;
   }
 }
 
-/* Large Mobile Phones */
+/* ========== Small Phones (361px - 480px) ========== */
+@media (max-width: 480px) {
+  .playlist-titlee {
+    font-size: 1.3rem;
+  }
+
+  .video-itemm {
+    padding: 10px;
+    border-radius: 12px;
+  }
+   .liked-videos-layoutt {
+    position: absolute;
+    left: -70px;
+  }
+
+  .video-thumbnaill {
+    width: 100%;
+    aspect-ratio: 16/9;
+  }
+}
+
+/* ========== Medium Phones (481px - 600px) ========== */
+@media (max-width: 600px) {
+  .liked-videos-layoutt {
+    position: absolute;
+    right: 0;
+  }
+  
+  .playlist-titlee {
+    font-size: 1.4rem;
+  }
+  .video-itemm {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+}
+
+/* ========== Tablets (601px - 768px) ========== */
 @media (max-width: 768px) {
   .playlist-titlee {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .video-itemm {
     flex-direction: row;
     align-items: flex-start;
   }
-
   .video-thumbnaill {
     width: 140px;
-    height: 78px;
+    height: 80px;
+  }
+  .liked-videos-layoutt {
+  position: absolute;
+  right: 0px;
+}
+
+  /* .videos-columnn {
+    margin-left: -60px;
+  } */
+  .playlist-info-cardd {
+    position: relative;
+    right: 0px;
   }
 }
 
-/* Medium Mobile Phones */
-@media (max-width: 600px) {
+/* ========== Small Laptops / Landscape Tablets (769px - 1024px) ========== */
+@media (max-width: 1024px) {
   .liked-videos-layoutt {
-    padding: 16px 12px;
-  }
-
-  .playlist-titlee {
-    font-size: 1.5rem;
-  }
-
-  .playlist-metaa {
-    font-size: 0.9rem;
-  }
-
-  .video-countt,
-  .updated-datee {
-    font-size: 0.85rem;
-  }
-
-  .tabs {
-    padding: 6px 18px;
-    font-size: 0.95rem;
-  }
-
-  .video-itemm {
     flex-direction: column;
-    gap: 12px;
+    padding: 20px 16px;
+    gap: 24px;
   }
-
-  .video-thumbnaill {
+  .playlist-info-cardd {
     width: 100%;
-    height: auto;
-    aspect-ratio: 16/9;
+    flex: none;
+    margin-bottom: 16px;
+    border-radius: 20px;
+    margin-left: 10px;
   }
-
-  .video-titlee {
-    font-size: 1rem;
-  }
-
-  .video-metaa {
-    font-size: 0.85rem;
-    gap: 6px;
-  }
-
-  .playlist-btnn {
-    font-size: 0.95rem;
-    padding: 6px 14px;
-  }
-
-  .action-roww {
-    flex-direction: column;
-    gap: 10px;
-    align-items: stretch;
-  }
-
-  .menu-btnn {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-  }
-
-  .menu-btnn:hover {
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-  }
-}
-
-/* Small Mobile Phones */
-@media (max-width: 480px) {
   .playlist-titlee {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
-
-  .playlist-info-cardd {
-    border-radius: 16px;
-  }
-
-  .banner-imgg {
-    border-radius: 16px 16px 0 0;
-  }
-
-  .filter-tabss {
-    justify-content: center;
-  }
-
-  .tabs {
-    flex: 1;
-    text-align: center;
-    padding: 8px;
-  }
-
-  .video-itemm {
-    padding: 12px;
-    border-radius: 12px;
-  }
-
-  .video-detailss {
-    margin-top: 0;
-  }
-
-  .video-metaa {
-    flex-direction: column;
-    gap: 2px;
-  }
+  /* .videos-columnn {
+ margin-left: 50px;
+} */
 }
 
-/* Very Small Mobile Phones */
-@media (max-width: 360px) {
+/* ========== Medium Laptops (1025px - 1280px) ========== */
+@media (max-width: 1280px) {
   .liked-videos-layoutt {
-    padding: 12px 8px;
-    gap: 16px;
+    padding: 24px;
+    gap: 24px;
+    margin: 20px 65px;
   }
-
+  .playlist-info-cardd {
+    flex: 0 0 320px;
+  }
   .playlist-titlee {
-    font-size: 1.3rem;
-  }
-
-  .playlist-btnn {
-    font-size: 0.9rem;
-    padding: 5px 12px;
-  }
-
-  .video-durationn {
-    font-size: 0.8em;
-    padding: 1px 4px;
+    font-size: 1.75rem;
   }
 }
 
-/* Orientation-based adjustments */
-@media (max-height: 500px) and (orientation: landscape) {
+/* ========== Large Screens (1281px - 1440px) ========== */
+@media (min-width: 1281px) and (max-width: 1440px) {
   .liked-videos-layoutt {
-    padding: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 28px;
   }
-
   .playlist-info-cardd {
-    position: static;
-  }
-
-  .video-itemm {
-    flex-direction: row;
-  }
-
-  .video-thumbnaill {
-    width: 120px;
-    height: 68px;
+    flex: 0 0 360px;
   }
 }
 
-/* High-density displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .playlist-btnn,
-  .tabs {
-    border-width: 0.5px;
-  }
-}
-
-/* Reduced motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  .playlist-btnn,
-  .tabs,
-  .video-itemm {
-    transition: none;
-  }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .video-titlee {
-    color: #fff;
-  }
-
-  .menu-btnn:hover {
-    background: #333;
-    color: #fff;
-  }
-}
-/* @media (min-width: 280px) {
+/* ========== Extra Large Screens (>= 1441px) ========== */
+@media (min-width: 1441px) {
   .liked-videos-layoutt {
-    /* margin-left: 4%; */
-/* margin-top: 8%; */
-/* } */
-/* }  */
-@media (min-width: 768px) {
-  .liked-videos-layoutt {
-    margin-left: 5%;
-    margin-top: 8%;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  .playlist-info-cardd {
+    flex: 0 0 380px;
   }
 }
