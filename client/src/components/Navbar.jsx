@@ -4,6 +4,7 @@ import { UserContext } from "../context/userContext";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { useLocation } from "react-router-dom";
 import ChannelSuggest from "../pages/ChannleSuggest";
+
 import {
   Menu as MenuIcon,
   Search as SearchIcon,
@@ -358,6 +359,7 @@ export default function Navbar() {
               <VideoCallOutlinedIcon />
               <span>Liked Videos</span>
             </Link>
+
             <Link
               to="/watch-history"
               className="sidebar-item"

@@ -20,7 +20,6 @@ const generateAccessAndRefreshTokens = async (userId) => {
     throw new ApiError(500, "Error generating tokens: " + error.message);
   }
 };
-
 const registerUser = asyncHandler(async (req, res) => {
   // ger user details from frontend
 
@@ -97,7 +96,6 @@ const registerUser = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(200, userCreated, "User registered successfully"));
 });
-
 const loginUser = asyncHandler(async (req, res) => {
   // login logic here
   const { email, username, password } = req.body;
@@ -145,7 +143,6 @@ const loginUser = asyncHandler(async (req, res) => {
       )
     );
 });
-
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select(
     "_id username avatar coverImage email fullname"
@@ -157,7 +154,6 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
   res.status(200).json(user);
 });
-
 const logOutUser = asyncHandler(async (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
@@ -178,7 +174,6 @@ const logOutUser = asyncHandler(async (req, res) => {
     .cookie("accessToken", "", option)
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
-
 const refreshAccessToken = asyncHandler(async (req, res) => {
   try {
     const incomingRefreshToken =
@@ -240,7 +235,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Error refreshing tokens: " + error.message);
   }
 });
-
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
@@ -261,7 +255,6 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
-
 const updateAccountDetails = asyncHandler(async (req, res) => {
   const { fullname, email } = req.body;
 
@@ -288,7 +281,6 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, user, "User updated successfully"));
 });
-
 const updateAvatarProfile = asyncHandler(async (req, res) => {
   const avatarLocalPath = req.file?.path;
   // console.log("Avatar Local Path:", avatarLocalPath);
@@ -318,7 +310,6 @@ const updateAvatarProfile = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Avatar updated successfully"));
 });
-
 const updateCoverImage = asyncHandler(async (req, res) => {
   const coverImageLocalPath = req.file?.path;
   // console.log("Cover Image Local Path:", coverImageLocalPath);
@@ -351,9 +342,8 @@ const updateCoverImage = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Cover image updated successfully"));
 });
-
 const getUserChannelProfile = asyncHandler(async (req, res) => {
-  const { username } = req.parms;
+  const { username } = req.params;
 
   if (!username) {
     throw new ApiError(400, "Username is required");
@@ -422,7 +412,6 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
       new ApiResponse(200, channel[0], "Channel profile fetched successfully")
     );
 });
-
 const addToWatchHistory = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { videoId } = req.params;
@@ -479,7 +468,6 @@ const addToWatchHistory = asyncHandler(async (req, res) => {
     });
   }
 });
-
 const getUserWatchHistory = asyncHandler(async (req, res) => {
   const user = await User.aggregate([
     {
@@ -554,7 +542,6 @@ const getUserWatchHistory = asyncHandler(async (req, res) => {
     )
   );
 });
-
 const removeFromWatchHistory = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -591,7 +578,6 @@ const removeFromWatchHistory = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
-
 const clearWatchHistory = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
@@ -611,7 +597,6 @@ const clearWatchHistory = asyncHandler(async (req, res) => {
     message: "Watch history cleared",
   });
 });
-
 // Controller function (e.g., in userController.js)
 const togglePauseWatchHistory = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);

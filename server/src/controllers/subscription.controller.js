@@ -80,13 +80,13 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 
 // Get channels the user has subscribed to
 const getSubscribedChannels = asyncHandler(async (req, res) => {
-  const { subscribeId } = req.params;
+  const { subscriberId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(subscribeId)) {
+  if (!mongoose.Types.ObjectId.isValid(subscriberId)) {
     throw new ApiError(400, "Invalid user ID");
   }
 
-  const subscriptions = await Subscription.find({ subscriber: subscribeId })
+  const subscriptions = await Subscription.find({ subscriber: subscriberId })
     .populate("channel", "username avatar email") // send channel info
     .exec();
 

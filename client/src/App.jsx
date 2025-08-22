@@ -10,8 +10,9 @@ import UpdateVideo from "./pages/UploadVideo";
 import WatchHistory from "./pages/WatchHistory";
 import VideoPage from "./pages/VideoPage";
 import ProtectedRoute from "./components/protectedRout";
+import Subscription from "./pages/Subscription";
 import { VideoProvider } from "./context/videoContext";
-
+import ChannelPage from "./pages/channelPage";
 function App() {
   return (
     <BrowserRouter>
@@ -26,7 +27,8 @@ function App() {
           <Route path="/upload" element={<UpdateVideo />} />
           <Route path="/video/:videoId" element={<VideoPage />} />
           <Route path="/watch-history" element={<WatchHistory />} />
-
+          <Route path="/subscriptions" element={<Subscription />} />
+          <Route path="/channel/:username" element={<ChannelPage />} />
           <Route
             path="/dashboard"
             element={

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { getVideoById, addVideoView } from "../api/videoApi";
 import VideoCard from "../components/VideoCard";
@@ -6,7 +6,9 @@ import axiosInstance from "../api/axiosInstance";
 import { BiDislike, BiLike } from "react-icons/bi";
 import { toggleVideoLike, getLikedVideos } from "../api/likeApi";
 import { addToWatchHistory } from "../api/userApi";
-
+import SubscribeButton from "../pages/subscribeButton";
+import { UserContext } from "../context/userContext";
+import axios from "axios";
 import "../styles/VideoPage.css";
 
 const VideoPage = () => {
@@ -17,10 +19,12 @@ const VideoPage = () => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [liked, setLiked] = useState(false);
-  const [subscribed, setSubscribed] = useState(false);
+  // const [subscribed, setSubscribed] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [addedToHistory, setAddedToHistory] = useState(false); // prevent multiple calls
+  const { user } = useContext(UserContext); // or from Redux selector
+  const [subscriberCount, setSubscriberCount] = useState(0);
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -31,18 +35,36 @@ const VideoPage = () => {
         const videoData = res.data.data || res.data;
         setVideo(videoData);
 
-        // Initial likes and dislikes
+        // ✅ Fetch subscriber count of the video owner
+        const ownerId = videoData?.owner?._id;
+        if (ownerId) {
+          try {
+            const subsRes = await axios.get(
+              `http://localhost:8000/api/v1/subscriptions/u/${ownerId}`,
+              { withCredentials: true }
+            );
+            setSubscriberCount(subsRes.data.data.length);
+          } catch (err) {
+            console.error(
+              "Failed to fetch subscriber count:",
+              err.response?.data?.message || err.message
+            );
+            setSubscriberCount(0); // optional fallback
+          }
+        }
+
+        // ✅ Likes/Dislikes
         setLikes(videoData.likes || 0);
         setDislikes(videoData.dislikes || 0);
 
-        // Check if user liked this video
+        // ✅ Check if user liked this video
         const likedVideosRes = await getLikedVideos();
         const likedVideos =
           likedVideosRes.data.data || likedVideosRes.data || [];
         const isLiked = likedVideos.some((like) => like.video?._id === videoId);
         setLiked(isLiked);
 
-        // Recommended videos
+        // ✅ Recommended videos
         const allVideosRes = await axiosInstance.get("/videos");
         const allVideos = allVideosRes.data.data || allVideosRes.data;
 
@@ -53,7 +75,7 @@ const VideoPage = () => {
           console.warn("Expected an array for allVideos but got:", allVideos);
         }
 
-        // Sample comments
+        // ✅ Sample comments
         setComments([
           { id: 1, user: "John Doe", text: "Great video!" },
           { id: 2, user: "Jane Smith", text: "Very helpful, thanks!" },
@@ -106,7 +128,7 @@ const VideoPage = () => {
     setDislikes((prev) => (prev === 0 ? 1 : prev));
   };
 
-  const handleSubscribe = () => setSubscribed(!subscribed);
+  // const handleSubscribe = () => setSubscribed(!subscribed);
 
   const handleAddComment = () => {
     if (newComment.trim()) {
@@ -189,25 +211,15 @@ const VideoPage = () => {
                 {video.owner?.username || video.data?.owner?.username}
               </h4>
               <p style={{ margin: 0, fontSize: "13px", color: "#777" }}>
-                1.2K subscribers
+                {subscriberCount} subscribers
               </p>
             </div>
 
-            <button
-              onClick={handleSubscribe}
-              style={{
-                padding: "10px 16px",
-                background: subscribed ? "#ccc" : "red",
-                border: "none",
-                borderRadius: "20px",
-                color: "#fff",
-                cursor: "pointer",
-                fontWeight: "bold",
-                marginLeft: "12px",
-              }}
-            >
-              {subscribed ? "Subscribed" : "Subscribe"}
-            </button>
+            {(video.owner?._id || video.data?.owner?._id) && (
+              <SubscribeButton
+                channelId={video.owner?._id || video.data?.owner?._id}
+              />
+            )}
           </div>
 
           {/* Actions Row */}
