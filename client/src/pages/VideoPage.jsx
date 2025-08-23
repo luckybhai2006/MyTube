@@ -9,6 +9,7 @@ import { addToWatchHistory } from "../api/userApi";
 import SubscribeButton from "../pages/subscribeButton";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 import "../styles/VideoPage.css";
 
 const VideoPage = () => {
@@ -40,7 +41,7 @@ const VideoPage = () => {
         if (ownerId) {
           try {
             const subsRes = await axios.get(
-              `http://localhost:8000/api/v1/subscriptions/u/${ownerId}`,
+              `${API_URL}api/v1/subscriptions/u/${ownerId}`,
               { withCredentials: true }
             );
             setSubscriberCount(subsRes.data.data.length);
