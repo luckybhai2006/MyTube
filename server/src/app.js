@@ -9,7 +9,7 @@ app.use(
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   })
 );
-
+console.log("Allowed origin:", process.env.CORS_ORIGIN);
 app.use(express.json({ limit: "200mb" })); // Limit request body size to 2MB
 app.use(express.urlencoded({ extended: true, limit: "200mb" })); // Limit URL-encoded data size to 2MB
 app.use(express.static("public")); // Serve static files from the 'public' directory
