@@ -15,7 +15,7 @@ const ChannelPage = () => {
       try {
         // Get user details by username
         const userRes = await axios.get(
-          `${API_URL}api/v1/users/C/${username}`,
+          `${API_URL}/api/v1/users/C/${username}`,
           { withCredentials: true }
         );
         const user = userRes.data.data;
@@ -23,14 +23,14 @@ const ChannelPage = () => {
 
         // Get videos by user._id
         const videoRes = await axios.get(
-          `${API_URL}api/v1/videos/user/${user._id}`,
+          `${API_URL}/api/v1/videos/user/${user._id}`,
           { withCredentials: true }
         );
         setVideos(videoRes.data || []);
 
         // Get subscriber count
         const res = await axios.get(
-          `${API_URL}api/v1/subscriptions/u/${user._id}`,
+          `${API_URL}/api/v1/subscriptions/u/${user._id}`,
           { withCredentials: true }
         );
         setSubscriberCount(res.data.data.length);

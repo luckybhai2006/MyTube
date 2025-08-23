@@ -57,57 +57,57 @@ export default function UploadVideo() {
 
   return (
     <div className="auth-wrapper">
-    <div className="upload-container">
-      <h2>Upload Video</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Video File:</label>
-          <input
-            type="file"
-            accept="video/*"
-            onChange={handleVideoChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Thumbnail:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setThumbnail(e.target.files[0])}
-            required
-          />
-        </div>
-        <div>
-          <label>Title:</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Description:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>
-            Publish Now?
+      <div className="upload-container">
+        <h2>Upload Video</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Video File:</label>
             <input
-              type="checkbox"
-              checked={isPublished}
-              onChange={() => setIsPublished(!isPublished)}
+              type="file"
+              accept="video/*"
+              onChange={handleVideoChange}
+              required
             />
-          </label>
-        </div>
-        <button type="submit">Upload</button>
-      </form>
-    </div>
+          </div>
+          <div>
+            <label>Thumbnail:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setThumbnail(e.target.files[0])}
+              required
+            />
+          </div>
+          <div>
+            <label>Title:</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Description:</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>
+              Publish Now?
+              <input
+                type="checkbox"
+                checked={isPublished}
+                onChange={() => setIsPublished(!isPublished)}
+              />
+            </label>
+          </div>
+          <button type="submit">Upload</button>
+        </form>
+      </div>
     </div>
   );
 }

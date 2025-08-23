@@ -23,7 +23,7 @@ const SubscribeButton = ({ channelId, initialSubscriberCount = 0 }) => {
     const fetchSubscriptionStatus = async () => {
       try {
         const res = await axios.get(
-          `${API_URL}api/v1/subscriptions/c/${user._id}`,
+          `${API_URL}/api/v1/subscriptions/c/${user._id}`,
           { withCredentials: true }
         );
         const subscribedChannels = res.data.data || [];
@@ -58,7 +58,7 @@ const SubscribeButton = ({ channelId, initialSubscriberCount = 0 }) => {
     try {
       setLoading(true);
       await axios.post(
-        `${API_URL}api/v1/subscriptions/c/${channelId}`,
+        `${API_URL}/api/v1/subscriptions/c/${channelId}`,
         {},
         { withCredentials: true }
       );

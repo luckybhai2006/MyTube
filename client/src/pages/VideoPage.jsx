@@ -41,7 +41,7 @@ const VideoPage = () => {
         if (ownerId) {
           try {
             const subsRes = await axios.get(
-              `${API_URL}api/v1/subscriptions/u/${ownerId}`,
+              `${API_URL}/api/v1/subscriptions/u/${ownerId}`,
               { withCredentials: true }
             );
             setSubscriberCount(subsRes.data.data.length);

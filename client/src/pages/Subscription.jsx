@@ -15,7 +15,7 @@ const Subscription = () => {
 
       try {
         const res = await axios.get(
-          `${API_URL}api/v1/subscriptions/c/${user._id}`,
+          `${API_URL}/api/v1/subscriptions/c/${user._id}`,
           { withCredentials: true }
         );
         setSubscribedChannels(res.data.data || []);

@@ -46,7 +46,7 @@ const Register = () => {
       if (coverImage) data.append("coverImage", coverImage);
 
       const response = await axios.post(
-        `${API_URL}api/v1/users/register`,
+        `${API_URL}/api/v1/users/register`,
         data,
         {
           withCredentials: true,

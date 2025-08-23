@@ -11,7 +11,7 @@ function ProtectedRoute({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get(`${API_URL}api/v1/users/me`, {
+        const res = await axios.get(`${API_URL}/api/v1/users/me`, {
           withCredentials: true, // sends HttpOnly cookies
         });
         setUser(res.data); // store user info if needed
