@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { UserContext } from "../context/userContext";
 import { Link } from "react-router-dom"; // import Link
+const API_URL = import.meta.env.VITE_API_URL;
 import "../styles/VideoCard.css";
 const Subscription = () => {
   const { user } = useContext(UserContext);
@@ -14,7 +15,7 @@ const Subscription = () => {
 
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/v1/subscriptions/c/${user._id}`,
+          `${API_URL}api/v1/subscriptions/c/${user._id}`,
           { withCredentials: true }
         );
         setSubscribedChannels(res.data.data || []);

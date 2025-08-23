@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../context/userContext";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const SubscribeButton = ({ channelId, initialSubscriberCount = 0 }) => {
   const { user } = useContext(UserContext);
@@ -22,7 +23,7 @@ const SubscribeButton = ({ channelId, initialSubscriberCount = 0 }) => {
     const fetchSubscriptionStatus = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/v1/subscriptions/c/${user._id}`,
+          `${API_URL}api/v1/subscriptions/c/${user._id}`,
           { withCredentials: true }
         );
         const subscribedChannels = res.data.data || [];
@@ -57,7 +58,7 @@ const SubscribeButton = ({ channelId, initialSubscriberCount = 0 }) => {
     try {
       setLoading(true);
       await axios.post(
-        `http://localhost:8000/api/v1/subscriptions/c/${channelId}`,
+        `${API_URL}api/v1/subscriptions/c/${channelId}`,
         {},
         { withCredentials: true }
       );

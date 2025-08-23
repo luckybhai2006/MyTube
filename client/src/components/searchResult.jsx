@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const ResultsPage = () => {
   const [searchParams] = useSearchParams();
@@ -14,7 +15,7 @@ const ResultsPage = () => {
     const fetchSearchResults = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/v1/users/search?q=${query}`,
+          `${API_URL}/api/v1/users/search?q=${query}`,
           { withCredentials: true }
         );
         setVideos(res.data.data.videos || []);
