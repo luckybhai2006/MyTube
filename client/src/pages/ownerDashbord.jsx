@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useContext } from "react";
 import VideoCard from "../components/VideoCard";
 import { UserContext } from "../context/userContext";
@@ -8,7 +7,9 @@ const Dashboard = () => {
   const { user, activeCategory } = useContext(UserContext);
   const [videos, setVideos] = useState([]);
   const [filteredVideos, setFilteredVideos] = useState([]);
+  const [subscriberCount, setSubscriberCount] = useState(0);
 
+  // 🟡 Fetch videos
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -27,7 +28,25 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  // ✅ Apply global category filter whenever activeCategory changes
+  // 🟡 Fetch subscriber count
+  useEffect(() => {
+    const fetchSubscriberCount = async () => {
+      try {
+        const res = await axiosInstance.get(`/subscriptions/u/${user._id}`, {
+          withCredentials: true,
+        });
+        setSubscriberCount(res.data.data.length);
+      } catch (err) {
+        console.error("Failed to fetch subscriber count:", err);
+      }
+    };
+
+    if (user?._id) {
+      fetchSubscriberCount();
+    }
+  }, [user]);
+
+  // 🟡 Filter by category
   useEffect(() => {
     if (activeCategory === "All") {
       setFilteredVideos(videos);
@@ -39,9 +58,44 @@ const Dashboard = () => {
   }, [activeCategory, videos]);
 
   return (
-    <div className="responsiveContainer">
-      {filteredVideos.length > 0 ? (
-        filteredVideos.map((video) => (
+    <>
+      {/* 👤 Top Section: Avatar, Name, Subscriber Count */}
+      <div className="responsiveContainerr">
+        {user && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "20px",
+              padding: "10px 0",
+              borderBottom: "1px solid #ccc",
+            }}
+          >
+            <img
+              src={user.avatar || "/default-avatar.png"}
+              alt={user.username}
+              style={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+
+            <div>
+              <h2 style={{ margin: 0 }}>{user.username}</h2>
+              <p style={{ margin: 0, color: "#666" }}>
+                {subscriberCount} subscriber{subscriberCount !== 1 ? "s" : ""} ·{" "}
+                {videos.length} video{videos.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 🎥 Video list */}
+      <div className="responsiveContainer">
+        {filteredVideos.map((video) => (
           <VideoCard
             key={video._id}
             createdAt={video.createdAt}
@@ -54,11 +108,9 @@ const Dashboard = () => {
             avatar={video.owner.avatar}
             views={video.views}
           />
-        ))
-      ) : (
-        <p>No videos found in {activeCategory}.</p>
-      )}
-    </div>
+        ))}
+      </div>
+    </>
   );
 };
 

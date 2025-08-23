@@ -130,6 +130,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
 }
 
 /* Video Items */
@@ -254,6 +255,9 @@
   .playlist-info-cardd {
     margin: 0;
   }
+  .videos-listt {
+    width: 100%;
+  }
 }
 
 /* ========== Small Phones (361px - 480px) ========== */
@@ -274,6 +278,9 @@
   .video-thumbnaill {
     width: 100%;
     aspect-ratio: 16/9;
+  }
+  .videos-listt {
+    width: 89%;
   }
 }
 
@@ -310,12 +317,15 @@
   }
   .liked-videos-layoutt {
     position: absolute;
-    right: 0px;
+    right: -80px;
   }
 
-  /* .videos-columnn {
-    margin-left: -60px;
+  /* .video-detailss {
+    margin-top: 0;
   } */
+  .videos-columnn {
+    margin-top: -20px;
+  }
   .playlist-info-cardd {
     position: relative;
     right: 0px;
@@ -370,6 +380,11 @@
     flex: 0 0 360px;
   }
 }
+/* @media (min-width: 768px) and (max-width: 1024px) {
+  .videos-columnn {
+    /* margin-top: -20px; */
+/* } */
+/* }  */
 
 /* ========== Extra Large Screens (>= 1441px) ========== */
 @media (min-width: 1441px) {

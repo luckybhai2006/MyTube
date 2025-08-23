@@ -50,7 +50,7 @@ router.get("/random", async (req, res) => {
 });
 router
   .route("/:videoId")
-  .get(verifyJwt, getVideoById)
+  .get(getVideoById)
   .delete(verifyJwt, deleteVideo)
   .patch(verifyJwt, upload.single("thumbnail"), updateVideo);
 

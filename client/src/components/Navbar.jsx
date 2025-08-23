@@ -61,10 +61,9 @@ export default function Navbar() {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/results?search_query=${encodeURIComponent(searchQuery)}`);
-      setShowMobileSearch(false);
+      setSearchQuery(""); // Optional reset
     }
   };
-
   // close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -266,6 +265,7 @@ export default function Navbar() {
                       <div style={{ fontSize: "12px", color: "#777" }}>
                         {user.email}
                       </div>
+                      <Link to="/dashboard">view your channel</Link>
                     </div>
                   </div>
 

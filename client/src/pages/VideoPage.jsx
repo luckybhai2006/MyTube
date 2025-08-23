@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getVideoById, addVideoView } from "../api/videoApi";
 import VideoCard from "../components/VideoCard";
 import axiosInstance from "../api/axiosInstance";
@@ -196,24 +196,38 @@ const VideoPage = () => {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <img
-              src={video.owner?.avatar || video.data?.owner?.avatar}
-              alt="channel avatar"
+            <Link
+              to={`/channel/${
+                video.owner?.username || video.data?.owner?.username
+              }`}
               style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                objectFit: "cover",
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                textDecoration: "none",
+                color: "inherit",
+                marginBottom: "16px",
               }}
-            />
-            <div>
-              <h4 style={{ margin: 0, color: "#000" }}>
-                {video.owner?.username || video.data?.owner?.username}
-              </h4>
-              <p style={{ margin: 0, fontSize: "13px", color: "#777" }}>
-                {subscriberCount} subscribers
-              </p>
-            </div>
+            >
+              <img
+                src={video.owner?.avatar || video.data?.owner?.avatar}
+                alt="channel avatar"
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+              <div>
+                <h4 style={{ margin: 0, color: "#000" }}>
+                  {video.owner?.username || video.data?.owner?.username}
+                </h4>
+                <p style={{ margin: 0, fontSize: "13px", color: "#777" }}>
+                  {subscriberCount} subscribers
+                </p>
+              </div>
+            </Link>
 
             {(video.owner?._id || video.data?.owner?._id) && (
               <SubscribeButton

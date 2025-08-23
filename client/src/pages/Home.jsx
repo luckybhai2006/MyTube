@@ -39,7 +39,7 @@ const HomePage = () => {
     return <p className="text-center mt-10">Loading videos...</p>;
 
   return (
-    <div className="responsiveContainer">
+    <div className="responsiveContainerr">
       {randomVideos.map((video) => (
         <Link
           key={video._id}

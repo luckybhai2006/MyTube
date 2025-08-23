@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
 const ChannelPage = () => {
@@ -43,94 +43,123 @@ const ChannelPage = () => {
     fetchChannelDetails();
   }, [username]);
 
-  if (loading) return <p style={styles.loading}>Loading channel...</p>;
-  if (!userInfo) return <p style={styles.loading}>Channel not found</p>;
+  // if (loading) return <p style={styles.loading}>Loading channel...</p>;
+  // if (!userInfo) return <p style={styles.loading}>Channel not found</p>;
 
   return (
-    <div style={styles.container}>
-      <div style={styles.profileSection}>
-        <img
-          src={userInfo.avatar || "https://via.placeholder.com/100"}
-          alt="Avatar"
-          style={styles.avatar}
-        />
-        <div>
-          <h2>{userInfo.username}</h2>
-          <p>Email: {userInfo.email}</p>
-          <p>
-            <strong>{subscriberCount}</strong> Subscribers
-          </p>
-        </div>
-      </div>
-
-      <h3 style={styles.videoHeader}>Videos</h3>
-      {videos.length === 0 ? (
-        <p>No videos uploaded.</p>
-      ) : (
-        <div style={styles.videoGrid}>
-          {videos.map((video) => (
-            <div key={video._id} style={styles.videoCard}>
-              <video
-                src={video.videoFile}
-                poster={video.thumbnail}
-                controls
-                width="100%"
-                style={{ borderRadius: "8px" }}
-              />
-              <h4>{video.title}</h4>
-              <p style={styles.videoDesc}>{video.description}</p>
-            </div>
-          ))}
+    <>
+      {userInfo && (
+        <div
+          className="coverImage"
+          style={{
+            width: "100%",
+            height: "200px",
+            position: "relative",
+            maxWidth: "1400px",
+            marginTop: "70px",
+            marginBottom: "-130px",
+            left: "0",
+            overflow: "hidden",
+          }}
+        >
+          <img
+            style={{
+              width: "100%",
+              height: "100%",
+              top: "50px",
+              position: "absolute",
+              objectFit: "cover",
+              objectPosition: "center",
+              display: "block",
+            }}
+            src={userInfo.coverImage}
+            alt="coverImage"
+          />
         </div>
       )}
-    </div>
-  );
-};
+      {/* 👤 Top Section: Avatar, Name, Subscriber Count */}
+      <div className="responsiveContainerr">
+        {userInfo && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "20px",
+              // marginTop: "7%",
+              padding: "10px 0",
+              borderBottom: "1px solid #ccc",
+            }}
+          >
+            <img
+              src={userInfo.avatar || "/default-avatar.png"}
+              alt={userInfo.username}
+              style={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
 
-const styles = {
-  container: {
-    padding: "40px",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  profileSection: {
-    display: "flex",
-    alignItems: "center",
-    gap: "20px",
-    borderBottom: "1px solid #ddd",
-    paddingBottom: "20px",
-    marginBottom: "30px",
-  },
-  avatar: {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-    objectFit: "cover",
-  },
-  videoHeader: {
-    marginBottom: "20px",
-  },
-  videoGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-    gap: "20px",
-  },
-  videoCard: {
-    backgroundColor: "#f9f9f9",
-    padding: "15px",
-    borderRadius: "10px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-  },
-  videoDesc: {
-    fontSize: "0.9rem",
-    color: "#555",
-    marginTop: "8px",
-  },
-  loading: {
-    textAlign: "center",
-    marginTop: "100px",
-    fontSize: "18px",
-  },
+            <div>
+              <h2 style={{ margin: 0 }}>{userInfo.username}</h2>
+              <p style={{ margin: 0, color: "#666" }}>
+                {subscriberCount} subscriber{subscriberCount !== 1 ? "s" : ""} .{" "}
+                {videos.length} videos
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+      {/* 🎥 Your existing video list — untouched */}
+      <div className="responsiveContainer">
+        {videos.map((video) => (
+          <Link
+            key={video._id}
+            to={`/video/${video._id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <div className="video-card">
+              <div className="video-thumbnail">
+                <img
+                  src={video.thumbnail || "/default-thumbnail.jpg"}
+                  alt={video.title}
+                />
+                <span className="duration-badge">
+                  {video.duration || "00:00"}
+                </span>
+              </div>
+
+              <div className="video-body">
+                <img
+                  src={
+                    video.owner?.avatar ||
+                    userInfo?.avatar ||
+                    "/default-avatar.png"
+                  }
+                  alt="creator"
+                  className="creator-avatar"
+                />
+                <div className="video-info">
+                  <div className="title-row">
+                    <h3 className="video-title">{video.title}</h3>
+                    <button className="menu-button">⋮</button>
+                  </div>
+                  <p className="video-owner">
+                    {video.owner?.username || userInfo?.username || "Unknown"}
+                  </p>
+                  <p className="video-meta">
+                    {video.views ? `${video.views} views` : "0 views"} •{" "}
+                    {new Date(video.createdAt).toDateString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </>
+  );
 };
 
 export default ChannelPage;

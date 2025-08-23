@@ -12,6 +12,7 @@ import VideoPage from "./pages/VideoPage";
 import ProtectedRoute from "./components/protectedRout";
 import Subscription from "./pages/Subscription";
 import { VideoProvider } from "./context/videoContext";
+import ResultsPage from "./components/searchResult";
 import ChannelPage from "./pages/channelPage";
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/watch-history" element={<WatchHistory />} />
           <Route path="/subscriptions" element={<Subscription />} />
           <Route path="/channel/:username" element={<ChannelPage />} />
+          <Route path="/results" element={<ResultsPage />} />
           <Route
             path="/dashboard"
             element={

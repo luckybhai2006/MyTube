@@ -16,6 +16,7 @@ import {
   removeFromWatchHistory,
   clearWatchHistory,
   togglePauseWatchHistory,
+  searchHandler,
 } from "../controllers/user.controller.js";
 import { Router } from "express";
 
@@ -58,5 +59,6 @@ router.delete("/history/clear", verifyJwt, clearWatchHistory);
 // In routes/userRoutes.js
 router.patch("/watch-history/pause", verifyJwt, togglePauseWatchHistory);
 // router.get("/watch-history/status", verifyJwt, togglePauseWatchHistory);
+router.get("/search", searchHandler);
 
 export default router;
