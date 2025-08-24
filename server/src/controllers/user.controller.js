@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asynchandeler.js";
 import { ApiError } from "../utils/apierror.js";
 import { User } from "../models/user.model.js";
+import { Video } from "../models/video.model.js";
 import { uploadOnCloudinary } from "../utils/cloudnary.js";
 import { ApiResponse } from "../utils/apiresponse.js";
 import jwt from "jsonwebtoken";
@@ -616,6 +617,32 @@ const togglePauseWatchHistory = asyncHandler(async (req, res) => {
     paused: user.watchHistoryPaused,
   });
 });
+// Controller
+const searchHandler = async (req, res) => {
+  const query = req.query.q?.toLowerCase();
+
+  if (!query) return res.status(400).json({ message: "Missing query" });
+
+  const videos = await Video.find({
+    $or: [
+      { title: { $regex: query, $options: "i" } },
+      { description: { $regex: query, $options: "i" } },
+      { tags: { $in: [query] } },
+    ],
+  }).populate("owner", "username avatar"); // ✅ populate owner info
+
+  const users = await User.find({
+    username: { $regex: query, $options: "i" },
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {
+      videos,
+      users,
+    },
+  });
+};
 
 export {
   registerUser,
@@ -633,4 +660,5 @@ export {
   removeFromWatchHistory,
   clearWatchHistory,
   togglePauseWatchHistory,
+  searchHandler,
 };

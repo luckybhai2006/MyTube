@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ const Register = () => {
       if (coverImage) data.append("coverImage", coverImage);
 
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/register",
+        `${API_URL}/api/v1/users/register`,
         data,
         {
           withCredentials: true,
@@ -65,53 +66,53 @@ const Register = () => {
 
   return (
     <div className="auth-wrapper">
-    <div className="register-container">
-      <h2>Register</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="fullname"
-          placeholder="Full Name"
-          value={formData.fullname}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="file"
-          name="avatar"
-          onChange={handleAvatarChange}
-          required
-        />
-        <input type="file" name="coverImage" onChange={handleCoverChange} />
-        <button type="submit">Register</button>
-      </form>
-    </div>
+      <div className="register-container">
+        <h2>Register</h2>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {success && <p style={{ color: "green" }}>{success}</p>}
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="fullname"
+            placeholder="Full Name"
+            value={formData.fullname}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="file"
+            name="avatar"
+            onChange={handleAvatarChange}
+            required
+          />
+          <input type="file" name="coverImage" onChange={handleCoverChange} />
+          <button type="submit">Register</button>
+        </form>
+      </div>
     </div>
   );
 };

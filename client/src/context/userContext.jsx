@@ -7,7 +7,6 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
 
-
   // Only fetch user on mount if not already set
   useEffect(() => {
     if (!user) {
@@ -50,8 +49,15 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, loading, handleLogin, handleLogout,activeCategory,
-        setActiveCategory}}
+      value={{
+        user,
+        setUser,
+        loading,
+        handleLogin,
+        handleLogout,
+        activeCategory,
+        setActiveCategory,
+      }}
     >
       {children}
     </UserContext.Provider>
