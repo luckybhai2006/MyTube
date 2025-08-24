@@ -4,6 +4,7 @@ import { UserContext } from "../context/userContext";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { useLocation } from "react-router-dom";
 import ChannelSuggest from "../pages/ChannleSuggest";
+import NProgress from "../pages/Loader";
 
 import {
   Menu as MenuIcon,
@@ -49,6 +50,10 @@ export default function Navbar() {
   const uploadMenuRef = useRef();
   const userMenuRef = useRef();
 
+  useEffect(() => {
+    NProgress.start();
+    NProgress.done();
+  }, [location]);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const onLogout = () => {
