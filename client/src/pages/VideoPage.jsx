@@ -8,6 +8,7 @@ import { toggleVideoLike, getLikedVideos } from "../api/likeApi";
 import { addToWatchHistory } from "../api/userApi";
 import SubscribeButton from "../pages/subscribeButton";
 import { UserContext } from "../context/userContext";
+import CommentSection from "../pages/commentSection";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 import "../styles/VideoPage.css";
@@ -21,8 +22,8 @@ const VideoPage = () => {
   const [dislikes, setDislikes] = useState(0);
   const [liked, setLiked] = useState(false);
   // const [subscribed, setSubscribed] = useState(false);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
+  // const [comments, setComments] = useState([]);
+  // const [newComment, setNewComment] = useState("");
   const [addedToHistory, setAddedToHistory] = useState(false); // prevent multiple calls
   const { user } = useContext(UserContext); // or from Redux selector
   const [subscriberCount, setSubscriberCount] = useState(0);
@@ -76,11 +77,11 @@ const VideoPage = () => {
           console.warn("Expected an array for allVideos but got:", allVideos);
         }
 
-        // ✅ Sample comments
-        setComments([
-          { id: 1, user: "John Doe", text: "Great video!" },
-          { id: 2, user: "Jane Smith", text: "Very helpful, thanks!" },
-        ]);
+        // // ✅ Sample comments
+        // setComments([
+        //   { id: 1, user: "John Doe", text: "Great video!" },
+        //   { id: 2, user: "Jane Smith", text: "Very helpful, thanks!" },
+        // ]);
       } catch (err) {
         console.error("Error fetching video:", err);
       }
@@ -131,15 +132,15 @@ const VideoPage = () => {
 
   // const handleSubscribe = () => setSubscribed(!subscribed);
 
-  const handleAddComment = () => {
-    if (newComment.trim()) {
-      setComments([
-        ...comments,
-        { id: Date.now(), user: "You", text: newComment },
-      ]);
-      setNewComment("");
-    }
-  };
+  // const handleAddComment = () => {
+  //   if (newComment.trim()) {
+  //     setComments([
+  //       ...comments,
+  //       { id: Date.now(), user: "You", text: newComment },
+  //     ]);
+  //     setNewComment("");
+  //   }
+  // };
 
   if (!video) return <p>Loading video...</p>;
 
@@ -338,52 +339,7 @@ const VideoPage = () => {
         </div>
 
         {/* Comments */}
-        <div style={{ marginTop: "20px" }}>
-          <h3 style={{ color: "#000" }}>Comments</h3>
-          <div style={{ display: "flex", gap: "10px", marginBottom: "12px" }}>
-            <input
-              type="text"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
-              style={{
-                flex: 1,
-                padding: "8px",
-                borderRadius: "6px",
-                border: "1px solid #ccc",
-                background: "#fff",
-                color: "#000",
-              }}
-            />
-            <button
-              onClick={handleAddComment}
-              style={{
-                padding: "8px 16px",
-                background: "#065fd4",
-                border: "none",
-                borderRadius: "6px",
-                color: "#fff",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              Comment
-            </button>
-          </div>
-
-          {comments.map((c) => (
-            <div
-              key={c.id}
-              style={{
-                padding: "8px 0",
-                borderBottom: "1px solid #eee",
-              }}
-            >
-              <strong style={{ color: "#000" }}>{c.user}</strong>
-              <p style={{ margin: "4px 0", color: "#333" }}>{c.text}</p>
-            </div>
-          ))}
-        </div>
+        <CommentSection videoId={video._id} user={user} />
       </div>
 
       {/* Recommended Videos */}
