@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 import axios from "axios";
 
 const ChannelPage = () => {
@@ -14,15 +15,17 @@ const ChannelPage = () => {
       try {
         // Get user details by username
         const userRes = await axios.get(
-          `http://localhost:8000/api/v1/users/C/${username}`,
-          { withCredentials: true }
+          `${API_URL}/api/v1/users/C/${username}`,
+          {
+            withCredentials: true,
+          }
         );
         const user = userRes.data.data;
         setUserInfo(user);
 
         // 🔹 Fetch videos (independent)
         axios
-          .get(`http://localhost:8000/api/v1/videos/user/${user._id}`, {
+          .get(`${API_URL}/api/v1/videos/user/${user._id}`, {
             withCredentials: true,
           })
           .then((res) => setVideos(res.data || []))
@@ -30,7 +33,7 @@ const ChannelPage = () => {
 
         // 🔹 Fetch subscribers (independent)
         axios
-          .get(`http://localhost:8000/api/v1/subscriptions/u/${user._id}`, {
+          .get(`${API_URL}/api/v1/subscriptions/u/${user._id}`, {
             withCredentials: true,
           })
           .then((res) => setSubscriberCount(res.data.data.length))
