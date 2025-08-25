@@ -66,7 +66,8 @@ const HomePage = () => {
               />
               <div className="video-info">
                 <div className="title-row">
-                  <h3 className="video-title">{video.title}</h3>
+                  <h3 className="video-title">{video.title.length > 40
+                  ?`${video.title.substring(0,40)}....`:video.title}</h3>
                   <button className="menu-button">⋮</button>
                 </div>
                 {/* <p className="video-description">

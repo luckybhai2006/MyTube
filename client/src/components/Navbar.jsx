@@ -24,6 +24,7 @@ import {
   Help as HelpIcon,
   Feedback as FeedbackIcon,
 } from "@mui/icons-material";
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { SiYoutubeshorts, SiYoutubegaming } from "react-icons/si";
 import { MdNewspaper } from "react-icons/md";
 import { GrTrophy } from "react-icons/gr";
@@ -178,11 +179,11 @@ export default function Navbar() {
         <div className={`navbar-right ${showMobileSearch ? "hidden" : ""}`}>
           {/* Upload menu */}
           <div className="upload-trigger" style={{ position: "relative" }}>
-            <VideoCallOutlinedIcon
-              className="navbar-icon"
+            <AddOutlinedIcon 
+              className="create-button"
               onClick={() => setShowUploadMenu((prev) => !prev)}
-              style={{ cursor: "pointer" }}
-            />
+              style={{ cursor: "pointer" }} 
+            /> 
             {showUploadMenu && (
               <div
                 ref={uploadMenuRef}
@@ -215,8 +216,8 @@ export default function Navbar() {
             )}
           </div>
 
-          <AppsIcon className="navbar-icon" />
-          <NotificationsIcon className="navbar-icon" />
+          {/* <AppsIcon className="navbar-icon" /> */}
+          <NotificationsIcon className="create-button" />
 
           {/* Avatar with User Menu */}
           {user ? (
@@ -298,8 +299,8 @@ export default function Navbar() {
             </div>
           ) : (
             <button className="sign-in-button">
-              <AccountCircleIcon />
-              <Link to="/login">SIGN IN</Link>
+              
+              <Link to="/login"><AccountCircleIcon /></Link>
             </button>
           )}
         </div>

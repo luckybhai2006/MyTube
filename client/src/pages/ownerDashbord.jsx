@@ -9,7 +9,7 @@ const Dashboard = () => {
   const [filteredVideos, setFilteredVideos] = useState([]);
   const [subscriberCount, setSubscriberCount] = useState(0);
 
-  // 🟡 Fetch videos
+  // 🟡 Fetch videos  
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -88,6 +88,17 @@ const Dashboard = () => {
                 {subscriberCount} subscriber{subscriberCount !== 1 ? "s" : ""} ·{" "}
                 {videos.length} video{videos.length !== 1 ? "s" : ""}
               </p>
+              <button
+      style={{
+        padding: "6px 14px",
+        background: "#065fd4",
+        color: "white",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        fontSize: "14px",
+      }}
+    >Edit Channel</button>
             </div>
           </div>
         )}

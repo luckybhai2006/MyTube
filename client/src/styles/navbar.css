@@ -152,12 +152,13 @@ body {
   justify-content: flex-end;
 }
 
-.navbar-icon {
+.create-button {
   background: none;
   border: none;
+  font-size: larger;
   justify-content: center;
   padding: 8px;
-  margin: 0 4px;
+  margin: 0 8px;
   cursor: pointer;
   color: #606060;
 }
@@ -165,19 +166,35 @@ body {
 .sign-in-button {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
+  justify-content: center;
+  width: 40px;   /* fixed size circle */
+  height: 40px;
   border: 1px solid #065fd4;
-  border-radius: 2px;
+  border-radius: 50%;   /* makes it a circle */
   background: white;
   color: #065fd4;
-  font-size: 14px;
+  font-size: 0;
   font-weight: 500;
   cursor: pointer;
+
+  transition: all 0.3s ease;
 }
 
+/* Icon inside the button */
 .sign-in-button svg {
-  margin-right: 8px;
+  width: 100%;   /* make icon fill most of the circle */
+  height: 100%;
   color: #065fd4;
+  margin: 0; /* remove spacing */
+}
+
+/* Hover effect */
+.sign-in-button:hover {
+  background: #065fd4;
+}
+
+.sign-in-button:hover svg {
+  color: white; /* icon turns white */
 }
 
 /* Profile Dropdown */
@@ -437,5 +454,21 @@ body {
   .mobile-search-button,
   .mobile-search-expanded {
     display: none !important;
+  }
+}
+@media (max-width: 600px) {
+  .sign-in-button {
+    padding: 10px;              /* equal padding */
+    border-radius: 50%;         /* circle */
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    font-size: 0;               /* hide text */
+  }
+
+  .sign-in-button svg {
+    margin-right: 0;            /* center icon */
+    width: 40px;
+    height: 40px;
   }
 }

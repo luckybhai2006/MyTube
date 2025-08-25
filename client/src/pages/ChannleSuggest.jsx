@@ -6,12 +6,17 @@ const ChannelSuggest = ({ activeCategory, onSelectCategory }) => {
   const location = useLocation();
 
   // hide if current path starts with /video
-  if (location.pathname.startsWith("/video")) {
-    return null;
-  }
-  if (location.pathname.startsWith("/watch-history")) {
-    return null;
-  }
+if (
+  location.pathname.startsWith("/video") ||
+  location.pathname.startsWith("/watch-history") ||
+  location.pathname.startsWith("/login") ||
+  location.pathname.startsWith("/register") ||
+  location.pathname.startsWith("/upload")
+
+) {
+  return null;
+}
+  
   const categories = [
     "All",
     "Music",

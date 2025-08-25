@@ -33,10 +33,16 @@ const Subscription = () => {
 
   if (subscribedChannels.length === 0)
     return <div>You haven't subscribed to any channels yet.</div>;
+   const gradients = [
+    "linear-gradient(135deg, #fdfbfb, #ebedee)",
+    "linear-gradient(135deg, #fff5f5, #fceaea)",
+    "linear-gradient(135deg, #f7f9fc, #e9edf5)",
+    "linear-gradient(135deg, #fefcfb, #f5f3f0)"
+  ];
 
   return (
     <div className="responsiveContainerr">
-      {subscribedChannels.map((sub) => (
+      {subscribedChannels.map((sub,index) => (
         <Link
           key={sub.channel._id}
           to={`/channel/${sub.channel.username}`}
@@ -50,6 +56,17 @@ const Subscription = () => {
             marginBottom: "16px",
             textDecoration: "none",
             color: "inherit",
+             background: gradients[index % gradients.length],
+            boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+            transition: "transform 0.3s ease, box-shadow 0.3s ease"
+          }}
+            onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-6px)";
+            e.currentTarget.style.boxShadow = "0 6px 16px rgba(0,0,0,0.15)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.08)";
           }}
         >
           <img
