@@ -46,6 +46,7 @@ body {
 }
 
 .logo-container {
+  margin-left: -5px;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -131,16 +132,14 @@ body {
 
 .mobile-search-expanded {
   display: none;
-  margin-left: -10px;
-  width: 30px;
   flex: 1;
 }
 
 .mobile-search-expanded .search-input {
-  border: 1px solid #ccc;
   border-radius: 20px;
+  border: 1px solid #000;
   padding-left: 16px;
-  width: 10px;
+  width: 100%;
 }
 
 /* Right Section */
@@ -167,10 +166,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;   /* fixed size circle */
+  width: 40px; /* fixed size circle */
   height: 40px;
   border: 1px solid #065fd4;
-  border-radius: 50%;   /* makes it a circle */
+  border-radius: 50%; /* makes it a circle */
   background: white;
   color: #065fd4;
   font-size: 0;
@@ -182,7 +181,7 @@ body {
 
 /* Icon inside the button */
 .sign-in-button svg {
-  width: 100%;   /* make icon fill most of the circle */
+  width: 100%; /* make icon fill most of the circle */
   height: 100%;
   color: #065fd4;
   margin: 0; /* remove spacing */
@@ -405,6 +404,97 @@ body {
   font-size: 10px;
 }
 
+/* navbar.css ke andar */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  z-index: 1000;
+}
+
+.bottom-nav a,
+.bottom-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: #000;
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-size: 12px;
+}
+
+.bottom-nav img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+/* By default (desktop) dikhana hai */
+.desktop-only {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.suggestion-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  max-height: 250px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+}
+
+.suggestion-box li {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.suggestion-box li:hover {
+  background: #f2f2f2;
+}
+
+.search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 0.1px solid grey;
+  border-radius: 15px;
+  height: 40px;
+  overflow: hidden;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .search-input-container {
+    display: none;
+  }
+  .hide-triger {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .bottom-nav {
+    display: none; /* sirf mobile ke liye */
+  }
+}
+
 @media (min-width: 769px) {
   .sidebar:not(.open) + .mini-sidebar {
     display: flex;
@@ -423,14 +513,15 @@ body {
 
   .navbar-left {
     min-width: auto;
+    margin-left: -12px;
+  }
+  .logo-container {
+    margin-left: -12px;
   }
 
-  .logo-text {
-    display: none;
-  }
   .navbar.search-active .mobile-search-expanded {
     display: flex;
-    margin-right: 20px;
+    /* margin-right: 10px; */
   }
 
   .navbar.search-active .navbar-right {
@@ -458,16 +549,16 @@ body {
 }
 @media (max-width: 600px) {
   .sign-in-button {
-    padding: 10px;              /* equal padding */
-    border-radius: 50%;         /* circle */
+    padding: 10px; /* equal padding */
+    border-radius: 50%; /* circle */
     width: 30px;
     height: 30px;
     justify-content: center;
-    font-size: 0;               /* hide text */
+    font-size: 0; /* hide text */
   }
 
   .sign-in-button svg {
-    margin-right: 0;            /* center icon */
+    margin-right: 0; /* center icon */
     width: 40px;
     height: 40px;
   }
