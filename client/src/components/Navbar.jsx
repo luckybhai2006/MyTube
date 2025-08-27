@@ -24,7 +24,7 @@ import {
   Help as HelpIcon,
   Feedback as FeedbackIcon,
 } from "@mui/icons-material";
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { SiYoutubeshorts, SiYoutubegaming } from "react-icons/si";
 import { MdNewspaper } from "react-icons/md";
 import { GrTrophy } from "react-icons/gr";
@@ -45,7 +45,8 @@ export default function Navbar() {
   const [showUploadMenu, setShowUploadMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { activeCategory, setActiveCategory } = useContext(UserContext);
-
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const sidebarRef = useRef();
   const searchInputRef = useRef();
   const uploadMenuRef = useRef();
@@ -57,6 +58,11 @@ export default function Navbar() {
   }, [location]);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+  // load from localStorage once
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("searchHistory")) || [];
+    setSuggestions(saved);
+  }, []);
   const onLogout = () => {
     handleLogout();
     setShowUserMenu(false);
@@ -65,10 +71,25 @@ export default function Navbar() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/results?search_query=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery(""); // Optional reset
-    }
+    if (!searchQuery.trim()) return;
+
+    // 🔎 navigate — tumhara hi route pattern
+    navigate(`/results?search_query=${encodeURIComponent(searchQuery)}`);
+
+    // 💾 history save (no duplicates, recent first, max 10)
+    setSuggestions((prev) => {
+      const withoutDup = prev.filter(
+        (x) => x.toLowerCase() !== searchQuery.toLowerCase()
+      );
+      const updated = [searchQuery, ...withoutDup].slice(0, 10);
+      localStorage.setItem("searchHistory", JSON.stringify(updated));
+      return updated;
+    });
+
+    setShowSuggestions(false);
+    setShowMobileSearch(false);
+    // searchQuery reset optional — agar chaho to rakho/hatado
+    // setSearchQuery("");
   };
   // close menus when clicking outside
   useEffect(() => {
@@ -133,57 +154,307 @@ export default function Navbar() {
         </div>
 
         {/* Middle Section - Search */}
-        <div className="search-container">
-          {!showMobileSearch ? (
+        <div
+          className="search-container"
+          style={{ position: "relative", flex: 1 }}
+        >
+          {!showMobileSearch && (
             <>
-              <form onSubmit={handleSearch} className="desktop-search">
+              {/* Desktop Search */}
+              <form
+                onSubmit={handleSearch}
+                className="desktop-search"
+                style={{ display: "flex", alignItems: "center" }}
+              >
                 <div className="search-input-container">
                   <input
                     type="text"
                     placeholder="Search"
                     className="search-input"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setShowSuggestions(true);
+                    }}
+                    onFocus={() => setShowSuggestions(true)}
+                    style={{
+                      flex: 1,
+                      padding: "8px 10px",
+                      background: "transparent",
+                      color: "inherit",
+                      border: "none",
+                      outline: "none",
+                    }}
                   />
-                  <button type="submit" className="search-button">
+
+                  <button
+                    type="submit"
+                    className="search-button"
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: "6px 10px",
+                    }}
+                  >
                     <SearchIcon />
                   </button>
+
+                  {/* Desktop Suggestion dropdown */}
+                  {showSuggestions && suggestions.length > 0 && (
+                    <ul
+                      className="suggestion-box"
+                      style={{
+                        position: "absolute",
+                        top: "100%",
+                        left: 0,
+                        right: 0,
+                        background: "#222",
+                        border: "1px solid #333",
+                        borderTop: "none",
+                        listStyle: "none",
+                        margin: 0,
+                        padding: 0,
+                        zIndex: 1000,
+                        maxHeight: 260,
+                        overflowY: "auto",
+                      }}
+                    >
+                      {suggestions
+                        .filter((s) =>
+                          searchQuery.trim()
+                            ? s
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase())
+                            : true
+                        )
+                        .map((s, i) => (
+                          <li
+                            key={i}
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                              setSearchQuery(s);
+                              setShowSuggestions(false);
+                              navigate(
+                                `/results?search_query=${encodeURIComponent(s)}`
+                              );
+                            }}
+                            style={{ padding: "10px 12px", cursor: "pointer" }}
+                          >
+                            {s}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
                 </div>
-                <button type="button" className="voice-search-button">
+
+                <button
+                  type="button"
+                  className="voice-search-button"
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    marginLeft: 8,
+                  }}
+                >
                   <MicIcon />
                 </button>
               </form>
 
-              <button
-                className="mobile-search-button"
-                onClick={() => setShowMobileSearch(true)}
-              >
-                <SearchIcon />
-              </button>
+              {/* Mobile icon — RIGHT aligned, hide if panel open */}
+              {!showMobileSearch && (
+                <button
+                  className="mobile-search-button"
+                  onClick={() => {
+                    setShowMobileSearch(true);
+                    setShowSuggestions(false);
+                  }}
+                  style={{
+                    marginLeft: "auto",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <SearchIcon />
+                </button>
+              )}
             </>
-          ) : (
-            <form onSubmit={handleSearch} className="mobile-search-expanded">
-              <input
-                type="text"
-                placeholder="Search"
-                className="search-input"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                ref={searchInputRef}
-              />
-            </form>
+          )}
+
+          {/* Mobile Panel */}
+          {showMobileSearch && (
+            <div
+              className="mobile-search-panel"
+              style={{
+                position: "fixed",
+                inset: 0,
+                background: "#f4f4f4",
+                zIndex: 2000,
+                display: "flex",
+                flexDirection: "column",
+                padding: 12,
+                gap: 12,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <button
+                  onClick={() => setShowMobileSearch(false)}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    fontSize: 18,
+                    cursor: "pointer",
+                  }}
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+
+                <form
+                  onSubmit={handleSearch}
+                  className="mobile-search-expanded"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    // width: "50px",
+                    // gap: 180,
+                    flex: 1,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      flex: 1,
+                      background: "#fff",
+                      border: "1px solid #000",
+                      borderRadius: 24,
+                      padding: "6px 10px",
+                      width: "90px",
+                    }}
+                  >
+                    {/* <SearchIcon /> */}
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      className="search-input"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      autoFocus
+                      style={{
+                        flex: 1,
+                        border: "none",
+                        outline: "none",
+                        background: "transparent",
+                        fontSize: 16,
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      className="search-button"
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <SearchIcon />
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* History list */}
+              <div
+                style={{
+                  background: "#fff",
+                  border: "1px solid #eee",
+                  borderRadius: 10,
+                  overflow: "hidden",
+                }}
+              >
+                {suggestions.length === 0 ? (
+                  <div style={{ padding: 14, color: "#666" }}>
+                    No recent searches
+                  </div>
+                ) : (
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      maxHeight: "60vh",
+                      overflowY: "auto",
+                    }}
+                  >
+                    {suggestions.map((s, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          padding: "12px 14px",
+                          borderBottom: "1px solid #f1f1f1",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between", // icon + text opposite side
+                        }}
+                      >
+                        <span
+                          onClick={() => {
+                            setSearchQuery(s);
+                            setShowMobileSearch(false);
+                            navigate(
+                              `/results?search_query=${encodeURIComponent(s)}`
+                            );
+                          }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            flex: 1,
+                          }}
+                        >
+                          <SearchIcon />
+                          {s}
+                        </span>
+
+                        {/* ❌ Cross icon */}
+                        <span
+                          onClick={(e) => {
+                            e.stopPropagation(); // click bubble prevent
+                            setSuggestions((prev) =>
+                              prev.filter((item) => item !== s)
+                            );
+                          }}
+                          style={{
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            marginLeft: 8,
+                          }}
+                        >
+                          ✕
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
           )}
         </div>
 
         {/* Right Section */}
         <div className={`navbar-right ${showMobileSearch ? "hidden" : ""}`}>
           {/* Upload menu */}
-          <div className="upload-trigger" style={{ position: "relative" }}>
-            <AddOutlinedIcon 
+          <div className="upload-trigger hide-triger">
+            <AddOutlinedIcon
               className="create-button"
               onClick={() => setShowUploadMenu((prev) => !prev)}
-              style={{ cursor: "pointer" }} 
-            /> 
+              style={{ cursor: "pointer" }}
+            />
             {showUploadMenu && (
               <div
                 ref={uploadMenuRef}
@@ -299,8 +570,9 @@ export default function Navbar() {
             </div>
           ) : (
             <button className="sign-in-button">
-              
-              <Link to="/login"><AccountCircleIcon /></Link>
+              <Link to="/login">
+                <AccountCircleIcon />
+              </Link>
             </button>
           )}
         </div>
@@ -494,6 +766,43 @@ export default function Navbar() {
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
       />
+      {/* Bottom Navigation - Mobile Only */}
+      {/* Bottom Navigation - Mobile Only */}
+      {!showMobileSearch && (
+        <div className="bottom-nav">
+          <Link to="/">
+            <HomeIcon />
+            <span>Home</span>
+          </Link>
+          <Link to="/shorts">
+            <SiYoutubeshorts size={20} style={{ marginTop: "4px" }} />
+            <span>Shorts</span>
+          </Link>
+
+          {/* Add/Upload button */}
+          <button onClick={() => navigate(user ? "/upload" : "/login")}>
+            <AddOutlinedIcon />
+            <span>Create</span>
+          </button>
+
+          <Link to="/subscriptions">
+            <SubscriptionsIcon />
+            <span>Subs</span>
+          </Link>
+
+          {user ? (
+            <Link to="/dashboard">
+              <img src={user.avatar} alt="profile" />
+              <span>You</span>
+            </Link>
+          ) : (
+            <Link to="/login">
+              <AccountCircleIcon />
+              <span>Sign In</span>
+            </Link>
+          )}
+        </div>
+      )}
 
       {!hideSidebar && <div className="mini-sidebar">...</div>}
     </>
