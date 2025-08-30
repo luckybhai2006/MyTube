@@ -2,8 +2,13 @@
    📌 Comment Section
 ------------------------- */
 .comment-section {
+<<<<<<< HEAD
   margin-top: 24px;
   max-width: 750px;
+=======
+  /* margin-top: 24px; */
+  /* max-width: 750px; */
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
   width: 100%;
 }
 
@@ -142,7 +147,11 @@
   left: 0;
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   background: rgba(0,0,0,0.5); /* dark bg */
+=======
+  background: rgba(0, 0, 0, 0.5); /* dark bg */
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -185,7 +194,11 @@
 ------------------------- */
 .comment-preview-btn {
   width: 100%;
+<<<<<<< HEAD
   background: rgb(228, 227, 227);
+=======
+  background: #999999;
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
   border: none;
   border-top: 1px solid #c9c7c7;
   border-bottom: 1px solid #e5e5e5;
@@ -197,7 +210,10 @@
   text-align: left;
   cursor: pointer;
   gap: 10px;
+<<<<<<< HEAD
   margin-left: -10px; /* align to edge */
+=======
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
 }
 
 /* Comment count */
@@ -242,6 +258,7 @@
    📌 Responsive
 ------------------------- */
 @media (max-width: 480px) {
+<<<<<<< HEAD
   .comment-section {
     padding: 0 10px;
   }
@@ -250,11 +267,18 @@
     gap: 8px;
   }
  */
+=======
+  .comment-input-wrapper {
+    gap: 8px;
+  }
+
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
   .comment-input-wrapper img,
   .comment-item img {
     width: 28px;
     height: 28px;
   }
+<<<<<<< HEAD
 /* 
   .comment-input-box input {
     font-size: 13px;
@@ -295,6 +319,47 @@
   padding-bottom: 60px; 
 }
 
+=======
+
+  .comment-input-box input {
+    font-size: 13px;
+    padding: 4px 2px;
+  }
+
+  /* Comment Input Wrapper (fixed at bottom) */
+  .comment-input-wrapper {
+    position: fixed; /* stays in place */
+    bottom: 0; /* stick to bottom */
+    left: 0;
+    width: 100%; /* full width */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff; /* white background */
+    padding: 10px 12px;
+    border-top: 1px solid #ddd;
+    z-index: 1001; /* above drawer content */
+  }
+
+  /* Input box inside */
+  .comment-input-box {
+    flex: 1;
+  }
+
+  .comment-input-box input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 6px 2px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  /* Make sure comment list has space at bottom so input doesn't overlap */
+  .comment-list {
+    padding-bottom: 60px;
+  }
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
 
   .comment-user {
     font-size: 12px;
@@ -320,5 +385,9 @@
 @media (min-width: 768px) {
   .mobile-comments {
     display: none;
+<<<<<<< HEAD
+=======
+    /* margin-left: -10px; align to edge */
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
   }
 }

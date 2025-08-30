@@ -59,9 +59,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 });
 
 const publishAVideo = asyncHandler(async (req, res) => {
-  const { title, description, duration } = req.body;
-
-  // console.log("📦 Incoming files:", req.files); // ✅ Debug incoming file uploads
+  const { title, description, duration, category } = req.body; // ✅ category bhi le
 
   const videoFile = req.files?.videoFile;
   const thumbnailFile = req.files?.thumbnail;
@@ -69,15 +67,9 @@ const publishAVideo = asyncHandler(async (req, res) => {
   if (!videoFile || !thumbnailFile) {
     throw new ApiError(400, "Video and thumbnail are required.");
   }
-  // ...........................................................
-  // console.log("Uploading video to Cloudinary:", videoFile[0].path);
-  const videoUpload = await uploadOnCloudinary(videoFile[0].path);
-  // console.log("Video uploaded result:", videoUpload);
 
-  // console.log("Uploading thumbnail to Cloudinary:", thumbnailFile[0].path);
+  const videoUpload = await uploadOnCloudinary(videoFile[0].path);
   const thumbnailUpload = await uploadOnCloudinary(thumbnailFile[0].path);
-  // console.log("Thumbnail uploaded result:", thumbnailUpload);
-  // ...........................................................
 
   if (!videoUpload?.url || !thumbnailUpload?.url) {
     throw new ApiError(500, "Upload to Cloudinary failed.");
@@ -86,6 +78,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
   const video = await Video.create({
     title,
     description,
+    category, // ✅ ab yaha category bhi save hogi
     duration: videoUpload?.duration,
     videoFile: videoUpload.url,
     thumbnail: thumbnailUpload.url,
@@ -95,6 +88,27 @@ const publishAVideo = asyncHandler(async (req, res) => {
   return res
     .status(201)
     .json(new ApiResponse(201, video, "Video published successfully"));
+});
+
+// controller/video.controller.js
+const getVideosByCategory = asyncHandler(async (req, res) => {
+  try {
+    const { category } = req.query;
+    let filter = {};
+    if (category) filter.category = category;
+
+    const videos = await Video.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .populate("owner", "username avatar"); // 👈 ye important
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, videos, "Videos fetched successfully"));
+  } catch (err) {
+    console.error("Error in getVideosByCategory:", err);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
 });
 
 const getVideoById = asyncHandler(async (req, res) => {
@@ -220,6 +234,7 @@ const addVideoView = asyncHandler(async (req, res) => {
 export {
   getAllVideos,
   publishAVideo,
+  getVideosByCategory,
   getVideoById,
   updateVideo,
   deleteVideo,

@@ -11,6 +11,18 @@ const videoSchema = new mongoose.Schema(
       type: String, // cloudinary URL for the video thumbnail
       required: true,
     },
+    category: {
+      type: String,
+      enum: [
+        "Music",
+        "Gaming",
+        "Education",
+        "Entertainment",
+        "Sports",
+        "Other",
+      ],
+      default: "Other",
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Reference to the User model

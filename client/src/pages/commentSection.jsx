@@ -179,7 +179,13 @@ const CommentSection = ({ videoId, user }) => {
         </div>
       ))}
       {comments.length === 0 && (
+<<<<<<< HEAD
         <p style={{ fontSize: "13px", color: "#666" }} className="no-cmmt">No comments yet</p>
+=======
+        <p style={{ fontSize: "13px", color: "#666" }} className="no-cmmt">
+          No comments yet
+        </p>
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
       )}
     </div>
   );
@@ -212,6 +218,104 @@ const CommentSection = ({ videoId, user }) => {
           </div>
         ) : (
           <p style={{ fontSize: "13px", color: "#666" }}>Login to comment</p>
+<<<<<<< HEAD
+=======
+        )}
+
+        {renderComments()}
+      </div>
+
+      {/* ✅ Mobile version (drawer button only) */}
+      <div className="mobile-comments">
+        <button
+          onClick={() => setDrawerOpen(true)}
+          className="comment-preview-btn"
+        >
+          <div className="comment-count">Comments {comments.length}</div>
+
+          {comments.length > 0 ? (
+            <div className="comment-preview-body">
+              <img
+                src={
+                  comments[comments.length - 1]?.owner?.avatar ||
+                  comments[comments.length - 1]?.user?.avatar ||
+                  "/default-avatar.png"
+                }
+                alt="avatar"
+                className="comment-preview-avatar"
+              />
+              <div className="comment-preview-texts">
+                <span className="comment-preview-text">
+                  {comments[comments.length - 1]?.content ||
+                    comments[comments.length - 1]?.text ||
+                    ""}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="comment-preview-body">
+              <span className="comment-preview-text" style={{ color: "#666" }}>
+                Add a comment...
+              </span>
+            </div>
+          )}
+        </button>
+
+        {drawerOpen && (
+          <div className="drawer-overlay">
+            <div
+              className="drawer"
+              ref={drawerRef}
+              onClick={(e) => e.stopPropagation()} // stop overlay click
+            >
+              {/* Drawer Handle (drag area only) */}
+              <div
+                className="drawer-handle"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              ></div>
+
+              <h3 style={{ marginBottom: "12px" }}>
+                {comments.length} Comments
+              </h3>
+
+              {/* Comments List */}
+              <div className="comments-list">{renderComments()}</div>
+
+              {/* ✅ Fixed Add Comment Bar (always visible) */}
+              <div className="comment-input-fixed">
+                {user ? (
+                  <div className="comment-input-wrapper">
+                    <img src={user.avatar} alt={user.username} />
+                    <div className="comment-input-box">
+                      <input
+                        type="text"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="Add a comment..."
+                      />
+                      {newComment && (
+                        <div className="comment-actions">
+                          <button onClick={() => setNewComment("")}>
+                            Cancel
+                          </button>
+                          <button onClick={handleAddComment} disabled={loading}>
+                            {loading ? "Posting..." : "Comment"}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <p style={{ fontSize: "13px", color: "#666" }}>
+                    Login to comment
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+>>>>>>> 050881fe9e72f46b0caf3022a3358a5e02d25b25
         )}
 
         {renderComments()}

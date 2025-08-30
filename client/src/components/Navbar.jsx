@@ -37,6 +37,7 @@ export default function Navbar() {
 
   // Only hide the mini sidebar on /video/:videoId pages
   const hideSidebar = location.pathname.startsWith("/video/");
+  // const hideNavbar = location.pathname.startsWith("/video/");
   const navigate = useNavigate();
   const { user, handleLogout } = useContext(UserContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
