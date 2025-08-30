@@ -8,6 +8,7 @@ import {
   togglePublishStatus,
   updateVideo,
   addVideoView,
+  getVideosByCategory,
 } from "../controllers/video.controller.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middlewares.js";
@@ -48,11 +49,13 @@ router.get("/random", async (req, res) => {
     res.status(500).json({ message: "Error fetching random videos", error });
   }
 });
+router.get("/category", getVideosByCategory);
 router
   .route("/:videoId")
   .get(getVideoById)
   .delete(verifyJwt, deleteVideo)
   .patch(verifyJwt, upload.single("thumbnail"), updateVideo);
+// routes/video.routes.js
 
 router.route("/toggle/publish/:videoId").patch(verifyJwt, togglePublishStatus);
 

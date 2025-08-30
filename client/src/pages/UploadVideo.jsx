@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { publishVideo } from "../api/videoApi"; // <-- your API function
+import { publishVideo } from "../api/videoApi";
 import { useNavigate } from "react-router-dom";
 import "../styles/leftDashboard.css";
 
@@ -10,10 +10,10 @@ export default function UploadVideo() {
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState(0);
   const [isPublished, setIsPublished] = useState(false);
+  const [category, setCategory] = useState(""); // ✅ new state
 
   const navigate = useNavigate();
 
-  // extract video duration before uploading
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
     setVideoFile(file);
@@ -23,7 +23,7 @@ export default function UploadVideo() {
       video.preload = "metadata";
       video.onloadedmetadata = () => {
         window.URL.revokeObjectURL(video.src);
-        setDuration(video.duration.toFixed(2)); // set duration in seconds
+        setDuration(video.duration.toFixed(2));
       };
       video.src = URL.createObjectURL(file);
     }
@@ -32,7 +32,7 @@ export default function UploadVideo() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!videoFile || !thumbnail || !title || !description) {
+    if (!videoFile || !thumbnail || !title || !description || !category) {
       alert("Please fill all required fields");
       return;
     }
@@ -44,11 +44,12 @@ export default function UploadVideo() {
     formData.append("description", description);
     formData.append("duration", duration);
     formData.append("isPublished", isPublished);
+    formData.append("category", category); // ✅ add category
 
     try {
       await publishVideo(formData);
       alert("Video uploaded successfully!");
-      navigate("/"); // redirect to home or video page
+      navigate("/");
     } catch (error) {
       console.error("Upload failed", error);
       alert("Failed to upload video");
@@ -95,6 +96,26 @@ export default function UploadVideo() {
               required
             />
           </div>
+
+          {/* ✅ New Category Field */}
+          <div>
+            <label>Category:</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+            >
+              <option value="">-- Select Category --</option>
+              <option value="Music">Music</option>
+              <option value="Gaming">Gaming</option>
+              <option value="Education">Education</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Sports">Sports</option>
+              <option value="News">News</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
           <div>
             <label>
               Publish Now?
@@ -105,6 +126,7 @@ export default function UploadVideo() {
               />
             </label>
           </div>
+
           <button type="submit">Upload</button>
         </form>
       </div>
