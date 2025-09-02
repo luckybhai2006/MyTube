@@ -59,7 +59,7 @@ router
 
 router.route("/toggle/publish/:videoId").patch(verifyJwt, togglePublishStatus);
 
-router.route("/user/:userId").get(verifyJwt, getVideosByUser);
+router.route("/user/:userId").get(getVideosByUser);
 
 router.post("/views/:videoId", addVideoView);
 // Like a video

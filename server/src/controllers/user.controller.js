@@ -359,7 +359,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     },
     {
       $lookup: {
-        from: "Subscription",
+        from: "subscriptions",
         localField: "_id",
         foreignField: "subscriber",
         as: "subscribedTo",
@@ -367,21 +367,8 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     },
     {
       $addFields: {
-        subscriberCount: {
-          $size: "$subscribers",
-        },
-        subscribedToCount: {
-          $size: "$subscribedTo",
-        },
-        isSubscribed: {
-          $cond: {
-            if: {
-              $in: [req.user._id, "$subscribers.subscriber"],
-            },
-            then: true,
-            else: false,
-          },
-        },
+        subscriberCount: { $size: "$subscribers" },
+        subscribedToCount: { $size: "$subscribedTo" },
       },
     },
     {
@@ -393,7 +380,6 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
         email: 1,
         subscriberCount: 1,
         subscribedToCount: 1,
-        isSubscribed: 1,
       },
     },
   ]);
@@ -402,12 +388,25 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Channel not found");
   }
 
+  // ✅ Handle isSubscribed manually
+  let isSubscribed = false;
+  if (req.user) {
+    isSubscribed = channel[0].subscribers.some(
+      (sub) => sub.subscriber.toString() === req.user._id.toString()
+    );
+  }
+
   return res
     .status(200)
     .json(
-      new ApiResponse(200, channel[0], "Channel profile fetched successfully")
+      new ApiResponse(
+        200,
+        { ...channel[0], isSubscribed },
+        "Channel profile fetched successfully"
+      )
     );
 });
+
 const addToWatchHistory = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { videoId } = req.params;

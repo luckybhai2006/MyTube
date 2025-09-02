@@ -317,3 +317,28 @@
     /* margin-left: -10px; align to edge */
   }
 }
+/* body.drawer-open {
+  overflow: hidden;
+} */
+
+.drawer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.drawer.open {
+  transform: translateY(0); /* 👆 slide up */
+}
+
+.drawer.closing {
+  transform: translateY(100%); /* 👇 slide down smooth */
+}

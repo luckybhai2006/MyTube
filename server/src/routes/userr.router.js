@@ -50,7 +50,7 @@ router
   .route("/update-coverImage")
   .patch(verifyJwt, upload.single("coverImage"), updateCoverImage);
 
-router.route("/C/:username").get(verifyJwt, getUserChannelProfile);
+router.route("/C/:username").get(getUserChannelProfile);
 router.post("/watch-history/add/:videoId", verifyJwt, addToWatchHistory);
 router.route("/watch-history").get(verifyJwt, getUserWatchHistory);
 
