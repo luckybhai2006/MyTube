@@ -31,48 +31,67 @@ const VideoPage = () => {
   useEffect(() => {
     const fetchVideo = async () => {
       try {
-        // Main video
+        // ✅ Main video
         await addVideoView(videoId);
         const res = await getVideoById(videoId);
         const videoData = res.data.data || res.data;
         setVideo(videoData);
 
-        // Subscriber count
+        // ✅ Subscriber count (skip if not logged in)
         const ownerId = videoData?.owner?._id;
         if (ownerId) {
           try {
             const subsRes = await axios.get(
-              `${API_URL}/api/v1/subscriptions/u/${ownerId}`,
-              { withCredentials: true }
+              `${API_URL}/api/v1/subscriptions/u/${ownerId}`
             );
             setSubscriberCount(subsRes.data.data.length);
           } catch {
-            setSubscriberCount(0);
+            setSubscriberCount(0); // not logged in
           }
         }
 
         setLikes(videoData.likes || 0);
         setDislikes(videoData.dislikes || 0);
 
-        // Check if user liked this video
-        const likedVideosRes = await getLikedVideos();
-        const likedVideos =
-          likedVideosRes.data.data || likedVideosRes.data || [];
-        const isLiked = likedVideos.some((like) => like.video?._id === videoId);
-        setLiked(isLiked);
-
-        // Recommended videos by category
-        if (videoData.category) {
-          const recRes = await axiosInstance.get(
-            `/videos/category?category=${videoData.category}`
+        // ✅ Check if user liked (skip if not logged in)
+        try {
+          const likedVideosRes = await getLikedVideos();
+          const likedVideos =
+            likedVideosRes.data.data || likedVideosRes.data || [];
+          const isLiked = likedVideos.some(
+            (like) => like.video?._id === videoId
           );
-          const recVideos = recRes.data.data || [];
-          // Filter out videos with invalid _id or same as current
-          const filtered = recVideos.filter((v) => v._id && v._id !== videoId);
-          setRecommended(filtered);
+          setLiked(isLiked);
+        } catch {
+          setLiked(false);
+        }
+
+        // ✅ Recommended videos (independent of user login)
+        if (videoData?.category) {
+          try {
+            const recRes = await axios.get(
+              `${API_URL}/api/v1/videos/category?category=${videoData.category}`
+            );
+
+            const recVideos = Array.isArray(recRes.data)
+              ? recRes.data
+              : recRes.data?.data || [];
+
+            const filtered = recVideos.filter(
+              (v) => v._id && v._id !== videoId
+            );
+
+            setRecommended(filtered);
+          } catch (err) {
+            console.error("❌ Error fetching recommended videos:", err);
+          }
+        } else {
+          console.warn(
+            "⚠️ videoData.category missing, recommend API skip ho gaya"
+          );
         }
       } catch (err) {
-        console.error("Error fetching video:", err);
+        console.error("❌ Error fetching video:", err);
       }
     };
 
@@ -112,7 +131,13 @@ const VideoPage = () => {
     setDislikes((prev) => (prev === 0 ? 1 : prev));
   };
 
-  if (!video) return <p>Loading video...</p>;
+  if (!video) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="videoPageContainer_vpg">

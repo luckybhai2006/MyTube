@@ -105,7 +105,22 @@ const WatchHistory = () => {
                     to={`/video/${video._id}`}
                     style={styles.videoTitleLink}
                   >
-                    <h3 style={styles.videoTitle}>{video.title}</h3>
+                    <h3
+                      style={{
+                        margin: "0 0 4px 0",
+                        fontSize: "16px",
+                        fontWeight: "500",
+                        lineHeight: "1.2",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2, // max 2 lines
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        color: "#0f0f0f",
+                      }}
+                    >
+                      {video.title}
+                    </h3>
                   </Link>
 
                   <div style={styles.videoMetadata}>
@@ -226,14 +241,6 @@ const styles = {
   videoTitleLink: {
     textDecoration: "none",
   },
-  videoTitle: {
-    fontSize: "16px",
-    //  color: "#0f0f0f",
-    fontWeight: "500",
-    margin: "0 0 8px 0",
-    color: "#0f0f0f",
-    lineHeight: "1.4",
-  },
   videoMetadata: {
     display: "flex",
     alignItems: "center",
@@ -244,12 +251,15 @@ const styles = {
   },
   metadataSeparator: {
     margin: "0 4px",
+    fontSize: "18px",
   },
   channelName: {
     color: "#aaa",
+    fontSize: "14px",
   },
   views: {
     color: "#aaa",
+    fontSize: "12px",
   },
   timestamp: {
     color: "#aaa",
@@ -287,9 +297,8 @@ const styles = {
     cursor: "pointer",
     padding: "4px 8px",
     marginLeft: "auto",
-    "&:hover": {
-      color: "#fff",
-    },
+
+    color: "#FF0000",
   },
 };
 export default WatchHistory;

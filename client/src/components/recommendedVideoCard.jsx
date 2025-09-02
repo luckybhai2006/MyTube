@@ -16,6 +16,16 @@ const RecommendedVideoCard = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  const formatDuration = (durationInSeconds) => {
+    if (!durationInSeconds) return "0:00";
+
+    const totalSeconds = Math.floor(durationInSeconds); // decimal hatao
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
   const formatTimeAgo = (dateString) => {
     const now = new Date();
     const created = new Date(dateString);
@@ -47,6 +57,7 @@ const RecommendedVideoCard = ({
         marginBottom: "12px",
         cursor: "pointer",
         width: "100%",
+        borderRadius: "15px",
       }}
       onClick={() => navigate(`/video/${_id}`)}
     >
@@ -55,21 +66,10 @@ const RecommendedVideoCard = ({
         <img
           src={thumbnail}
           alt="thumbnail"
-          style={{ width: "168px", height: "94px", borderRadius: "4px" }}
+          style={{ width: "168px", height: "94px", borderRadius: "15px" }}
         />
-        <span
-          style={{
-            position: "absolute",
-            bottom: "4px",
-            right: "4px",
-            backgroundColor: "rgba(0,0,0,0.8)",
-            color: "#fff",
-            fontSize: "12px",
-            padding: "2px 4px",
-            borderRadius: "2px",
-          }}
-        >
-          {duration}
+        <span className="duration-badge">
+          {formatDuration(duration || "00:00")}
         </span>
       </div>
 

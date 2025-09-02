@@ -48,6 +48,16 @@ const VideoCard = ({
     }
   };
 
+  const formatDuration = (durationInSeconds) => {
+    if (!durationInSeconds) return "0:00";
+
+    const totalSeconds = Math.floor(durationInSeconds); // decimal hatao
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
   const formatTimeAgo = (dateString) => {
     const now = new Date();
     const created = new Date(dateString);
@@ -79,7 +89,9 @@ const VideoCard = ({
         onClick={() => navigate(`/video/${_id}`)}
       >
         <img src={thumbnail} alt="thumbnail" />
-        <span className="duration-badge">{duration}</span>
+        <span className="duration-badge">
+          {formatDuration(duration || "00:00")}
+        </span>
       </div>
 
       <div className="video-body">
@@ -87,7 +99,21 @@ const VideoCard = ({
 
         <div className="video-info">
           <div className="title-row">
-            <h3 className="video-title">{title}</h3>
+            <h3
+              style={{
+                margin: "0 0 4px 0",
+                fontSize: "18px",
+                fontWeight: "500",
+                lineHeight: "1.2",
+                display: "-webkit-box",
+                WebkitLineClamp: 2, // max 2 lines
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {title}
+            </h3>
             <button
               className="menu-button"
               onClick={(e) => {

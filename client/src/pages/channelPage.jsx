@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
+import "../styles/VideoCard.css";
 import axios from "axios";
 
 const ChannelPage = () => {
@@ -48,8 +49,23 @@ const ChannelPage = () => {
     fetchChannelDetails();
   }, [username]);
 
-  // if (loading) return <p style={styles.loading}>Loading channel...</p>;
-  // if (!userInfo) return <p style={styles.loading}>Channel not found</p>;
+  const formatDuration = (durationInSeconds) => {
+    if (!durationInSeconds) return "0:00";
+
+    const totalSeconds = Math.floor(durationInSeconds); // decimal hatao
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  if (loading)
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  if (!userInfo) return <p style={styles.loading}>Channel not found</p>;
 
   return (
     <>
@@ -131,7 +147,7 @@ const ChannelPage = () => {
                   alt={video.title}
                 />
                 <span className="duration-badge">
-                  {video.duration || "00:00"}
+                  {formatDuration(video.duration || video.video?.duration || 0)}
                 </span>
               </div>
 

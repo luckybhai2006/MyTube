@@ -9,6 +9,6 @@
 @media (max-width: 768px) {
   .historyContainer {
     margin-left: -16px;
-    margin-right: 0;
+    /* margin-right: 0; */
   }
 }

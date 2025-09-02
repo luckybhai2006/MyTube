@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import VideoCard from "../components/VideoCard";
 import { UserContext } from "../context/userContext";
 import axiosInstance from "../api/axiosInstance";
@@ -8,8 +9,8 @@ const Dashboard = () => {
   const [videos, setVideos] = useState([]);
   const [filteredVideos, setFilteredVideos] = useState([]);
   const [subscriberCount, setSubscriberCount] = useState(0);
-
-  // 🟡 Fetch videos  
+  const navigate = useNavigate();
+  // 🟡 Fetch videos
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -59,6 +60,35 @@ const Dashboard = () => {
 
   return (
     <>
+      {user && (
+        <div
+          className="coverImage"
+          style={{
+            width: "100%",
+            height: "200px",
+            position: "relative",
+            maxWidth: "1400px",
+            marginTop: "70px",
+            marginBottom: "-130px",
+            left: "0",
+            overflow: "hidden",
+          }}
+        >
+          <img
+            style={{
+              width: "100%",
+              height: "100%",
+              top: "50px",
+              position: "absolute",
+              objectFit: "cover",
+              objectPosition: "center",
+              display: "block",
+            }}
+            src={user.coverImage}
+            alt="coverImage"
+          />
+        </div>
+      )}
       {/* 👤 Top Section: Avatar, Name, Subscriber Count */}
       <div className="responsiveContainerr">
         {user && (
@@ -89,16 +119,19 @@ const Dashboard = () => {
                 {videos.length} video{videos.length !== 1 ? "s" : ""}
               </p>
               <button
-      style={{
-        padding: "6px 14px",
-        background: "#065fd4",
-        color: "white",
-        border: "none",
-        borderRadius: "4px",
-        cursor: "pointer",
-        fontSize: "14px",
-      }}
-    >Edit Channel</button>
+                style={{
+                  padding: "6px 14px",
+                  background: "#065fd4",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                }}
+                onClick={() => navigate("/settings")}
+              >
+                Edit Channel
+              </button>
             </div>
           </div>
         )}

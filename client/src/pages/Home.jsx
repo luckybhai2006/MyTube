@@ -35,8 +35,22 @@ const HomePage = () => {
     return "just now";
   };
 
+  const formatDuration = (durationInSeconds) => {
+    if (!durationInSeconds) return "0:00";
+
+    const totalSeconds = Math.floor(durationInSeconds); // decimal hatao
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
   if (!randomVideos.length)
-    return <p className="text-center mt-10">Loading videos...</p>;
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    );
 
   return (
     <div className="responsiveContainerr">
@@ -54,7 +68,7 @@ const HomePage = () => {
                 alt={video.title}
               />
               <span className="duration-badge">
-                {video.duration || "00:00"}
+                {formatDuration(video.duration || video.video?.duration || 0)}
               </span>
             </div>
 
@@ -66,11 +80,7 @@ const HomePage = () => {
               />
               <div className="video-info">
                 <div className="title-row">
-                  <h3 className="video-title">
-                    {video.title.length > 40
-                      ? `${video.title.substring(0, 40)}....`
-                      : video.title}
-                  </h3>
+                  <h3 className="video-title">{video.title}</h3>
                   <button className="menu-button">⋮</button>
                 </div>
                 {/* <p className="video-description">

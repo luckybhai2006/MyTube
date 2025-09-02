@@ -15,6 +15,8 @@ import Subscription from "./pages/Subscription";
 import { VideoProvider } from "./context/videoContext";
 import ResultsPage from "./components/searchResult";
 import ChannelPage from "./pages/channelPage";
+import SettingsPage from "./components/setting";
+import "./App.css";
 
 function AppWrapper() {
   return (
@@ -35,8 +37,11 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // hide navbar on mobile screens for video page
-  const hideNavbar = isMobile && location.pathname.startsWith("/video/");
+  // hide navbar on video pages (mobile) AND on settings page (all screens)
+  const hideNavbar =
+    (isMobile && location.pathname.startsWith("/video/")) ||
+    location.pathname === "/settings" ||
+    location.pathname === "/login";
 
   return (
     <VideoProvider>
@@ -47,6 +52,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/upload" element={<UpdateVideo />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/video/:videoId" element={<VideoPage />} />
         <Route path="/watch-history" element={<WatchHistory />} />
         <Route path="/subscriptions" element={<Subscription />} />
