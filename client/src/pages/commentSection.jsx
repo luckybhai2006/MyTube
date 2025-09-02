@@ -13,6 +13,16 @@ const CommentSection = ({ videoId, user }) => {
   const drawerRef = useRef(null);
   const startY = useRef(0);
   const currentY = useRef(0);
+  const [closing, setClosing] = useState(false);
+
+  const closeDrawer = () => {
+    setClosing(true); // 👈 pehle closing true kar do
+    setTimeout(() => {
+      setDrawerOpen(false); // 👈 actual close thoda delay se
+      setClosing(false);
+      document.body.classList.remove("drawer-open");
+    }, 300); // transition time
+  };
 
   const handleTouchStart = (e) => {
     startY.current = e.touches[0].clientY;
@@ -222,7 +232,10 @@ const CommentSection = ({ videoId, user }) => {
       {/* ✅ Mobile version (drawer button only) */}
       <div className="mobile-comments">
         <button
-          onClick={() => setDrawerOpen(true)}
+          onClick={() => {
+            document.body.classList.add("drawer-open"); // 🚀 prevent body scroll
+            setDrawerOpen(true);
+          }}
           className="comment-preview-btn"
         >
           <div className="comment-count">Comments {comments.length}</div>
@@ -256,13 +269,13 @@ const CommentSection = ({ videoId, user }) => {
         </button>
 
         {drawerOpen && (
-          <div className="drawer-overlay">
+          <div className="drawer-overlay" onClick={closeDrawer}>
             <div
-              className="drawer"
+              className={`drawer ${closing ? "closing" : "open"}`}
               ref={drawerRef}
               onClick={(e) => e.stopPropagation()} // stop overlay click
             >
-              {/* Drawer Handle (drag area only) */}
+              {/* Drawer Handle */}
               <div
                 className="drawer-handle"
                 onTouchStart={handleTouchStart}
@@ -277,7 +290,7 @@ const CommentSection = ({ videoId, user }) => {
               {/* Comments List */}
               <div className="comments-list">{renderComments()}</div>
 
-              {/* ✅ Fixed Add Comment Bar (always visible) */}
+              {/* ✅ Fixed Add Comment Bar */}
               <div className="comment-input-fixed">
                 {user ? (
                   <div className="comment-input-wrapper">
