@@ -66,14 +66,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/likedvideos"
-          element={
-            <ProtectedRoute>
-              <LikedVideosPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/likedvideoss" element={<LikedVideosPage />} />
       </Routes>
     </VideoProvider>
   );

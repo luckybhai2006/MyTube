@@ -185,7 +185,7 @@
 ------------------------- */
 .comment-preview-btn {
   width: 100%;
-  background: #999999;
+  background: #d2d1d1;
   border: none;
   border-top: 1px solid #c9c7c7;
   border-bottom: 1px solid #e5e5e5;
@@ -314,22 +314,18 @@
 @media (min-width: 768px) {
   .mobile-comments {
     display: none;
-    /* margin-left: -10px; align to edge */
+    margin-left: -10px;
   }
 }
-/* body.drawer-open {
+body.drawer-open {
   overflow: hidden;
-} */
+}
 
 .drawer {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background: #fff;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  max-height: 80vh;
+  max-height: 70vh;
   overflow-y: auto;
   transform: translateY(100%);
   transition: transform 0.3s ease-in-out;

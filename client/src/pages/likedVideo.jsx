@@ -10,6 +10,75 @@ const LikedVideosPage = () => {
   const [activeTab, setActiveTab] = useState("Videos");
   const navigate = useNavigate();
 
+  if (loading)
+    return (
+      <div
+        style={{
+          marginTop: "120px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "60vh",
+          color: "#333",
+          fontFamily: "'Roboto', sans-serif",
+        }}
+      >
+        {/* Illustration */}
+        <img
+          src="https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_fill,q_auto,f_auto/avatar.png
+"
+          alt="Login Required"
+          style={{
+            width: "150px",
+            height: "150px",
+            marginBottom: "25px",
+            borderRadius: "50%",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+            transition: "transform 0.3s",
+          }}
+        />
+
+        {/* Text */}
+        <p
+          style={{
+            fontSize: "20px",
+            fontWeight: "600",
+            marginBottom: "20px",
+            textAlign: "center",
+            maxWidth: "300px",
+          }}
+        >
+          Login to see your liked videos
+        </p>
+
+        {/* Button */}
+        <button
+          onClick={() => navigate("/login")}
+          style={{
+            padding: "12px 25px",
+            fontSize: "16px",
+            fontWeight: "600",
+            borderRadius: "30px",
+            border: "none",
+            backgroundColor: "#FF0000",
+            color: "#fff",
+            cursor: "pointer",
+            boxShadow: "0 4px 15px rgba(255,0,0,0.4)",
+            transition: "all 0.3s ease",
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = "scale(1.05)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = "scale(1)";
+          }}
+        >
+          Login
+        </button>
+      </div>
+    );
+
   useEffect(() => {
     const fetchLikedVideos = async () => {
       try {

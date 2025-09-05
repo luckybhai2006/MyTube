@@ -202,7 +202,7 @@
   .responsiveContainerr {
     margin-left: 0;
     margin-right: 0;
-    gap: 0;
+    gap: 1;
   }
 }
 

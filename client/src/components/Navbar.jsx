@@ -631,7 +631,7 @@ export default function Navbar() {
               <span>Your Videos</span>
             </Link>
             <Link
-              to="/likedvideos"
+              to="/likedvideoss"
               className="sidebar-item"
               onClick={() => setIsSidebarOpen(false)}
             >

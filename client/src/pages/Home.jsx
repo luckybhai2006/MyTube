@@ -60,7 +60,9 @@ const HomePage = () => {
               />
               <span className="duration-badge">
                 {Math.floor(video.duration / 60)}:
-                {(video.duration % 60).toString().padStart(2, "0")}
+                {Math.floor(video.duration % 60)
+                  .toString()
+                  .padStart(2, "0")}
               </span>
             </div>
             <div className="video-body">

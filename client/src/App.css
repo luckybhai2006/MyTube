@@ -6,3 +6,24 @@ body {
   background-color: #fff;
   color: #0f0f0f;
 }
+a,
+a:focus,
+a:active {
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent; /* iOS Safari */
+}
+
+* {
+  -webkit-tap-highlight-color: transparent; /* mobile Safari/Chrome highlight disable */
+}
+
+button,
+button:focus,
+button:active,
+div:focus,
+div:active {
+  outline: none;
+  box-shadow: none;
+}

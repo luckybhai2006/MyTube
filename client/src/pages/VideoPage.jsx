@@ -210,8 +210,8 @@ const VideoPage = () => {
           <div className="videoDescription_vpg">
             {showMore
               ? video.description
-              : (video.description || "").slice(0, 150) + "..."}
-            {video.description?.length > 150 && (
+              : (video.description || "").slice(0, 120) + "..."}
+            {video.description?.length > 120 && (
               <button
                 onClick={() => setShowMore(!showMore)}
                 className="showMoreBtn_vpg"
