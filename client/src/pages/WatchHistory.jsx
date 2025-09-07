@@ -1,21 +1,81 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { UserContext } from "../context/userContext";
+import { useNavigate, Link } from "react-router-dom";
 import {
   getWatchHistory,
   removeFromWatchHistory,
   clearWatchHistory,
   togglePauseWatchHistory,
 } from "../api/userApi";
-import { Link } from "react-router-dom";
 import "../styles/watchHistory.css";
 
 const WatchHistory = () => {
+  const { user } = useContext(UserContext);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isPaused, setIsPaused] = useState(false); // UI state for pause
+  const [isPaused, setIsPaused] = useState(false);
 
   const navigate = useNavigate();
-  if (loading)
+
+  // Fetch history only if user is logged in
+  useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchHistory = async () => {
+      setLoading(true);
+      try {
+        const res = await getWatchHistory();
+        const videos = res?.data?.data || [];
+        setHistory(videos);
+
+        if (res?.data?.paused?.paused !== undefined) {
+          setIsPaused(res.data.paused.paused);
+        }
+      } catch (err) {
+        console.error("Error fetching watch history:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHistory();
+  }, [user]);
+
+  const handleRemove = async (videoId) => {
+    try {
+      await removeFromWatchHistory(videoId);
+      setHistory((prev) => prev.filter((video) => video._id !== videoId));
+    } catch (err) {
+      console.error("Error removing video:", err);
+    }
+  };
+
+  const handleClearAll = async () => {
+    try {
+      await clearWatchHistory();
+      setHistory([]);
+    } catch (err) {
+      console.error("Error clearing watch history:", err);
+    }
+  };
+
+  const handleTogglePause = async () => {
+    try {
+      const res = await togglePauseWatchHistory();
+      setIsPaused(res.data.paused);
+    } catch (err) {
+      console.error("Error toggling pause state:", err);
+    }
+  };
+
+  // ============================
+  // Conditional Rendering Section
+  // ============================
+
+  if (!user) {
     return (
       <div
         style={{
@@ -29,10 +89,8 @@ const WatchHistory = () => {
           fontFamily: "'Roboto', sans-serif",
         }}
       >
-        {/* Illustration */}
         <img
-          src="https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_fill,q_auto,f_auto/avatar.png
-"
+          src="https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_fill,q_auto,f_auto/avatar.png"
           alt="Login Required"
           style={{
             width: "150px",
@@ -40,11 +98,8 @@ const WatchHistory = () => {
             marginBottom: "25px",
             borderRadius: "50%",
             boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
-            transition: "transform 0.3s",
           }}
         />
-
-        {/* Text */}
         <p
           style={{
             fontSize: "20px",
@@ -56,8 +111,6 @@ const WatchHistory = () => {
         >
           Login to see your watch history
         </p>
-
-        {/* Button */}
         <button
           onClick={() => navigate("/login")}
           style={{
@@ -83,55 +136,13 @@ const WatchHistory = () => {
         </button>
       </div>
     );
+  }
 
-  const fetchHistory = async () => {
-    setLoading(true);
-    try {
-      const res = await getWatchHistory();
-      const videos = res?.data?.data || [];
-      setHistory(videos);
-
-      if (res?.data?.paused?.paused !== undefined) {
-        setIsPaused(res.data.paused.paused); // update from backend nested paused object
-      }
-    } catch (err) {
-      console.error("Error fetching watch history:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchHistory();
-  }, []);
-
-  const handleRemove = async (videoId) => {
-    try {
-      await removeFromWatchHistory(videoId);
-      setHistory((prev) => prev.filter((video) => video._id !== videoId));
-    } catch (err) {
-      console.error("Error removing video:", err);
-    }
-  };
-
-  const handleClearAll = async () => {
-    try {
-      await clearWatchHistory();
-      setHistory([]); // Clear frontend history
-    } catch (err) {
-      console.error("Error clearing watch history:", err);
-    }
-  };
-
-  const handleTogglePause = async () => {
-    try {
-      const res = await togglePauseWatchHistory(); // call backend to toggle
-      setIsPaused(res.data.paused); // update pause state from backend response
-      // Do NOT clear or modify history here, keep videos visible at all times
-    } catch (err) {
-      console.error("Error toggling pause state:", err);
-    }
-  };
+  if (loading) {
+    return (
+      <p style={{ marginTop: "100px", textAlign: "center" }}>Loading...</p>
+    );
+  }
 
   return (
     <div style={styles.container} className="historyContainer">
@@ -167,7 +178,12 @@ const WatchHistory = () => {
                       alt={video.title}
                       style={styles.thumbnail}
                     />
-                    <div style={styles.videoDuration}>{video.duration}</div>
+                    <div style={styles.videoDuration}>
+                      {Math.floor(video.duration / 60)}:
+                      {Math.floor(video.duration % 60)
+                        .toString()
+                        .padStart(2, "0")}
+                    </div>
                   </div>
                 </Link>
 
@@ -223,7 +239,7 @@ const WatchHistory = () => {
 
 const styles = {
   container: {
-    //  marginLeft: "60px",
+    // marginLeft: "60px",
     marginTop: "50px",
     minHeight: "100vh",
     color: "#fff",
@@ -276,6 +292,8 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     gap: "16px",
+    marginBottom: "40px",
+    width: "104%",
   },
   videoItem: {
     display: "flex",
@@ -368,7 +386,6 @@ const styles = {
     cursor: "pointer",
     padding: "4px 8px",
     marginLeft: "auto",
-
     color: "#FF0000",
   },
 };

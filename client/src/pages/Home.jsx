@@ -20,6 +20,29 @@ const HomePage = () => {
     return () => clearTimeout(timer);
   }, [fetchRandomVideos]);
 
+  const formatTimeAgo = (dateString) => {
+    const now = new Date();
+    const created = new Date(dateString);
+    const seconds = Math.floor((now - created) / 1000);
+
+    const intervals = [
+      { label: "year", seconds: 31536000 },
+      { label: "month", seconds: 2592000 },
+      { label: "week", seconds: 604800 },
+      { label: "day", seconds: 86400 },
+      { label: "hour", seconds: 3600 },
+      { label: "min", seconds: 60 },
+      { label: "second", seconds: 1 },
+    ];
+
+    for (const interval of intervals) {
+      const count = Math.floor(seconds / interval.seconds);
+      if (count >= 1) {
+        return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
+      }
+    }
+    return "just now";
+  };
   // Skeleton Loader (YouTube style)
   if (loading) {
     return (
@@ -81,7 +104,7 @@ const HomePage = () => {
                 </p>
                 <p className="video-meta">
                   {video.views ? `${video.views} views` : "0 views"} •{" "}
-                  {new Date(video.createdAt).toLocaleDateString()}
+                  {formatTimeAgo(video.createdAt)}
                 </p>
               </div>
             </div>
